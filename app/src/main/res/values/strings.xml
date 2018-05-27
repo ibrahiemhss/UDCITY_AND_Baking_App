@@ -1,0 +1,7 @@
+<resources>
+    <string name="app_name">Baking_App</string>
+    <string name="loading">loading...</string>
+    <string name="loading_completed">loading completed...</string>
+    <string name="loading_error">error</string>
+
+</resources>
