@@ -1,6 +1,6 @@
 package com.example.ibrahim.udacity_and_baking_app.mvp.model;
 
-public class BakingResponseIngredients {
+public class BakingResponseIngredients  {
     private float quantity;
     private String measure;
     private String ingredient;

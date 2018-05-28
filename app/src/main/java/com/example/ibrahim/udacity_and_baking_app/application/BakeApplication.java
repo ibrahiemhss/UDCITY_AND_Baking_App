@@ -7,7 +7,6 @@ import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerApplicatio
 import com.example.ibrahim.udacity_and_baking_app.di.module.ApplicationModule;
 
 import static com.example.ibrahim.udacity_and_baking_app.base.BaseContract.BASE_URL;
-
 //TODO (5) create class BakeApplication
 /**
  *
