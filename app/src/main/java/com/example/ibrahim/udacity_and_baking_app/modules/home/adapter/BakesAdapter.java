@@ -21,7 +21,6 @@ import java.util.List;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 //TODO (74) create  BakesAdapter
-
 /**
  *
  * Created by ibrahim on 25/05/18.

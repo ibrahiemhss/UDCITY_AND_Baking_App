@@ -49,7 +49,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this).unbind();
         super.onDestroy();
     }
-    /*TODO (47) create  resolveDaggerDependency*/
+    /*TODO (47) create resolveDaggerDependency*/
     protected void resolveDaggerDependency() {}
 
     protected void showBackArrow() {

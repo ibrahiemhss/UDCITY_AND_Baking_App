@@ -11,7 +11,7 @@ import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-//TODO (24) create class  BasePresenter
+//TODO (24) create class BasePresenter
 /*
  *
  * Created by ibrahim on 22/05/18.
