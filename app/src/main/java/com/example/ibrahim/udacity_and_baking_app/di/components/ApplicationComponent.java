@@ -8,7 +8,7 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import retrofit2.Retrofit;
-//TODO (14) create interface ApplicationComponent
+ //TODO (14) create interface ApplicationComponent
 /**
  *
  * Created by ibrahim on 22/05/18.

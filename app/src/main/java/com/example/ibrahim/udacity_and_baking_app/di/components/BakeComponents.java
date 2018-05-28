@@ -5,7 +5,7 @@ import com.example.ibrahim.udacity_and_baking_app.di.scope.PreActivity;
 import com.example.ibrahim.udacity_and_baking_app.modules.home.MainActivity;
 
 import dagger.Component;
-//TODO (25) create interface BakeComponents
+ //TODO (25) create interface BakeComponents
 /**
  *
  * Created by ibrahim on 22/05/18.

@@ -24,7 +24,7 @@ import rx.schedulers.Schedulers;
  * */
 public class BasePresenter <V extends BaseView>{
 
-    //TODO (41) inject View
+     //TODO (41) inject View
     @Inject protected  V mView;
     /*
     * using this can communicate with a view that already injected

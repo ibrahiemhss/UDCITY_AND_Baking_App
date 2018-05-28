@@ -59,7 +59,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
             supportActionBar.setDisplayShowHomeEnabled(true);
         }
     }
-    //TODO (3)
+     //TODO (3)
     protected void showDialog(String message) {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);

@@ -5,7 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.ibrahim.udacity_and_baking_app.modules.home.MainActivity">
-   <!--TODO (72) create RecyclerView-->
+    <!--TODO (72) create RecyclerView-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/bake_list"
         android:layout_width="match_parent"

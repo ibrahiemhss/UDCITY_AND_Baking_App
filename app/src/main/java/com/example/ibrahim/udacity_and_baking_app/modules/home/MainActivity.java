@@ -22,7 +22,7 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-//TODO (33) extends BaseActivity class to get what  we need from it
+ //TODO (33) extends BaseActivity class to get what  we need from it
 //TODO (43) implements MainView interface to get Value of all injected View in it
 public class MainActivity extends BaseActivity implements MainView {
 
