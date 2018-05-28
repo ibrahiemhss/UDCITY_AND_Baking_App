@@ -14,6 +14,7 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
+//TODO (15) create interface ApplicationModule
 
 /**
  *
@@ -27,15 +28,17 @@ public class ApplicationModule {
 
     /* dagger is basically to
      provide any object here */
-    private String mBaseUrl;
-    private Context mContext;
+    private final String mBaseUrl;
+    private final Context mContext;
+    //TODO (22)
     @Inject
     public ApplicationModule(Context context,String baseUrl) {
         this.mBaseUrl = baseUrl;
         this.mContext=context;
     }
 
-    /**provide GsonConverterFactory which need some dependency that can
+    /**TODO (20)provide GsonConverterFactory
+     *   which need some dependency that can
      be passed through the conserve for through this method
 
      */
@@ -46,7 +49,8 @@ public class ApplicationModule {
         return GsonConverterFactory.create();
     }
 
-    /**provide OkHttpClient which need some dependency that can
+    /**TODO (19)provide OkHttpClient
+     * which need some dependency that can
      be passed through the conserve for through this method
      */
 
@@ -71,7 +75,8 @@ public class ApplicationModule {
                 .build();
     }*/
 
-    /**provide RxJavaCallAdapterFactory which need some dependency that can
+    /**TODO (21)provide RxJavaCallAdapterFactory
+     *  which need some dependency that can
      be passed through the conserve for through this method
 
      */
@@ -81,7 +86,8 @@ public class ApplicationModule {
         return RxJavaCallAdapterFactory.create();
     }
 
-    /**provide retrofit which need some dependency that can
+    /** TODO (18)provide retrofit
+     * which need some dependency that can
      be passed through the conserve for through this method
 
      *@param client
@@ -99,7 +105,7 @@ public class ApplicationModule {
                 .build();
     }
 
-
+   //TODO (29) Provides Context
     @Provides
     @Singleton
     Context provideContext() {

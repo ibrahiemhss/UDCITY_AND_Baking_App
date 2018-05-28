@@ -13,7 +13,7 @@ import com.example.ibrahim.udacity_and_baking_app.di.components.ApplicationCompo
 
 import butterknife.ButterKnife;
 
-
+//TODO (1) cr
 /**
  *
  * Created by ibrahim on 22/05/18.
@@ -27,6 +27,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
           /*this getContentView  will inherit by the
            child classes to pass their layout */
+        //TODO (2)
         setContentView(getContentView());
         ButterKnife.bind(this);
         onViewReady(savedInstanceState, getIntent());
@@ -35,6 +36,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
        noted CallSuper to force the call super for the child class so anyone
         inheriting this class he will has to do  @override super thought
         */
+    //TODO (4)
     @CallSuper
     //to be used by child activities
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
@@ -47,7 +49,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this).unbind();
         super.onDestroy();
     }
-
+    /*TODO (47) create  resolveDaggerDependency*/
     protected void resolveDaggerDependency() {}
 
     protected void showBackArrow() {
@@ -58,6 +60,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
         }
     }
 
+    //TODO (3)
     protected void showDialog(String message) {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
@@ -73,7 +76,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
             mProgressDialog.dismiss();
         }
     }
-    //pass the ApplicationComponent
+    //TODO (55) create getApplicationComponent to pass the ApplicationComponent
 
     protected ApplicationComponent getApplicationComponent() {
         return ((BakeApplication) getApplication()).getApplicationComponent();

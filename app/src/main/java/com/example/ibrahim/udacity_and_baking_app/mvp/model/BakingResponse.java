@@ -1,5 +1,6 @@
 package com.example.ibrahim.udacity_and_baking_app.mvp.model;
 
+//TODO (12)
 public class BakingResponse {
     private String image;
     private float servings;

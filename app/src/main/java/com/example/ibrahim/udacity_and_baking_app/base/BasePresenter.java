@@ -11,7 +11,7 @@ import rx.Observable;
 import rx.Observer;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
-
+//TODO (24) create class  BasePresenter
 /*
  *
  * Created by ibrahim on 22/05/18.
@@ -20,11 +20,11 @@ import rx.schedulers.Schedulers;
 /**
 * this class subscribing everything should be
 * protected as far is utility base class
- * V extends  BaseView In the original this is interfase
+ * V extends  BaseView In the original this is interface
  * */
 public class BasePresenter <V extends BaseView>{
 
-    //inject View
+    //TODO (41) inject View
     @Inject protected  V mView;
     /*
     * using this can communicate with a view that already injected
@@ -34,8 +34,7 @@ public class BasePresenter <V extends BaseView>{
         return mView;
     }
 
-    /**
-    * protected void subscribe and pass observer
+    /**TODO (38) create protected void subscribe and pass observer
      * @param  observable save RX type T
      * @param observer the observer is part of the RX type T
      */

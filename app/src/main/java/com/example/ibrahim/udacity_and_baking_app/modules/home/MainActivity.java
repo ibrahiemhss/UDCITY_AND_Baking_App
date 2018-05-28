@@ -22,11 +22,12 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-//extends BaseActivity class to get what i want from it
-//implements MainView interfase to get Value of all injected View in it
+//TODO (33) extends BaseActivity class to get what  we need from it
+//TODO (43) implements MainView interface to get Value of all injected View in it
 public class MainActivity extends BaseActivity implements MainView {
 
     private BakesAdapter mBakesAdapter;
+    //TODO (73) bind RecyclerView
     @BindView(R.id.bake_list) protected  RecyclerView mBake_list;
 
 
@@ -39,43 +40,55 @@ public class MainActivity extends BaseActivity implements MainView {
         return R.layout.activity_main;
     }
     /*
-    *MainActivity will get any bake  iformation from this BakePresenter */
+    *TODO (44) MainActivity will get any bake information  from this BakePresenter */
     @Inject protected BakePresenter mPresenter;
 
+    //TODO (34) Override view method from BaseActivity
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
         initialiseList();
+        /*TODO (45) get value from the object of BakePresenter class */
         mPresenter.geBaking();
     }
-
+//TODO (75) create  initialiseList to show values inside mBake_list
     private void initialiseList() {
 
+        Integer[] imgid={
+                R.drawable.nutella_pie,
+                R.drawable.brownies,
+                R.drawable.yellow_cake,
+                R.drawable.cheesecake
+        };
         ButterKnife.bind(this);
         mBake_list.setHasFixedSize(true);
         mBake_list.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL,false));
-        mBakesAdapter=new BakesAdapter(getLayoutInflater());
+        //Pass a list of images with inflator ​​into adapter
+        mBakesAdapter=new BakesAdapter(imgid, getLayoutInflater());
         mBake_list.setAdapter(mBakesAdapter);
     }
-
+    /*TODO (48) Override  resolveDaggerDependency from BaseActivity class*/
     @Override
     protected void resolveDaggerDependency() {
 
-
+        /*TODO (54) build component*/
         DaggerBakeComponents.builder()
+                /*TODO (58) add getApplicationComponent from
+                * BaseActivity.class*/
                 .applicationComponent(getApplicationComponent())
                 //bakeModule requiring a view being implements by that
                 .bakeModule(new BakeModule(this))
                 .build().inject(this);
     }
-
+//TODO (67) implements onBakeLoaded
     @Override
     public void onBakeLoaded(List<Bake> bakeList) {
 
         mBakesAdapter.addBakes(bakeList);
 
     }
+//TODO (69) implements onShowDialog & onShowToast & onHideDialog to show message
 
     @Override
     public void onShowDialog(String message) {

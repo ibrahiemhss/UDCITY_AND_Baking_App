@@ -5,14 +5,7 @@
     android:layout_height="match_parent"
     android:orientation="vertical"
     tools:context="com.example.ibrahim.udacity_and_baking_app.modules.home.MainActivity">
-
-        <TextView
-            android:layout_width="match_parent"
-            android:layout_height="55dp"
-            android:textSize="15sp"
-            android:text="bake of me"
-            android:textColor="@color/colorPrimary"
-            tools:ignore="HardcodedText" />
+<!--TODO (72) create RecyclerView-->
     <android.support.v7.widget.RecyclerView
         android:id="@+id/bake_list"
         android:layout_width="match_parent"

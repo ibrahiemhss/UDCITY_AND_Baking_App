@@ -9,6 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
+import com.bumptech.glide.request.target.Target;
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 
@@ -17,6 +20,7 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+//TODO (74) create  BakesAdapter
 
 /**
  *
@@ -26,12 +30,13 @@ import butterknife.ButterKnife;
 
 public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
 
+    private final Integer[] imgid;
 
 
-    private LayoutInflater mLayoutInflater;
-    private List<Bake> mBakeList=new ArrayList<>();
-    public BakesAdapter(LayoutInflater inflater){
-
+    private final LayoutInflater mLayoutInflater;
+    private final List<Bake> mBakeList=new ArrayList<>();
+    public BakesAdapter(Integer[] imgid, LayoutInflater inflater){
+        this.imgid = imgid;
         mLayoutInflater=inflater;
     }
     @NonNull
@@ -45,7 +50,7 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
 
-        holder.bind(mBakeList.get(position));
+        holder.bind(mBakeList.get(position),position);
     }
 
     @Override
@@ -58,9 +63,9 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
     }
 
     public class Holder extends RecyclerView.ViewHolder{
-        @BindView(R.id.bake_icon) protected ImageView mBakeseIcon;
-        @BindView(R.id.textview_name) protected TextView mCakeTitle;
-        private Context mContext;
+        @BindView(R.id.bake_img) protected ImageView mBakeIcon;
+        @BindView(R.id.textview_name) protected TextView mBakeName;
+        private final Context mContext;
 
         public Holder(View itemView) {
             super(itemView);
@@ -68,7 +73,11 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
             ButterKnife.bind(this,itemView);
         }
 
-        public void bind(Bake bake) {
+        public void bind(Bake bake,int position) {
+            mBakeName.setText(bake.getName());
+            mBakeIcon.setImageResource(imgid[position]);
+
+
         }
     }
 }
