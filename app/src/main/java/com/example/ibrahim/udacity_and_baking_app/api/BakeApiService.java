@@ -1,5 +1,6 @@
 package com.example.ibrahim.udacity_and_baking_app.api;
 
+import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakeIngredients;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakingResponse;
 
 import java.util.List;
@@ -25,6 +26,8 @@ public interface BakeApiService {
     *the type of object from BakingResponse
      */
     Observable<List<BakingResponse>> getBake();
+    Observable<List<BakeIngredients>> getBakeIngredients();
+
 
     @GET("/topher/2017/May/59121517_baking/baking.json")
     Call<List<BakingResponse>> getTheCakes();

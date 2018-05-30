@@ -61,7 +61,7 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
         notifyDataSetChanged();
     }
 
-    public class Holder extends RecyclerView.ViewHolder{
+    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.bake_img) protected ImageView mBakeIcon;
         @BindView(R.id.textview_name) protected TextView mBakeName;
         private final Context mContext;
@@ -69,6 +69,7 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
         public Holder(View itemView) {
             super(itemView);
             mContext=itemView.getContext();
+            itemView.setOnClickListener(this);
             ButterKnife.bind(this,itemView);
         }
 
@@ -78,6 +79,25 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
 
 
         }
+
+
+        @Override
+        public void onClick(View view) {
+            if(mBakeClickListener !=null){
+                mBakeClickListener.onClick(getAdapterPosition());
+            }
+        }
+    }
+    //TODO part(2) (1) create interface to goo another activity
+    public void setBakeClickListener(OnBakeClickListener listener) {
+        mBakeClickListener = listener;
+    }
+
+    private OnBakeClickListener mBakeClickListener;
+
+    public interface OnBakeClickListener {
+
+        void onClick( int position);
     }
 }
 
