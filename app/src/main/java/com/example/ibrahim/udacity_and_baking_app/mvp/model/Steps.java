@@ -1,15 +1,16 @@
 package com.example.ibrahim.udacity_and_baking_app.mvp.model;
 
 /**
+ *
  * Created by ibrahim on 30/05/18.
  */
 
 public class Steps {
-    long id;
-    String shortDescription;
-    String description;
-    String videoURL;
-    String thumbnailURL;
+    private long id;
+    private String shortDescription;
+    private String description;
+    private String videoURL;
+    private String thumbnailURL;
 
     public long getId() {
         return id;

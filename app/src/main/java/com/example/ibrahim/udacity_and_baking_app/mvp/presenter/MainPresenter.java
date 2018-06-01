@@ -1,6 +1,6 @@
 package com.example.ibrahim.udacity_and_baking_app.mvp.presenter;
 
- //TODO (36) create  class BakePresenter
+ //TODO (36) create  class MainPresenter
 
 import android.content.Context;
 import android.util.Log;
@@ -26,22 +26,24 @@ import rx.Observer;
  */
 //TODO (37) extends BasePresenter
 //TODO (42) <MainView>
-public class BakePresenter extends BasePresenter<MainView> implements Observer<List<BakingResponse>> {
+public class MainPresenter extends BasePresenter<MainView> implements Observer<List<BakingResponse>> {
   /*TODO (59) inject APIservice
    presenter what we can do we have provide
    the view then can also provide the APIservice not
    */
-  private Context mContext;
+  private final Context mContext;
+  @SuppressWarnings("WeakerAccess")
   @Inject
   protected BakeApiService mApiService;
   /*inject BakeMapper */
+  @SuppressWarnings("WeakerAccess")
   @Inject protected BakeMapper mBakeMapper;
-  /*TODO (49) Inject  BakePresenter
+  /*TODO (49) Inject  MainPresenter
   because Bakepresenter injected add Inject annotation
     * to easily inject dagger will automatically generate
     * for */
   @Inject
-  public BakePresenter(Context context) {
+  public MainPresenter(Context context) {
     mContext=context;
   }
 
@@ -54,7 +56,7 @@ public class BakePresenter extends BasePresenter<MainView> implements Observer<L
      */
     Observable<List<BakingResponse>> bakePresenterObservable= mApiService.getBake();
     //TODO (61) implement observer to BakeResponse List<BakingResponse>
-    subscribe(bakePresenterObservable,this);
+    subscribeBakingResponse(bakePresenterObservable,this);
   }
 
   @Override
@@ -82,11 +84,20 @@ public class BakePresenter extends BasePresenter<MainView> implements Observer<L
     * TODO (65) get list of BakeMap with  bakingResponse that will get list of bake*/
     List<Bake> bakeList= mBakeMapper.mapBake(bakingResponses);
    /*pass bakeList into getView that come from basepresenter
-    in BakePresenter that have specified
+    in MainPresenter that have specified
      as mainview so view will get MainView  */
     getView().onBakeLoaded(bakeList);
 
   }
+  /*list of photos to pass with List of Bake in BakeAdapter*/
+ public Integer[] getImgId(){
 
+   return new Integer[]{
+           R.drawable.nutella_pie,
+           R.drawable.brownies,
+           R.drawable.yellow_cake,
+           R.drawable.cheesecake
+   };
+ }
 
 }

@@ -8,7 +8,6 @@ public class BakingResponse {
     private BakingResponseIngredients[] ingredients;
     private long id;
     private BakingResponseSteps[] steps;
-
     public String getImage() {
         return this.image;
     }

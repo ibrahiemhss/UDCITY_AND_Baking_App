@@ -15,7 +15,9 @@ android:orientation="vertical">
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:layout_gravity="center"
-    android:scaleType="centerCrop"/>
+    android:scaleType="centerCrop"
+     android:contentDescription="TODO"
+     tools:ignore="ContentDescription,HardcodedText" />
 
 
 <TextView

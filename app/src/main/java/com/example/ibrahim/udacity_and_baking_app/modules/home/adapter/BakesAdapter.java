@@ -9,9 +9,6 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.bumptech.glide.Glide;
-import com.bumptech.glide.request.RequestOptions;
-import com.bumptech.glide.request.target.Target;
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 
@@ -29,13 +26,13 @@ import butterknife.ButterKnife;
 
 public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
 
-    private final Integer[] imgid;
+    private final Integer[] imgId;
 
 
     private final LayoutInflater mLayoutInflater;
     private final List<Bake> mBakeList=new ArrayList<>();
-    public BakesAdapter(Integer[] imgid, LayoutInflater inflater){
-        this.imgid = imgid;
+    public BakesAdapter(Integer[] imgId, LayoutInflater inflater){
+        this.imgId = imgId;
         mLayoutInflater=inflater;
     }
     @NonNull
@@ -62,9 +59,11 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
     }
 
     public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
-        @BindView(R.id.bake_img) protected ImageView mBakeIcon;
-        @BindView(R.id.textview_name) protected TextView mBakeName;
-        private final Context mContext;
+        @BindView(R.id.bake_img)
+        ImageView mBakeIcon;
+        @BindView(R.id.textview_name)
+        TextView mBakeName;
+        final Context mContext;
 
         public Holder(View itemView) {
             super(itemView);
@@ -75,7 +74,7 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
 
         public void bind(Bake bake,int position) {
             mBakeName.setText(bake.getName());
-            mBakeIcon.setImageResource(imgid[position]);
+            mBakeIcon.setImageResource(imgId[position]);
 
 
         }

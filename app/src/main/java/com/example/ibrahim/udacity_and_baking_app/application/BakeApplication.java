@@ -6,7 +6,7 @@ import com.example.ibrahim.udacity_and_baking_app.di.components.ApplicationCompo
 import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerApplicationComponent;
 import com.example.ibrahim.udacity_and_baking_app.di.module.ApplicationModule;
 
-import static com.example.ibrahim.udacity_and_baking_app.base.BaseContract.BASE_URL;
+import static com.example.ibrahim.udacity_and_baking_app.data.Contract.BASE_URL;
 //TODO (5) create class BakeApplication
 /**
  *
@@ -46,8 +46,8 @@ public class BakeApplication extends Application {
     }
 
     //TODO (7)
-    @Override
-    public void onTerminate() {
-        super.onTerminate();
-    }
+   // @Override
+    //public void onTerminate() {
+     //   super.onTerminate();
+    //}
 }

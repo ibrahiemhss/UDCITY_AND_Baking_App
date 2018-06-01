@@ -30,4 +30,5 @@ public interface BakeComponents {
 
 
     void inject(MainActivity activity);
+
 }

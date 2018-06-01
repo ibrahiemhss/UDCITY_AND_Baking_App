@@ -1,17 +1,12 @@
 package com.example.ibrahim.udacity_and_baking_app.mvp.presenter;
 
-import android.content.Context;
-import android.util.Log;
-
-import com.example.ibrahim.udacity_and_baking_app.R;
-import com.example.ibrahim.udacity_and_baking_app.api.BakeApiService;
+import com.example.ibrahim.udacity_and_baking_app.api.ListsDetailsBakeApiService;
 import com.example.ibrahim.udacity_and_baking_app.base.BasePresenter;
 import com.example.ibrahim.udacity_and_baking_app.mapper.BakeMapper;
-import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
-import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakeIngredients;
+import com.example.ibrahim.udacity_and_baking_app.mvp.model.Ingredients;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakingResponse;
+import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.DetailsView;
-import com.example.ibrahim.udacity_and_baking_app.mvp.view.MainView;
 
 import java.util.List;
 
@@ -21,29 +16,45 @@ import rx.Observable;
 import rx.Observer;
 
 /**
+ *
  * Created by ibrahim on 30/05/18.
  */
 
+@SuppressWarnings("WeakerAccess")
 public class DetailsPresenter extends BasePresenter<DetailsView> implements Observer<List<BakingResponse>> {
+    private int position;
 
-    private Context mContext;
-    int position=0;
+    /*get value position from intent */
+    private int getPosition() {
+        return position;
+    }
+
+    /*set position */
+    private void setPosition(int position) {
+        this.position = position;
+    }
+
     @Inject
-    protected BakeApiService mApiService;
+    protected ListsDetailsBakeApiService mApiService;
     /*inject BakeMapper */
-    @Inject protected BakeMapper mBakeMapper;
     @Inject
-    public DetailsPresenter(Context context) {
-        mContext=context;
+    protected BakeMapper mBakeMapper;
+    @Inject
+    public DetailsPresenter() {
     }
 
 
-    //pass information from this method
-    public void getBakeIngredients() {
-        Observable<List<BakingResponse>> bakePresenterObservable= mApiService.getBake();
-        //TODO (61) implement observer to BakeResponse List<BakingResponse>
-        subscribe(bakePresenterObservable,this);
-        //position=pos;
+    /**@param position that com from intent from DetailsActivity
+     * pass information to DetailsActivity from this method*/
+    public void getBakeIngredients(int position) {
+        /*pass <List<BakingResponse>> to get all lists of
+         BakingResponseSteps [] & BakingResponseIngredients[]
+        by their position that come from intent from DetailsActivity
+        */
+        Observable<List<BakingResponse>> listObservable= mApiService.getIngredients();
+        subscribeDetailsLists(listObservable,this);
+        //set the value of position from the value that come from intent
+        setPosition(position);
     }
 
     @Override
@@ -53,18 +64,26 @@ public class DetailsPresenter extends BasePresenter<DetailsView> implements Obse
 
     @Override
     public void onError(Throwable e) {
-        Log.v("errorJsondd",String.valueOf(e.getMessage()));
-
 
     }
-
-
 
     @Override
-    public void onNext(List<BakingResponse>  bakingResponses) {
+    public void onNext(List<BakingResponse> responseList) {
 
-        List<BakeIngredients> getIngredientsFrombakeList= mBakeMapper.getIngredientsList(bakingResponses,3);
-        getView().onBakeLoaded(getIngredientsFrombakeList);
+        /*get list of Ingredients for bakingResponse by its position that come from intent*/
+        List<Ingredients> ingredientsList= mBakeMapper.getIngredientsList(responseList,getPosition());
+        /*pass the value of ingredients List into
+        DetailsActivity by implements onIngredientsLoaded from DetailsView interface*/
+        getView().onIngredientsLoaded(ingredientsList);
+
+         /*get list of Steps for bakingResponse by its position that come from intent*/
+        List<Steps> stepsList= mBakeMapper.getStepsList(responseList,getPosition());
+        /*pass the value of Steps List into
+        DetailsActivity by implements onStepsLoaded from DetailsView interface*/
+        getView().onStepsLoaded(stepsList);
 
     }
+
+
+
 }

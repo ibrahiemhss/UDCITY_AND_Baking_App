@@ -1,13 +1,14 @@
 package com.example.ibrahim.udacity_and_baking_app.mvp.model;
 
 /**
+ *
  * Created by ibrahim on 29/05/18.
  */
 
-public class BakeIngredients {
-    float quantity;
-    String measure;
-    String ingredient;
+public class Ingredients {
+    private float quantity;
+    private String measure;
+    private String ingredient;
 
     public float getQuantity() {
         return quantity;

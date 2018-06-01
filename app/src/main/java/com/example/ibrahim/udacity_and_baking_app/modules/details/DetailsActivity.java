@@ -2,28 +2,48 @@ package com.example.ibrahim.udacity_and_baking_app.modules.details;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.widget.TextView;
 
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.base.BaseActivity;
-import com.example.ibrahim.udacity_and_baking_app.mvp.presenter.BakePresenter;
+import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerIngredientsComponents;
+import com.example.ibrahim.udacity_and_baking_app.di.module.IngredientsModule;
+import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.IngredientsAdapter;
+import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.StepsAdapter;
+import com.example.ibrahim.udacity_and_baking_app.mvp.model.Ingredients;
+import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 import com.example.ibrahim.udacity_and_baking_app.mvp.presenter.DetailsPresenter;
+import com.example.ibrahim.udacity_and_baking_app.mvp.view.DetailsView;
+
+import java.util.List;
 
 import javax.inject.Inject;
 
 import butterknife.BindView;
+import butterknife.ButterKnife;
+
 
 /**
  *
  * Created by ibrahim on 22/05/18.
  */
 
-public class DetailsActivity extends BaseActivity {
-    @BindView(R.id.textTest) protected TextView mtextTest;
+@SuppressWarnings("WeakerAccess")
+public class DetailsActivity extends BaseActivity implements DetailsView {
+
 
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
+    private IngredientsAdapter mIngredientsAdapter;
+    private StepsAdapter mStepsAdapter;
+
+
+    @BindView(R.id.ingredients_list)
+    protected RecyclerView mIngredients_list;
+    @BindView(R.id.step_list)
+    protected RecyclerView mStep_list;
+
     @Override
     protected int getContentView() {
         return R.layout.detials_activity;
@@ -35,29 +55,70 @@ public class DetailsActivity extends BaseActivity {
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
-        initialisetest();
+        getPositionFromIntent();
+        initialiseListIngredients();
+        initialiseListSteps();
+
     }
+    @Override
+    protected void resolveDaggerDependency() {
 
-    private void initialisetest() {
+        DaggerIngredientsComponents.builder()
+                .applicationComponent(getApplicationComponent())
+                .ingredientsModule(new IngredientsModule(this))
+                .build().inject(this);
+    }
+    private void getPositionFromIntent() {
 
+        //intent come MainActivity
         Intent intent = getIntent();
-        //   getIntent=intent.getStringExtra(EXTRA_POSITION)
+        int position=0;
         if (intent != null) {
-            // closeOnError();
-
-            int position = intent.getIntExtra(EXTRA_POSITION
+             position = intent.getIntExtra(EXTRA_POSITION
                     , DEFAULT_POSITION);
-                mPresenter.getBakeIngredients();
 
+             /*pass position to DetailsPresenter class
+             to get the value as list objects from Ingredients class
+             and Steps class
+               ----- NOTE----------------------
+                because i have 2 array which is <<ingredients>> and <<steps>>
+              inside json i get every Arraylist alone by its position inside general JsonAArray
+              that all of its value come from ListsDetailsBakeApiService by retrofit with
+              Observable inside BakingResponse class */
+            mPresenter.getBakeIngredients(position);
 
-
-            mtextTest.setText(String.valueOf(position));
-            if (position == DEFAULT_POSITION) {
-                // EXTRA_POSITION not found in intent
-                // closeOnError();
-                return;
-            }
         }
     }
 
+
+
+    private void initialiseListIngredients() {
+
+        ButterKnife.bind(this);
+        mIngredients_list.setHasFixedSize(true);
+        mIngredients_list.setLayoutManager(new LinearLayoutManager(this,
+        LinearLayoutManager.VERTICAL, false));
+        mIngredientsAdapter = new IngredientsAdapter( getLayoutInflater());
+        mIngredients_list.setAdapter(mIngredientsAdapter);
+    }
+    private void initialiseListSteps() {
+
+        ButterKnife.bind(this);
+        mStep_list.setHasFixedSize(true);
+        mStep_list.setLayoutManager(new LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false));
+        mStepsAdapter = new StepsAdapter( getLayoutInflater());
+        mStep_list.setAdapter(mStepsAdapter);
+    }
+
+    @Override
+    public void onIngredientsLoaded(List<Ingredients> ingredientsList) {
+        mIngredientsAdapter.addIngredients(ingredientsList);
+
+    }
+
+    @Override
+    public void onStepsLoaded(List<Steps> stepsList) {
+        mStepsAdapter.addSteps(stepsList);
+    }
 }

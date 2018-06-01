@@ -4,8 +4,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
-import android.view.View;
 import android.widget.Toast;
 
 import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivity;
@@ -16,9 +14,8 @@ import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerBakeCompon
 import com.example.ibrahim.udacity_and_baking_app.di.module.BakeModule;
 import com.example.ibrahim.udacity_and_baking_app.modules.home.adapter.BakesAdapter;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
-import com.example.ibrahim.udacity_and_baking_app.mvp.presenter.BakePresenter;
+import com.example.ibrahim.udacity_and_baking_app.mvp.presenter.MainPresenter;
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.MainView;
-
 import java.util.List;
 
 import javax.inject.Inject;
@@ -28,6 +25,7 @@ import butterknife.ButterKnife;
 
 //TODO (33) extends BaseActivity class to get what  we need from it
 //TODO (43) implements MainView interface to get Value of all injected View in it
+@SuppressWarnings("WeakerAccess")
 public class MainActivity extends BaseActivity implements MainView {
 
     private BakesAdapter mBakesAdapter;
@@ -46,34 +44,29 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     /*
-    *TODO (44) MainActivity will get any bake information  from this BakePresenter */
+    *TODO (44) MainActivity will get any bake information  from this MainPresenter */
     @Inject
-    protected BakePresenter mPresenter;
+    protected MainPresenter mPresenter;
 
     //TODO (34) Override view method from BaseActivity
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
         initialiseList();
-        /*TODO (45) get value from the object of BakePresenter class */
+        /*TODO (45) get value from the object of MainPresenter class */
         mPresenter.geBaking();
     }
 
     //TODO (75) create  initialiseList to show values inside mBake_list
     private void initialiseList() {
 
-        Integer[] imgid = {
-                R.drawable.nutella_pie,
-                R.drawable.brownies,
-                R.drawable.yellow_cake,
-                R.drawable.cheesecake
-        };
+
         ButterKnife.bind(this);
         mBake_list.setHasFixedSize(true);
         mBake_list.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
-        //Pass a list of images with inflator ​​into adapter
-        mBakesAdapter = new BakesAdapter(imgid, getLayoutInflater());
+        //Pass a list of images with inflater ​​in adapter
+        mBakesAdapter = new BakesAdapter(mPresenter.getImgId(), getLayoutInflater());
 
         mBakesAdapter.setBakeClickListener(onBakeClickListener);
 
@@ -121,7 +114,7 @@ public class MainActivity extends BaseActivity implements MainView {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private BakesAdapter.OnBakeClickListener onBakeClickListener = new BakesAdapter.OnBakeClickListener() {
+    private final BakesAdapter.OnBakeClickListener onBakeClickListener = new BakesAdapter.OnBakeClickListener() {
         @Override
         public void onClick(int position) {
             launchDetailActivity(position);
