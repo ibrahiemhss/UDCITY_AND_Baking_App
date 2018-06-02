@@ -6,16 +6,18 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.widget.Toast;
 
+import com.example.ibrahim.udacity_and_baking_app.di.module.MainModule;
 import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivity;
 
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.base.BaseActivity;
-import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerBakeComponents;
-import com.example.ibrahim.udacity_and_baking_app.di.module.BakeModule;
+import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerMainComponents;
 import com.example.ibrahim.udacity_and_baking_app.modules.home.adapter.BakesAdapter;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 import com.example.ibrahim.udacity_and_baking_app.mvp.presenter.MainPresenter;
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.MainView;
+
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -32,6 +34,7 @@ public class MainActivity extends BaseActivity implements MainView {
     //TODO (73) bind RecyclerView
     @BindView(R.id.bake_list)
     protected RecyclerView mBake_list;
+    private static final String STATE_BAKE = "state_bake";
 
 
     /**
@@ -47,14 +50,21 @@ public class MainActivity extends BaseActivity implements MainView {
     *TODO (44) MainActivity will get any bake information  from this MainPresenter */
     @Inject
     protected MainPresenter mPresenter;
+    private ArrayList<Bake> mBakeArrayList;
+
+
 
     //TODO (34) Override view method from BaseActivity
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
+        if (savedInstanceState != null && savedInstanceState.containsKey(STATE_BAKE)) {
+            mBakeArrayList = savedInstanceState.getParcelableArrayList(STATE_BAKE);
+        }
+
         initialiseList();
         /*TODO (45) get value from the object of MainPresenter class */
-        mPresenter.geBaking();
+         mPresenter.geBaking();
     }
 
     //TODO (75) create  initialiseList to show values inside mBake_list
@@ -66,7 +76,7 @@ public class MainActivity extends BaseActivity implements MainView {
         mBake_list.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
         //Pass a list of images with inflater ​​in adapter
-        mBakesAdapter = new BakesAdapter(mPresenter.getImgId(), getLayoutInflater());
+        mBakesAdapter = new BakesAdapter(mPresenter.getImgId(), getLayoutInflater(),mBakeArrayList);
 
         mBakesAdapter.setBakeClickListener(onBakeClickListener);
 
@@ -78,20 +88,20 @@ public class MainActivity extends BaseActivity implements MainView {
     protected void resolveDaggerDependency() {
 
         /*TODO (54) build component*/
-        DaggerBakeComponents.builder()
+        DaggerMainComponents.builder()
                 /*TODO (58) add getApplicationComponent from
                 * BaseActivity.class*/
                 .applicationComponent(getApplicationComponent())
-                //bakeModule requiring a view being implements by that
-                .bakeModule(new BakeModule(this))
+                //MainModule requiring a view being implements by that
+                .mainModule(new MainModule(this))
                 .build().inject(this);
     }
 
     //TODO (67) implements onBakeLoaded
     @Override
-    public void onBakeLoaded(List<Bake> bakeList) {
-
-        mBakesAdapter.addBakes(bakeList);
+    public void onBakeLoaded(ArrayList<Bake> bakeList) {
+        mBakeArrayList=bakeList;
+        mBakesAdapter.addBakes(mBakeArrayList);
 
     }
 //TODO (69) implements onShowDialog & onShowToast & onHideDialog to show message
@@ -128,4 +138,10 @@ public class MainActivity extends BaseActivity implements MainView {
         intent.putExtra(DetailsActivity.EXTRA_POSITION, position);
         startActivity(intent);
     }
+    @Override
+    public void onSaveInstanceState(Bundle outState) {
+        outState.putParcelableArrayList(STATE_BAKE, mBakeArrayList);
+        super.onSaveInstanceState(outState);
+    }
+
 }

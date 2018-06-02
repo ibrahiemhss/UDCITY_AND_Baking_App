@@ -3,5 +3,6 @@
     <string name="loading">loading…</string>
     <string name="loading_completed">loading completed…</string>
     <string name="loading_error">error</string>
+    <string name="txt_please_wait">please wait.....</string>
 
 </resources>

@@ -1,26 +1,26 @@
 package com.example.ibrahim.udacity_and_baking_app.di.module;
 
 import com.example.ibrahim.udacity_and_baking_app.api.BakeApiService;
-import com.example.ibrahim.udacity_and_baking_app.di.scope.PreActivity;
+import com.example.ibrahim.udacity_and_baking_app.di.scope.AppScope;
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.MainView;
 
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
-//TODO (26) create class BakeModule
+//TODO (26) create class MainModule
 /**
  *
  * Created by ibrahim on 22/05/18.
-*BakeModules should provide finalized version of BakeApiService
+*MainModule should provide finalized version of BakeApiService
 * */
 //@SuppressWarnings("ALL")
 @Module
-public class BakeModule {
+public class MainModule {
 
      /*TODO (50) add MainView*/
       private final MainView mView;
     /*TODO (51) create constructor to pass mView*/
-      public BakeModule (MainView view){
+      public MainModule(MainView view){
           //pass view reference so the providing it
           this.mView=view;
       }
@@ -31,7 +31,7 @@ public class BakeModule {
        * can make dagger it knows how to pass
        *then using that inject inside presenter
        */
-    @PreActivity
+    @AppScope
     @Provides
     BakeApiService provideBakeApiService(Retrofit retrofit) {
         return retrofit.create(BakeApiService.class);
@@ -39,7 +39,7 @@ public class BakeModule {
     /*
     TODO (52) providing that dependency of mainView
     */
-    @PreActivity
+    @AppScope
     @Provides
     MainView provideView() {
         return mView;

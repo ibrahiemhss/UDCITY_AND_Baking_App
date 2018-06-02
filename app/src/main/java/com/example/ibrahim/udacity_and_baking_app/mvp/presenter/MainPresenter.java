@@ -13,6 +13,7 @@ import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakingResponse;
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.MainView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -31,6 +32,7 @@ public class MainPresenter extends BasePresenter<MainView> implements Observer<L
    presenter what we can do we have provide
    the view then can also provide the APIservice not
    */
+  private ArrayList<Bake> mBakeList;
   private final Context mContext;
   @SuppressWarnings("WeakerAccess")
   @Inject
@@ -48,7 +50,7 @@ public class MainPresenter extends BasePresenter<MainView> implements Observer<L
   }
 
   //pass information from this method
-  public void geBaking() {
+  public ArrayList<Bake> geBaking() {
     //pass a message
     getView().onShowDialog(mContext.getApplicationContext().getResources().getString(R.string.loading));
   /*TODO (60) get Observable from BakingResponse
@@ -57,6 +59,7 @@ public class MainPresenter extends BasePresenter<MainView> implements Observer<L
     Observable<List<BakingResponse>> bakePresenterObservable= mApiService.getBake();
     //TODO (61) implement observer to BakeResponse List<BakingResponse>
     subscribeBakingResponse(bakePresenterObservable,this);
+    return mBakeList;
   }
 
   @Override
@@ -82,11 +85,11 @@ public class MainPresenter extends BasePresenter<MainView> implements Observer<L
 
     /*
     * TODO (65) get list of BakeMap with  bakingResponse that will get list of bake*/
-    List<Bake> bakeList= mBakeMapper.mapBake(bakingResponses);
+    mBakeList= mBakeMapper.mapBake(bakingResponses);
    /*pass bakeList into getView that come from basepresenter
     in MainPresenter that have specified
      as mainview so view will get MainView  */
-    getView().onBakeLoaded(bakeList);
+    getView().onBakeLoaded(mBakeList);
 
   }
   /*list of photos to pass with List of Bake in BakeAdapter*/

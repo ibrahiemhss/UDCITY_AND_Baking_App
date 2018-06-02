@@ -2,15 +2,18 @@ package com.example.ibrahim.udacity_and_baking_app.modules.details;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.base.BaseActivity;
-import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerIngredientsComponents;
-import com.example.ibrahim.udacity_and_baking_app.di.module.IngredientsModule;
+import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerDetailsComponents;
+import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerDetailsComponents;
+import com.example.ibrahim.udacity_and_baking_app.di.module.DetailsModule;
 import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.IngredientsAdapter;
 import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.StepsAdapter;
+import com.example.ibrahim.udacity_and_baking_app.modules.details.fragments.StepsFragment;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Ingredients;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 import com.example.ibrahim.udacity_and_baking_app.mvp.presenter.DetailsPresenter;
@@ -41,8 +44,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     @BindView(R.id.ingredients_list)
     protected RecyclerView mIngredients_list;
-    @BindView(R.id.step_list)
-    protected RecyclerView mStep_list;
 
     @Override
     protected int getContentView() {
@@ -57,15 +58,15 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         super.onViewReady(savedInstanceState, intent);
         getPositionFromIntent();
         initialiseListIngredients();
-        initialiseListSteps();
+       // initialiseListSteps();
 
     }
     @Override
     protected void resolveDaggerDependency() {
 
-        DaggerIngredientsComponents.builder()
+        DaggerDetailsComponents.builder()
                 .applicationComponent(getApplicationComponent())
-                .ingredientsModule(new IngredientsModule(this))
+                .detailsModule(new DetailsModule(this))
                 .build().inject(this);
     }
     private void getPositionFromIntent() {
@@ -86,6 +87,12 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
               that all of its value come from ListsDetailsBakeApiService by retrofit with
               Observable inside BakingResponse class */
             mPresenter.getBakeIngredients(position);
+            StepsFragment stepsFragment =new StepsFragment();
+            FragmentManager fragmentManager = getSupportFragmentManager();
+            stepsFragment.setPos(position);
+            fragmentManager.beginTransaction()
+                    .add(R.id.step_container, stepsFragment)
+                    .commit();
 
         }
     }
@@ -101,7 +108,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         mIngredientsAdapter = new IngredientsAdapter( getLayoutInflater());
         mIngredients_list.setAdapter(mIngredientsAdapter);
     }
-    private void initialiseListSteps() {
+    /*private void initialiseListSteps() {
 
         ButterKnife.bind(this);
         mStep_list.setHasFixedSize(true);
@@ -109,7 +116,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                 LinearLayoutManager.VERTICAL, false));
         mStepsAdapter = new StepsAdapter( getLayoutInflater());
         mStep_list.setAdapter(mStepsAdapter);
-    }
+    }*/
 
     @Override
     public void onIngredientsLoaded(List<Ingredients> ingredientsList) {
@@ -119,6 +126,5 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     @Override
     public void onStepsLoaded(List<Steps> stepsList) {
-        mStepsAdapter.addSteps(stepsList);
     }
 }

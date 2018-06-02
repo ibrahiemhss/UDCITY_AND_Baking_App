@@ -4,7 +4,7 @@ import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
 
 import javax.inject.Scope;
- //TODO (16) create interface PreActivity
+ //TODO (16) create interface AppScope
 @Scope
 /* this type of scope is per activity so can be per fragment
 * per view ,per service etc..*/
@@ -15,5 +15,5 @@ import javax.inject.Scope;
   which will be live throughout the entire journey of the app
   @notation @Scope specify saying it is a scope
   */
-public @interface PreActivity {
+public @interface AppScope {
 }

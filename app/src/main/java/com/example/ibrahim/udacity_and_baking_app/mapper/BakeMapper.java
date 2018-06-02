@@ -22,9 +22,9 @@ public class BakeMapper {
     @Inject
     public BakeMapper() {
     }
-    public List<Bake> mapBake(List<BakingResponse> responses){
+    public ArrayList<Bake> mapBake(List<BakingResponse> responses){
         //create object bakeList ArrayList from class Bake
-        List<Bake> bakeList=new ArrayList<>();
+        ArrayList<Bake> bakeList=new ArrayList<>();
         //get value from list responses
         if (responses != null) {
             for (BakingResponse bakingResponse: responses) {
@@ -69,8 +69,8 @@ public class BakeMapper {
 
     }
 
-    private List<Ingredients> ingredientsList(BakingResponseIngredients[] bakingResponseIngredients){
-        List<Ingredients> bakeIngredientsList=new ArrayList<>();
+    private ArrayList<Ingredients> ingredientsList(BakingResponseIngredients[] bakingResponseIngredients){
+        ArrayList<Ingredients> bakeIngredientsList=new ArrayList<>();
         if (bakingResponseIngredients != null) {
 
             for (BakingResponseIngredients bakingResponseIngredients1 : bakingResponseIngredients) {
@@ -84,8 +84,8 @@ public class BakeMapper {
         return  bakeIngredientsList;
 
     }
-    private List<Steps> stepsList(BakingResponseSteps[] bakingResponseSteps){
-        List <Steps> stepsList1 =new ArrayList<>();
+    private ArrayList<Steps> stepsList(BakingResponseSteps[] bakingResponseSteps){
+        ArrayList <Steps> stepsList1 =new ArrayList<>();
         if(bakingResponseSteps !=null){
             for (BakingResponseSteps bakingResponseStep : bakingResponseSteps) {
                 Steps mySteps=new Steps();
@@ -102,8 +102,8 @@ public class BakeMapper {
     }
 
 
-    public List<Ingredients> getIngredientsList(List<BakingResponse> responses, int position){
-        List<Ingredients> bakeList=new ArrayList<>();
+    public ArrayList<Ingredients> getIngredientsList(List<BakingResponse> responses, int position){
+        ArrayList<Ingredients> bakeList=new ArrayList<>();
         if (responses != null) {
             for (BakingResponse bakingResponse: responses) {
                 bakeList=  ingredientsList(responses.get(position).getIngredients());
@@ -111,8 +111,8 @@ public class BakeMapper {
         }
         return bakeList;
     }
-           public List<Steps> getStepsList(List<BakingResponse> responses,int position){
-            List<Steps> stepsList=new ArrayList<>();
+           public ArrayList<Steps> getStepsList(List<BakingResponse> responses,int position){
+               ArrayList<Steps> stepsList=new ArrayList<>();
             if (responses != null) {
                 for (BakingResponse bakingResponse: responses) {
                    stepsList= stepsList(responses.get(position).getSteps());

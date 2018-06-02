@@ -3,10 +3,9 @@ package com.example.ibrahim.udacity_and_baking_app.mvp.presenter;
 import com.example.ibrahim.udacity_and_baking_app.api.BakeApiService;
 import com.example.ibrahim.udacity_and_baking_app.base.BasePresenter;
 import com.example.ibrahim.udacity_and_baking_app.mapper.BakeMapper;
-import com.example.ibrahim.udacity_and_baking_app.mvp.model.Ingredients;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakingResponse;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
-import com.example.ibrahim.udacity_and_baking_app.mvp.view.DetailsView;
+import com.example.ibrahim.udacity_and_baking_app.mvp.view.StepsView;
 
 import java.util.List;
 
@@ -17,11 +16,11 @@ import rx.Observer;
 
 /**
  *
- * Created by ibrahim on 30/05/18.
+ * Created by ibrahim on 02/06/18.
  */
 
-@SuppressWarnings("WeakerAccess")
-public class DetailsPresenter extends BasePresenter<DetailsView> implements Observer<List<BakingResponse>> {
+public class StepfragmentPresenter extends BasePresenter<StepsView> implements Observer<List<BakingResponse>> {
+
     private int position;
 
     /*get value position from intent */
@@ -40,7 +39,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> implements Obse
     @Inject
     protected BakeMapper mBakeMapper;
     @Inject
-    public DetailsPresenter() {
+    public StepfragmentPresenter() {
     }
 
 
@@ -70,12 +69,6 @@ public class DetailsPresenter extends BasePresenter<DetailsView> implements Obse
     @Override
     public void onNext(List<BakingResponse> responseList) {
 
-        /*get list of Ingredients for bakingResponse by its position that come from intent*/
-        List<Ingredients> ingredientsList= mBakeMapper.getIngredientsList(responseList,getPosition());
-        /*pass the value of ingredients List into
-        DetailsActivity by implements onIngredientsLoaded from DetailsView interface*/
-        getView().onIngredientsLoaded(ingredientsList);
-
          /*get list of Steps for bakingResponse by its position that come from intent*/
         List<Steps> stepsList= mBakeMapper.getStepsList(responseList,getPosition());
         /*pass the value of Steps List into
@@ -83,7 +76,5 @@ public class DetailsPresenter extends BasePresenter<DetailsView> implements Obse
         getView().onStepsLoaded(stepsList);
 
     }
-
-
 
 }

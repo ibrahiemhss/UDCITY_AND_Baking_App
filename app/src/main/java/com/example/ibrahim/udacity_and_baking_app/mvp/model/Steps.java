@@ -1,16 +1,43 @@
 package com.example.ibrahim.udacity_and_baking_app.mvp.model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 /**
  *
  * Created by ibrahim on 30/05/18.
  */
 
-public class Steps {
+public class Steps implements Parcelable {
     private long id;
     private String shortDescription;
     private String description;
     private String videoURL;
     private String thumbnailURL;
+
+    public Steps(Parcel in) {
+        id = in.readLong();
+        shortDescription = in.readString();
+        description = in.readString();
+        videoURL = in.readString();
+        thumbnailURL = in.readString();
+    }
+
+    public static final Creator<Steps> CREATOR = new Creator<Steps>() {
+        @Override
+        public Steps createFromParcel(Parcel in) {
+            return new Steps(in);
+        }
+
+        @Override
+        public Steps[] newArray(int size) {
+            return new Steps[size];
+        }
+    };
+
+    public Steps() {
+
+    }
 
     public long getId() {
         return id;
@@ -50,5 +77,19 @@ public class Steps {
 
     public void setThumbnailURL(String thumbnailURL) {
         this.thumbnailURL = thumbnailURL;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeLong(id);
+        parcel.writeString(shortDescription);
+        parcel.writeString(description);
+        parcel.writeString(videoURL);
+        parcel.writeString(thumbnailURL);
     }
 }
