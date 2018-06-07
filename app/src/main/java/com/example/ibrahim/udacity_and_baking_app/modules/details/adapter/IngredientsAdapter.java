@@ -56,20 +56,21 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         notifyDataSetChanged();
     }
     @SuppressWarnings("WeakerAccess")
-    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class Holder extends RecyclerView.ViewHolder {
         @BindView(R.id.textview_quantity)
         TextView mQuantity;
         @BindView(R.id.textview_preview_measure)
         TextView mMeasure;
-        @BindView(R.id.textview_preview_ingredient) protected TextView mIngredient;
+        @BindView(R.id.textview_preview_ingredient)
+        protected TextView mIngredient;
 
         private final Context mContext;
 
         public Holder(View itemView) {
             super(itemView);
-            mContext=itemView.getContext();
-            itemView.setOnClickListener(this);
-            ButterKnife.bind(this,itemView);
+            mContext = itemView.getContext();
+            //   itemView.setOnClickListener(this);
+            ButterKnife.bind(this, itemView);
         }
 
         public void bind(Ingredients ingredients, int position) {
@@ -78,26 +79,8 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
             mQuantity.setText(String.valueOf(ingredients.getQuantity()));
 
 
-
         }
 
-
-        @Override
-        public void onClick(View view) {
-            if(mBakeClickListener !=null){
-                mBakeClickListener.onClick(getAdapterPosition());
-            }
-        }
     }
 
-    public void setIngredientsClickListener(IngredientsAdapter.OnIngredientsClickListener listener) {
-        mBakeClickListener = listener;
-    }
-
-    private IngredientsAdapter.OnIngredientsClickListener mBakeClickListener;
-
-    public interface OnIngredientsClickListener {
-
-        void onClick( int position);
-    }
 }

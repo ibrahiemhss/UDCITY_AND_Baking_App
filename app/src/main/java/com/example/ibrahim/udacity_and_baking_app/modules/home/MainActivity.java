@@ -1,9 +1,15 @@
 package com.example.ibrahim.udacity_and_baking_app.modules.home;
 
+import android.content.Context;
 import android.content.Intent;
+import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.view.Surface;
+import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.ibrahim.udacity_and_baking_app.di.module.MainModule;
@@ -13,6 +19,7 @@ import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.base.BaseActivity;
 import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerMainComponents;
 import com.example.ibrahim.udacity_and_baking_app.modules.home.adapter.BakesAdapter;
+import com.example.ibrahim.udacity_and_baking_app.modules.steps.fragments.StepsFragment;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 import com.example.ibrahim.udacity_and_baking_app.mvp.presenter.MainPresenter;
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.MainView;
@@ -58,30 +65,20 @@ public class MainActivity extends BaseActivity implements MainView {
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
+
+        GetListByScreenSize();
         if (savedInstanceState != null && savedInstanceState.containsKey(STATE_BAKE)) {
             mBakeArrayList = savedInstanceState.getParcelableArrayList(STATE_BAKE);
+            mBakesAdapter.addBakes(mBakeArrayList);
+
+        }else {
+            GetListByScreenSize();
+      /*TODO (45) get value from the object of MainPresenter class */
+            mPresenter.geBaking();
         }
-
-        initialiseList();
-        /*TODO (45) get value from the object of MainPresenter class */
-         mPresenter.geBaking();
     }
 
-    //TODO (75) create  initialiseList to show values inside mBake_list
-    private void initialiseList() {
 
-
-        ButterKnife.bind(this);
-        mBake_list.setHasFixedSize(true);
-        mBake_list.setLayoutManager(new LinearLayoutManager(this,
-                LinearLayoutManager.VERTICAL, false));
-        //Pass a list of images with inflater ​​in adapter
-        mBakesAdapter = new BakesAdapter(mPresenter.getImgId(), getLayoutInflater(),mBakeArrayList);
-
-        mBakesAdapter.setBakeClickListener(onBakeClickListener);
-
-        mBake_list.setAdapter(mBakesAdapter);
-    }
 
     /*TODO (48) Override  resolveDaggerDependency from BaseActivity class*/
     @Override
@@ -144,4 +141,66 @@ public class MainActivity extends BaseActivity implements MainView {
         super.onSaveInstanceState(outState);
     }
 
+    public void GetListByScreenSize(){
+
+        assert ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)) != null;
+        final int rotation = ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
+        switch (rotation) {
+            case Surface.ROTATION_0:
+                if (isTablet()) {
+                    initialiseListWithsLargSize();
+                } else {
+                    initialiseListWithPhoneScreen();
+                }
+
+                break;
+            case Surface.ROTATION_90:
+                initialiseListWithsLargSize();
+                break;
+            case Surface.ROTATION_180:
+                initialiseListWithPhoneScreen();
+                break;
+
+
+            case Surface.ROTATION_270:
+                break;
+        }
+    }
+
+    public  boolean isTablet() {
+        return (MainActivity.this.getResources().getConfiguration().screenLayout
+                & Configuration.SCREENLAYOUT_SIZE_MASK)
+                >= Configuration.SCREENLAYOUT_SIZE_LARGE;
+    }
+
+    //TODO (75) create  initialiseList to show values inside mBake_list
+    private void initialiseListWithPhoneScreen() {
+
+
+        ButterKnife.bind(this);
+        mBake_list.setHasFixedSize(true);
+        mBake_list.setLayoutManager(new LinearLayoutManager(this,
+                LinearLayoutManager.VERTICAL, false));
+        //Pass a list of images with inflater ​​in adapter
+        mBakesAdapter = new BakesAdapter(mPresenter.getImgId(), getLayoutInflater(),mBakeArrayList);
+
+        mBakesAdapter.setBakeClickListener(onBakeClickListener);
+
+        mBake_list.setAdapter(mBakesAdapter);
+    }
+    //TODO (75) create  initialiseList to show values inside mBake_list
+    private void initialiseListWithsLargSize() {
+
+
+        ButterKnife.bind(this);
+        mBake_list.setHasFixedSize(true);
+        mBake_list.setLayoutManager(new GridLayoutManager(this,2,
+                GridLayoutManager.VERTICAL, false));
+        //Pass a list of images with inflater ​​in adapter
+        mBakesAdapter = new BakesAdapter(mPresenter.getImgId(), getLayoutInflater(),mBakeArrayList);
+
+        mBakesAdapter.setBakeClickListener(onBakeClickListener);
+
+        mBake_list.setAdapter(mBakesAdapter);
+    }
 }

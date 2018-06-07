@@ -22,6 +22,8 @@ public class BakeMapper {
     @Inject
     public BakeMapper() {
     }
+    /*get all values from json that come inside BakingResponse
+    * and add inide object of Bake*/
     public ArrayList<Bake> mapBake(List<BakingResponse> responses){
         //create object bakeList ArrayList from class Bake
         ArrayList<Bake> bakeList=new ArrayList<>();
@@ -36,9 +38,7 @@ public class BakeMapper {
                 myBake.setIngredientsArrayList(bakingResponse.getIngredients());
                 //add all value from myBake to bakeList
                 bakeList.add(myBake);
-                //  bakingIngredients(bakingResponse.getIngredients());
 
-                //  stepsList(bakingResponse.getSteps());
 
             }
 
@@ -49,25 +49,38 @@ public class BakeMapper {
 
     }
 
+    /*after get all values from Observable and save inside  BakingResponse
+     * json have getIngredients  array inide BakingResponse
+       * this method get every getIngredients array by its position inside  BakingResponse
+       */
 
-    public List<Bake> mapBakeIngredients(List<BakingResponse> responses,int position){
-        //create object bakeList ArrayList from class Bake
-        List<Bake> bakeList=new ArrayList<>();
-        //get value from list responses
+    public ArrayList<Ingredients> getIngredientsList(List<BakingResponse> responses, int position){
+        ArrayList<Ingredients> ingredientsList=new ArrayList<>();
         if (responses != null) {
             for (BakingResponse bakingResponse: responses) {
-                Bake myBake=new Bake();
-                myBake.setIngredientsArrayList(bakingResponse.getIngredients());
-                bakeList.add(myBake);
+                //call ingredientsList method to get ingredients by its position
+                ingredientsList=  ingredientsList(responses.get(position).getIngredients());
             }
-            getIngredientsList(responses,position);
-            getStepsList(responses,position);
+        }
+        return ingredientsList;
+    }
+
+        /*
+       * this method get every Steps array by its position inside  BakingResponse
+       */
+           public ArrayList<Steps> getStepsList(List<BakingResponse> responses,int position){
+               ArrayList<Steps> stepsList=new ArrayList<>();
+            if (responses != null) {
+                for (BakingResponse bakingResponse: responses) {
+                    //call stepsList method to get Steps by its position
+                    stepsList= stepsList(responses.get(position).getSteps());
+                }
+            }
+            return stepsList;
+
 
         }
-        return bakeList;
 
-
-    }
 
     private ArrayList<Ingredients> ingredientsList(BakingResponseIngredients[] bakingResponseIngredients){
         ArrayList<Ingredients> bakeIngredientsList=new ArrayList<>();
@@ -102,24 +115,4 @@ public class BakeMapper {
     }
 
 
-    public ArrayList<Ingredients> getIngredientsList(List<BakingResponse> responses, int position){
-        ArrayList<Ingredients> bakeList=new ArrayList<>();
-        if (responses != null) {
-            for (BakingResponse bakingResponse: responses) {
-                bakeList=  ingredientsList(responses.get(position).getIngredients());
-            }
-        }
-        return bakeList;
-    }
-           public ArrayList<Steps> getStepsList(List<BakingResponse> responses,int position){
-               ArrayList<Steps> stepsList=new ArrayList<>();
-            if (responses != null) {
-                for (BakingResponse bakingResponse: responses) {
-                   stepsList= stepsList(responses.get(position).getSteps());
-                }
-            }
-            return stepsList;
-
-
-        }
 }

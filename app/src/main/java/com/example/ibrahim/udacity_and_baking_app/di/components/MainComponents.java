@@ -13,9 +13,11 @@ import dagger.Component;
 
 //
 
-/*TODO (31) activities might run and
- they might be destroyed so in this case is in AppScope
-(per runtime which it can be for any object so as far it is running then we can use it)
+/*TODO (31)
+  activities might run and they might be
+   destroyed so in this case is in AppScope
+(per runtime which it can be for any object
+ so as far it is running then we can use it)
 */
 @AppScope
 /*TODO (27) referring to MainModule class

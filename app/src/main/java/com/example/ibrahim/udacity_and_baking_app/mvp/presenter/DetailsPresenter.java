@@ -8,6 +8,7 @@ import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakingResponse;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.DetailsView;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
@@ -46,7 +47,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> implements Obse
 
     /**@param position that com from intent from DetailsActivity
      * pass information to DetailsActivity from this method*/
-    public void getBakeIngredients(int position) {
+    public void getDetials(int position) {
         /*pass <List<BakingResponse>> to get all lists of
          BakingResponseSteps [] & BakingResponseIngredients[]
         by their position that come from intent from DetailsActivity
@@ -71,13 +72,13 @@ public class DetailsPresenter extends BasePresenter<DetailsView> implements Obse
     public void onNext(List<BakingResponse> responseList) {
 
         /*get list of Ingredients for bakingResponse by its position that come from intent*/
-        List<Ingredients> ingredientsList= mBakeMapper.getIngredientsList(responseList,getPosition());
+        ArrayList<Ingredients> ingredientsList= mBakeMapper.getIngredientsList(responseList,getPosition());
         /*pass the value of ingredients List into
         DetailsActivity by implements onIngredientsLoaded from DetailsView interface*/
         getView().onIngredientsLoaded(ingredientsList);
 
          /*get list of Steps for bakingResponse by its position that come from intent*/
-        List<Steps> stepsList= mBakeMapper.getStepsList(responseList,getPosition());
+        ArrayList<Steps> stepsList= mBakeMapper.getStepsList(responseList,getPosition());
         /*pass the value of Steps List into
         DetailsActivity by implements onStepsLoaded from DetailsView interface*/
         getView().onStepsLoaded(stepsList);

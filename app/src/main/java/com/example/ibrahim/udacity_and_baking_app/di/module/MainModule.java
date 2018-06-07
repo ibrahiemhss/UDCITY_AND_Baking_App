@@ -12,7 +12,7 @@ import retrofit2.Retrofit;
  *
  * Created by ibrahim on 22/05/18.
 *MainModule should provide finalized version of BakeApiService
-* */
+*/
 //@SuppressWarnings("ALL")
 @Module
 public class MainModule {

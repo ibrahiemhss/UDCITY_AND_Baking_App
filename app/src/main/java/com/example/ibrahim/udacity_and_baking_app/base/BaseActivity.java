@@ -20,6 +20,8 @@ import butterknife.ButterKnife;
  */
 
 public abstract  class BaseActivity extends AppCompatActivity {
+
+    //ProgressDialog to view any message wanted in the child activity
     private ProgressDialog mProgressDialog;
 
     @Override

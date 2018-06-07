@@ -1,6 +1,8 @@
 package com.example.ibrahim.udacity_and_baking_app.modules.details.adapter;
 
 import android.content.Context;
+import android.content.Intent;
+import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -9,6 +11,7 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.ibrahim.udacity_and_baking_app.R;
+import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 
 import java.util.ArrayList;
@@ -24,7 +27,15 @@ import butterknife.ButterKnife;
 
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
 
+
+
     private final LayoutInflater mLayoutInflater;
+    private String mVideoURL;
+    private String mDescription;
+
+    private AdpaterListener mListener;
+
+
     private final List<Steps> mList=new ArrayList<>();
     public StepsAdapter( LayoutInflater inflater){
         mLayoutInflater=inflater;
@@ -44,6 +55,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
     public void onBindViewHolder(@NonNull StepsAdapter.Holder holder, int position) {
 
         holder.bind(mList.get(position),position);
+
     }
 
     @Override
@@ -55,37 +67,66 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
         notifyDataSetChanged();
     }
     @SuppressWarnings("WeakerAccess")
-    public class Holder extends RecyclerView.ViewHolder {
+    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.textview_id)
         protected TextView mId;
         @BindView(R.id.textview_shortDescription)
         protected TextView mShortDescription;
-        @BindView(R.id.textview_preview_description)
-        protected TextView mDescription;
-        @BindView(R.id.textview_preview_videoURL)
-        protected TextView mVideoURL;
-        @BindView(R.id.textview_preview_thumbnailURL)
-        protected TextView mThumbnailURL;
-
 
         private final Context mContext;
 
         public Holder(View itemView) {
             super(itemView);
             mContext = itemView.getContext();
+            itemView.setOnClickListener(this);
             ButterKnife.bind(this, itemView);
         }
 
         public void bind(Steps steps, int position) {
             mId.setText(String.valueOf(steps.getId()));
             mShortDescription.setText(steps.getShortDescription());
-            mDescription.setText(steps.getDescription());
-            mVideoURL.setText(steps.getVideoURL());
-            mThumbnailURL.setText(steps.getThumbnailURL());
+            setVideoURL(steps.getVideoURL());
+            setDescription(steps.getDescription());
 
 
         }
+            @Override
+            public void onClick (View view){
+                if (mBakeClickListener != null) {
+                    mBakeClickListener.onClick(getAdapterPosition());
+                }
+
+            }
+        }
+
+        public void setStepsClickListener(StepsAdapter.OnStepsClickListener listener) {
+            mBakeClickListener = listener;
+        }
+
+        private StepsAdapter.OnStepsClickListener mBakeClickListener;
+
+        public interface OnStepsClickListener {
+
+            void onClick(int position);
+        }
+
+    public String getVideoURL() {
+        return mVideoURL;
+    }
+
+    public void setVideoURL(String mVideoURL) {
+        this.mVideoURL = mVideoURL;
+    }
+    public String getDescription() {
+        return mDescription;
+    }
+
+    public void setDescription(String mDescription) {
+        this.mDescription = mDescription;
     }
 
 
+    public void setAdapterListener(AdpaterListener listener) {
+        mListener = listener;
+    }
 }

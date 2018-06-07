@@ -2,6 +2,7 @@ package com.example.ibrahim.udacity_and_baking_app.mvp.view;
 
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -14,6 +15,7 @@ public interface StepsView extends BaseView {
     void pause();
 
     void destroy();
-     void onStepsLoaded(List<Steps> stepsList);
+     void onStepsLoaded(ArrayList<Steps> stepsList);
+   //  void addPosition(int position);
 
     }

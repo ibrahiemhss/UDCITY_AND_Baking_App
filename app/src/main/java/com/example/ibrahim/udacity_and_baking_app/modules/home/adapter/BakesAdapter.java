@@ -34,7 +34,6 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
     public BakesAdapter(Integer[] imgId, LayoutInflater inflater,ArrayList<Bake> mBakeList){
         this.imgId = imgId;
         mLayoutInflater=inflater;
-        mBakeList=mBakeList;
     }
     @NonNull
     @Override

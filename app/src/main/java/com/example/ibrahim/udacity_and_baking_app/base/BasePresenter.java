@@ -65,11 +65,5 @@ public class BasePresenter <V extends BaseView>{
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(observer);
     }
-    protected  void  subscribeStepLists (Observable<List<BakingResponse>> observable, Observer<List<BakingResponse>> observer){
 
-        observable.subscribeOn(Schedulers.newThread())
-                .toSingle()
-                .observeOn(AndroidSchedulers.mainThread())
-                .subscribe(observer);
-    }
 }

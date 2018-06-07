@@ -3,23 +3,21 @@ package com.example.ibrahim.udacity_and_baking_app.di.module;
 import com.example.ibrahim.udacity_and_baking_app.api.BakeApiService;
 import com.example.ibrahim.udacity_and_baking_app.di.scope.AppScope;
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.DetailsView;
+import com.example.ibrahim.udacity_and_baking_app.mvp.view.StepsView;
 
 import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
 
 /**
- *
- * Created by ibrahim on 30/05/18.
- *
- * DetailsModule should provide  BakeApiService
+ * Created by ibrahim on 04/06/18.
  */
 @Module
-public class DetailsModule {
+public class FragmentStepModule {
 
-    //add DetailsView
-    private final DetailsView mView;
-    public DetailsModule(DetailsView view){
+    //add StepsView
+    private final StepsView mView;
+    public FragmentStepModule(StepsView view){
         this.mView=view;
     }
 
@@ -29,10 +27,10 @@ public class DetailsModule {
     BakeApiService ingredientsApiService(Retrofit retrofit) {
         return retrofit.create(BakeApiService.class);
     }
-    //providing  dependency of DetailsView
+    //providing  dependency of StepsView
     @AppScope
     @Provides
-    DetailsView provideView() {
+    StepsView provideView() {
         return mView;
     }
 }

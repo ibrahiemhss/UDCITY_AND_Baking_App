@@ -10,6 +10,7 @@ import com.example.ibrahim.udacity_and_baking_app.di.components.ApplicationCompo
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.StepsView;
 
 /**
+ *
  * Created by ibrahim on 01/06/18.
  */
 
@@ -76,11 +77,14 @@ public abstract class BaseFragments extends Fragment {
         make.show();
     }
 
+
     public void showMessage(String message) {
         showSnackbar(false, message);
     }
 
+    // getApplicationComponent to pass the ApplicationComponent
     protected ApplicationComponent getApplicationComponent() {
         return ((BakeApplication)getActivity(). getApplication()).getApplicationComponent();
     }
+
 }
