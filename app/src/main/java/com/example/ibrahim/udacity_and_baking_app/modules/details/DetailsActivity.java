@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
@@ -24,7 +25,6 @@ import com.example.ibrahim.udacity_and_baking_app.di.module.DetailsModule;
 import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.IngredientsAdapter;
 import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.StepsAdapter;
 import com.example.ibrahim.udacity_and_baking_app.modules.steps.StepsActivity;
-import com.example.ibrahim.udacity_and_baking_app.modules.steps.fragments.MyStringListener;
 import com.example.ibrahim.udacity_and_baking_app.modules.steps.fragments.StepsFragment;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Ingredients;
@@ -46,6 +46,8 @@ import static com.example.ibrahim.udacity_and_baking_app.data.Contract.EXTRA_VID
 
 
 /**
+ *
+ *
  * Created by ibrahim on 22/05/18.
  */
 
@@ -53,15 +55,21 @@ import static com.example.ibrahim.udacity_and_baking_app.data.Contract.EXTRA_VID
 public class DetailsActivity extends BaseActivity implements DetailsView  {
     private static final String TAG = "DetailsActivity";
 
-    private MyStringListener listener;
-
+    public interface FragmentListener {
+        public void itializePlayer(String url);
+    };
+    FragmentListener mCallback;
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
     private static final String STATE_INGREDIENTS = "state_ingredients";
     public static final String STATE_STEPS = "state_steps";
+    public static final String STATE_FRAGMENT = "state_fragment";
 
-    StepsFragment stepsFragment ;
+    boolean addNewFragment;
+    Fragment stepsFragment ;
     List<Steps> stepsList = new ArrayList<>();
+    List<Integer> stepsListIndex;
+    int urlPosition;
 
     public List<Steps> getStepsList() {
         return stepsList;
@@ -76,11 +84,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
     @BindView(R.id.linear_details)
     protected LinearLayout linear_details;
 
-    @BindView(R.id.move_left)
-    protected ImageView mImgMoveLeft;
 
-    @BindView(R.id.move_right)
-    protected ImageView mImgMoveright;
     int i = 0;
     int mySelectedId;
 
@@ -110,13 +114,13 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
-
         SharedPrefManager.getInstance(DetailsActivity.this).seSetVideoUrl(null);
+
+            GetFragmentByScreenSize();
 
         getPositionFromIntent();
         initialiseListIngredients();
         initialiseListSteps();
-        GetFragmentByScreenSize();
         if (savedInstanceState != null
                 && savedInstanceState.containsKey(STATE_INGREDIENTS)
                 && savedInstanceState.containsKey(STATE_STEPS)) {
@@ -169,7 +173,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
 
 
 
-}
+    }
 
     private void initialiseListIngredients() {
 
@@ -194,19 +198,19 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
 
                 if (mTwoPane) {
 
-                    stepsFragment = new StepsFragment();
+                    stepsFragment=new StepsFragment();
+
+                    Bundle bundle = new Bundle();
+                    bundle.putParcelableArrayList(StepsFragment.EXTRA_STEP_LIST_ACTIVITY, mStepsArrayList);
+                    bundle.putInt(StepsFragment.EXTRA_STEP_INDEX, position);
+                    bundle.putBoolean(StepsFragment.EXTRA_LARG_SCREEN,mTwoPane);
+
+                    stepsFragment.setArguments(bundle);
                     FragmentManager fragmentManager = getSupportFragmentManager();
-                    stepsFragment.setmDescription(getStepsList().get(position).getDescription());
-                    stepsFragment.setmVideoUrl(getStepsList().get(position).getVideoURL());
-                    stepsFragment.setVideoView(getStepsList().get(position).getVideoURL());
-                    stepsFragment.initializePlayer();
-
-
-                    Log.d(TAG, "VideoURL _ DetailsActivity :" + getStepsList().get(position).getVideoURL());
-                    listener.computeSomething(getStepsList().get(position).getVideoURL());
                     fragmentManager.beginTransaction()
                             .replace(R.id.step_container, stepsFragment)
                             .commit();
+
 
 
 
@@ -278,62 +282,26 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
     }
 
     private void changeVideo() {
-        stepsFragment = new StepsFragment();
+        stepsFragment=new StepsFragment();
 
-        mImgMoveLeft.setOnClickListener(new View.OnClickListener() {
+        Bundle bundle = new Bundle();
+        bundle.putParcelableArrayList(StepsFragment.EXTRA_STEP_LIST_ACTIVITY, mStepsArrayList);
+        bundle.putInt(StepsFragment.EXTRA_STEP_INDEX, 0);
+        bundle.putBoolean(StepsFragment.EXTRA_LARG_SCREEN,mTwoPane);
 
-            @Override
-            public void onClick(View view) {
-                i++;
-                if (i >= mStepsArrayList.size()) {
-                    i = mStepsArrayList.size() - 1;
-                    mImgMoveLeft.setVisibility(View.INVISIBLE);
-                    mImgMoveright.setVisibility(View.VISIBLE);
+        stepsFragment.setArguments(bundle);
+        FragmentManager fragmentManager = getSupportFragmentManager();
+        fragmentManager.beginTransaction()
+                .replace(R.id.step_container, stepsFragment)
+                .commit();
 
-                } else {
-                    mImgMoveright.setVisibility(View.VISIBLE);
-
-                }
-
-                SharedPrefManager.getInstance(DetailsActivity.this).seSetVideoUrl(mStepsArrayList.get(i).getVideoURL());
-//                stepsFragment.initializePlayer(SharedPrefManager.getInstance(DetailsActivity.this).getVideoUrl());
-                Log.d(TAG, "VideoURL:" + SharedPrefManager.getInstance(DetailsActivity.this).getVideoUrl());
-                FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
-                fragmentManager.replace(R.id.step_container, stepsFragment);
-                fragmentManager.addToBackStack(null);
-                fragmentManager.commit();
-
-// Commit the transaction
-                //  stepsFragment.resume();
-            }
-        });
-
-        mImgMoveright.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-
-                i--;
-                if (i <= 0) {
-                    i = 0;
-                    mImgMoveright.setVisibility(View.INVISIBLE);
-                    mImgMoveLeft.setVisibility(View.VISIBLE);
-
-                } else {
-                    mImgMoveLeft.setVisibility(View.VISIBLE);
-
-                }
-                SharedPrefManager.getInstance(DetailsActivity.this).seSetVideoUrl(mStepsArrayList.get(i).getVideoURL());
-           //     stepsFragment.initializePlayer(SharedPrefManager.getInstance(DetailsActivity.this).getVideoUrl());
-                FragmentTransaction fragmentManager = getSupportFragmentManager().beginTransaction();
-                fragmentManager.replace(R.id.step_container, stepsFragment);
-                fragmentManager.addToBackStack(null);
-                fragmentManager.commit();
-
-                Log.d(TAG, "VideoURL:" + SharedPrefManager.getInstance(DetailsActivity.this).getVideoUrl());
-
-
-            }
-        });
     }
 
+    @Override
+    public void onConfigurationChanged(Configuration newConfig) {
+        super.onConfigurationChanged(newConfig);
+        if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE){
+
+        }
+    }
 }

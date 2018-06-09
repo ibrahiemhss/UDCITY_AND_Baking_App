@@ -68,7 +68,7 @@ dependencies {
 
 // exo player
 /*Add ExoPlayer Dependency Here*/
-    implementation 'com.google.android.exoplayer:exoplayer:r2.2.0'
+    implementation 'com.google.android.exoplayer:exoplayer:r2.4.0'
     /* Optional IMA Extension Dependency If you want to show Video Ads
     in between Your videos Like Youtube */
 
