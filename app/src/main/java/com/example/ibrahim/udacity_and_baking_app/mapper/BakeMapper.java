@@ -12,6 +12,7 @@ import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakingResponseIngred
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakingResponseSteps;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Ingredients;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
+import com.example.ibrahim.udacity_and_baking_app.utilities.getBakeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -48,12 +49,17 @@ public class BakeMapper {
                 ContentValues values = new ContentValues();
                 values.put(Contract.COL_NAMES, bakingResponse.getName());
 
-                final Uri uri = mContext.getContentResolver().insert(Contract.PATH_BAKE_URI, values);
+                if (getBakeUtils.getBake(mContext).size() > 3) {
+                    Log.d("insert_content", "recall_added");
 
-                if (uri != null) {
-                    Log.d("insert_content", "addded");
+                } else {
+                    final Uri uri = mContext.getContentResolver().insert(Contract.PATH_BAKE_URI, values);
+
+                    if (uri != null) {
+                        Log.d("insert_content", "first_addded");
+                    }
+
                 }
-
             }
 
 

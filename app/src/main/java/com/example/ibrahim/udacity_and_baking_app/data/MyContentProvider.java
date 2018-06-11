@@ -86,7 +86,7 @@ public class MyContentProvider extends ContentProvider {
         switch (match) {
             case BAKE_CODE:
 
-                long id = db.insert(Contract.TABLE_BAKE, null, values);
+                long id = db.insertWithOnConflict(Contract.TABLE_BAKE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
 
                 if (id > 0) {
                     returnUri = ContentUris.withAppendedId(Contract.PATH_BAKE_URI, id);

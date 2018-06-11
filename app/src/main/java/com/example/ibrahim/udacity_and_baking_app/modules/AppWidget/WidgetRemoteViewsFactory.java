@@ -18,6 +18,7 @@ import com.example.ibrahim.udacity_and_baking_app.data.Contract;
  * Created by ibrahim on 24/05/18.
  */
 public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+
     private static final String TAG = "WidgetRemoteViewsFactor";
 
     private Context mContext;
