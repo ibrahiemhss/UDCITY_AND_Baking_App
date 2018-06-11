@@ -17,9 +17,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
- //TODO (74) create  BakesAdapter
+//TODO (74) create  BakesAdapter
+
 /**
- *
  * Created by ibrahim on 25/05/18.
  */
 
@@ -31,15 +31,18 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
 
 
     private final LayoutInflater mLayoutInflater;
-    private final ArrayList<Bake> mBakeList=new ArrayList<>();
-    public BakesAdapter(Integer[] imgId, LayoutInflater inflater,ArrayList<Bake> mBakeList){
+    private final ArrayList<Bake> mBakeList = new ArrayList<>();
+    private OnBakeClickListener mBakeClickListener;
+
+    public BakesAdapter(Integer[] imgId, LayoutInflater inflater, ArrayList<Bake> mBakeList) {
         this.imgId = imgId;
-        mLayoutInflater=inflater;
+        mLayoutInflater = inflater;
     }
+
     @NonNull
     @Override
     public Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-       View view= mLayoutInflater.inflate(R.layout.list_item_bakes,parent,false);
+        View view = mLayoutInflater.inflate(R.layout.list_item_bakes, parent, false);
 
         return new Holder(view);
     }
@@ -47,34 +50,45 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
     @Override
     public void onBindViewHolder(@NonNull Holder holder, int position) {
 
-        holder.bind(mBakeList.get(position),position);
+        holder.bind(mBakeList.get(position), position);
     }
 
     @Override
     public int getItemCount() {
         return mBakeList.size();
     }
-    public void addBakes(List<Bake> bakes){
+
+    public void addBakes(List<Bake> bakes) {
         mBakeList.addAll(bakes);
         notifyDataSetChanged();
     }
 
+    //TODO part(2) (1) create interface to goo another activity
+    public void setBakeClickListener(OnBakeClickListener listener) {
+        mBakeClickListener = listener;
+    }
+
+    public interface OnBakeClickListener {
+
+        void onClick(int position);
+    }
+
     @SuppressWarnings("unused")
-    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        final Context mContext;
         @BindView(R.id.bake_img)
         ImageView mBakeIcon;
         @BindView(R.id.textview_name)
         TextView mBakeName;
-        final Context mContext;
 
         public Holder(View itemView) {
             super(itemView);
-            mContext=itemView.getContext();
+            mContext = itemView.getContext();
             itemView.setOnClickListener(this);
-            ButterKnife.bind(this,itemView);
+            ButterKnife.bind(this, itemView);
         }
 
-        public void bind(Bake bake,int position) {
+        public void bind(Bake bake, int position) {
             mBakeName.setText(bake.getName());
             mBakeIcon.setImageResource(imgId[position]);
 
@@ -84,21 +98,10 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
 
         @Override
         public void onClick(View view) {
-            if(mBakeClickListener !=null){
+            if (mBakeClickListener != null) {
                 mBakeClickListener.onClick(getAdapterPosition());
             }
         }
-    }
-    //TODO part(2) (1) create interface to goo another activity
-    public void setBakeClickListener(OnBakeClickListener listener) {
-        mBakeClickListener = listener;
-    }
-
-    private OnBakeClickListener mBakeClickListener;
-
-    public interface OnBakeClickListener {
-
-        void onClick( int position);
     }
 }
 

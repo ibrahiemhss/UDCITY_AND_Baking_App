@@ -10,14 +10,13 @@ import com.example.ibrahim.udacity_and_baking_app.di.components.ApplicationCompo
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.StepsView;
 
 /**
- *
  * Created by ibrahim on 01/06/18.
  */
 
 @SuppressWarnings("unused")
 public abstract class BaseFragments extends Fragment {
 
-   private ProgressDialog progressDialog;
+    private ProgressDialog progressDialog;
 
     public abstract StepsView getSteps();
 
@@ -84,7 +83,7 @@ public abstract class BaseFragments extends Fragment {
 
     // getApplicationComponent to pass the ApplicationComponent
     protected ApplicationComponent getApplicationComponent() {
-        return ((BakeApplication)getActivity(). getApplication()).getApplicationComponent();
+        return ((BakeApplication) getActivity().getApplication()).getApplicationComponent();
     }
 
 }

@@ -18,7 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- *
  * Created by ibrahim on 01/06/18.
  */
 
@@ -26,15 +25,14 @@ import butterknife.ButterKnife;
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
 
 
-
     private final LayoutInflater mLayoutInflater;
+    private final List<Steps> mList = new ArrayList<>();
     private String mVideoURL;
     private String mDescription;
+    private StepsAdapter.OnStepsClickListener mBakeClickListener;
 
-
-    private final List<Steps> mList=new ArrayList<>();
-    public StepsAdapter( LayoutInflater inflater){
-        mLayoutInflater=inflater;
+    public StepsAdapter(LayoutInflater inflater) {
+        mLayoutInflater = inflater;
     }
 
     @NonNull
@@ -42,7 +40,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
     public StepsAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
-        View view= mLayoutInflater.inflate(R.layout.list_item_steps,parent,false);
+        View view = mLayoutInflater.inflate(R.layout.list_item_steps, parent, false);
 
         return new StepsAdapter.Holder(view);
     }
@@ -50,7 +48,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
     @Override
     public void onBindViewHolder(@NonNull StepsAdapter.Holder holder, int position) {
 
-        holder.bind(mList.get(position),position);
+        holder.bind(mList.get(position), position);
 
     }
 
@@ -58,18 +56,49 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
     public int getItemCount() {
         return mList.size();
     }
-    public void addSteps(List<Steps> stepsList){
+
+    public void addSteps(List<Steps> stepsList) {
         mList.addAll(stepsList);
         notifyDataSetChanged();
     }
+
+    public void setStepsClickListener(StepsAdapter.OnStepsClickListener listener) {
+        mBakeClickListener = listener;
+    }
+
+    public String getVideoURL() {
+        return mVideoURL;
+    }
+
+    private void setVideoURL(String mVideoURL) {
+        this.mVideoURL = mVideoURL;
+    }
+
+    public String getDescription() {
+        return mDescription;
+    }
+
+    private void setDescription(String mDescription) {
+        this.mDescription = mDescription;
+    }
+
+    @SuppressWarnings("UnnecessaryLocalVariable")
+    public void setAdapterListener(AdpaterListener listener) {
+        AdpaterListener mListener = listener;
+    }
+
+    public interface OnStepsClickListener {
+
+        void onClick(int position);
+    }
+
     @SuppressWarnings({"WeakerAccess", "unused"})
-    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
+        private final Context mContext;
         @BindView(R.id.textview_id)
         protected TextView mId;
         @BindView(R.id.textview_shortDescription)
         protected TextView mShortDescription;
-
-        private final Context mContext;
 
         public Holder(View itemView) {
             super(itemView);
@@ -86,44 +115,13 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
 
 
         }
-            @Override
-            public void onClick (View view){
-                if (mBakeClickListener != null) {
-                    mBakeClickListener.onClick(getAdapterPosition());
-                }
 
+        @Override
+        public void onClick(View view) {
+            if (mBakeClickListener != null) {
+                mBakeClickListener.onClick(getAdapterPosition());
             }
+
         }
-
-        public void setStepsClickListener(StepsAdapter.OnStepsClickListener listener) {
-            mBakeClickListener = listener;
-        }
-
-        private StepsAdapter.OnStepsClickListener mBakeClickListener;
-
-        public interface OnStepsClickListener {
-
-            void onClick(int position);
-        }
-
-    public String getVideoURL() {
-        return mVideoURL;
-    }
-
-    private void setVideoURL(String mVideoURL) {
-        this.mVideoURL = mVideoURL;
-    }
-    public String getDescription() {
-        return mDescription;
-    }
-
-    private void setDescription(String mDescription) {
-        this.mDescription = mDescription;
-    }
-
-
-    @SuppressWarnings("UnnecessaryLocalVariable")
-    public void setAdapterListener(AdpaterListener listener) {
-        AdpaterListener mListener = listener;
     }
 }

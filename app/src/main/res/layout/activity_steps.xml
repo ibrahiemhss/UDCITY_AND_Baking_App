@@ -6,9 +6,10 @@
     android:orientation="vertical"
     tools:context=".modules.steps.StepsActivity">
 
-    <FrameLayout android:id="@+id/step_container"
+    <FrameLayout
+        android:id="@+id/step_container"
         android:layout_width="match_parent"
         android:layout_height="180dp"
-        android:scaleType="centerInside"/>
+        android:scaleType="centerInside" />
 
 </RelativeLayout>

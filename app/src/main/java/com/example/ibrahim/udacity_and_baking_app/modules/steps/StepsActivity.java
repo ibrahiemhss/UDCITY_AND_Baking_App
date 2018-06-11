@@ -13,13 +13,13 @@ import static com.example.ibrahim.udacity_and_baking_app.data.Contract.EXTRA_DES
 import static com.example.ibrahim.udacity_and_baking_app.data.Contract.EXTRA_VIDEO_URL;
 
 /**
- *
  * Created by ibrahim on 03/06/18.
  */
 
 public class StepsActivity extends BaseActivity {
     private String mVideoURL;
     private String mDescription;
+
     @Override
     protected int getContentView() {
         return R.layout.activity_steps;
@@ -33,15 +33,15 @@ public class StepsActivity extends BaseActivity {
         final Bundle extras = getIntent().getExtras();
         if ((extras != null ? extras.getString(EXTRA_VIDEO_URL) : null) != null) {
             mVideoURL = extras.getString(EXTRA_VIDEO_URL);
-            Log.d("videoURL",mVideoURL);
+            Log.d("videoURL", mVideoURL);
 
         }
-         if (extras.getString(EXTRA_DESCRIPTION)!=null){
-            mDescription=extras.getString(EXTRA_DESCRIPTION);
-            Log.d("description",mDescription);
+        if (extras.getString(EXTRA_DESCRIPTION) != null) {
+            mDescription = extras.getString(EXTRA_DESCRIPTION);
+            Log.d("description", mDescription);
 
         }
-        StepsFragment stepsFragment =new StepsFragment();
+        StepsFragment stepsFragment = new StepsFragment();
         FragmentManager fragmentManager = getSupportFragmentManager();
         stepsFragment.setmVideoUrl(mVideoURL);
         stepsFragment.setmDescription(mDescription);

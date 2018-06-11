@@ -15,15 +15,21 @@ import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 
 
 /**
- *
  * Created by ibrahim on 24/05/18.
  */
 public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
-    private static final String TAG = "WidgetRemoteViewsFactory";
+    private static final String TAG = "WidgetRemoteViewsFactor";
 
     private Context mContext;
     private Cursor mCursor;
     private int position;
+
+    public WidgetRemoteViewsFactory() {
+    }
+
+    public WidgetRemoteViewsFactory(Context applicationContext, Intent intent) {
+        mContext = applicationContext;
+    }
 
     //this position will send to detailsActivity inside intent
     public int getPosition() {
@@ -32,12 +38,6 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
     public void setPosition(int position) {
         this.position = position;
-    }
-    public WidgetRemoteViewsFactory() {
-    }
-
-    public WidgetRemoteViewsFactory(Context applicationContext, Intent intent) {
-        mContext = applicationContext;
     }
 
     @Override
@@ -86,9 +86,11 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
         RemoteViews rv = new RemoteViews(mContext.getPackageName(), R.layout.list_item_widget);
         rv.setTextViewText(R.id.widgetItemTaskNameLabel, mCursor.getString(1));
+        Log.d(TAG, "ItemWidget_String = " + mCursor.getString(1));
 
         Intent fillInIntent = new Intent();
         fillInIntent.putExtra(MainWidgetProvider.EXTRA_ID, mCursor.getInt(1));
+
         rv.setOnClickFillInIntent(R.id.widgetItemContainer, fillInIntent);
 
         return rv;
@@ -106,7 +108,7 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
     @Override
     public long getItemId(int position) {
-        Log.d(TAG,"ItemWidget_postion = "+position);
+        Log.d(TAG, "ItemWidget_postion = " + position);
         setPosition(position);
         return mCursor.moveToPosition(position) ? mCursor.getLong(0) : position;
     }

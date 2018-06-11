@@ -6,24 +6,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- *
  * Created by ibrahim on 24/05/18.
  */
 
 @SuppressWarnings("unused")
-public class Bake implements Parcelable{
-    //TODO (63) create variables as in json and setter & getter
-    private long id;
-    private String name;
-    private String image;
-    private BakingResponseIngredients[] ingredientsArrayList;
-
-    private Bake(Parcel in) {
-        id = in.readLong();
-        name = in.readString();
-        image = in.readString();
-    }
-
+public class Bake implements Parcelable {
     public static final Creator<Bake> CREATOR = new Creator<Bake>() {
         @Override
         public Bake createFromParcel(Parcel in) {
@@ -35,6 +22,17 @@ public class Bake implements Parcelable{
             return new Bake[size];
         }
     };
+    //TODO (63) create variables as in json and setter & getter
+    private long id;
+    private String name;
+    private String image;
+    private BakingResponseIngredients[] ingredientsArrayList;
+
+    private Bake(Parcel in) {
+        id = in.readLong();
+        name = in.readString();
+        image = in.readString();
+    }
 
     public Bake() {
 

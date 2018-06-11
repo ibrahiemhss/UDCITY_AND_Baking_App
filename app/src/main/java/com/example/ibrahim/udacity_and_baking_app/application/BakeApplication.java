@@ -9,27 +9,28 @@ import com.example.ibrahim.udacity_and_baking_app.di.module.ApplicationModule;
 
 import static com.example.ibrahim.udacity_and_baking_app.data.Contract.BASE_URL;
 //TODO (5) create class BakeApplication
+
 /**
- *
  * Created by ibrahim on 22/05/18.
- *
+ * <p>
  * application is a singleton object which will
  * be available throughout the entire lifecycle of
  * app and initialize most of the things that might be
  * required throughout our entire app
- *
+ * <p>
  * used to specify inside application that in inside the manifests
  */
 
 public class BakeApplication extends Application {
 
-    /**TODO (56) initialise ApplicationComponent method
-     *from {@Link BasActivity.class}
+    private static Context context;
+    /**
+     * TODO (56) initialise ApplicationComponent method
+     * from {@Link BasActivity.class}
      */
     private ApplicationComponent mApplicationComponent;
-    private static Context context;
 
-     //TODO (6)
+    //TODO (6)
     @Override
     public void onCreate() {
         super.onCreate();
@@ -40,18 +41,19 @@ public class BakeApplication extends Application {
     //TODO (23)
     private void initializeApplicationComponents() {
         /*TODO (57) get value from dagger*/
-         mApplicationComponent= DaggerApplicationComponent.builder()
-                .applicationModule(new ApplicationModule(this,BASE_URL.trim()))
+        mApplicationComponent = DaggerApplicationComponent.builder()
+                .applicationModule(new ApplicationModule(this, BASE_URL.trim()))
                 .build();
 
     }
-    public ApplicationComponent getApplicationComponent(){
+
+    public ApplicationComponent getApplicationComponent() {
         return mApplicationComponent;
     }
 
     //TODO (7)
-   // @Override
+    // @Override
     //public void onTerminate() {
-     //   super.onTerminate();
+    //   super.onTerminate();
     //}
 }

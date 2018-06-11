@@ -7,10 +7,10 @@ import android.util.Log;
 
 import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
-import com.example.ibrahim.udacity_and_baking_app.mvp.model.Ingredients;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakingResponse;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakingResponseIngredients;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakingResponseSteps;
+import com.example.ibrahim.udacity_and_baking_app.mvp.model.Ingredients;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 
 import java.util.ArrayList;
@@ -18,8 +18,8 @@ import java.util.List;
 
 import javax.inject.Inject;
 //TODO (64) create class BakeMapper
+
 /**
- *
  * Created by ibrahim on 24/05/18.
  * BakeMapper maps the response object into model objects
  */
@@ -28,15 +28,16 @@ public class BakeMapper {
     @Inject
     public BakeMapper() {
     }
+
     /*get all values from json that come inside BakingResponse
     * and add inside object of Bake*/
-    public ArrayList<Bake> mapBake(Context mContext, List<BakingResponse> responses){
+    public ArrayList<Bake> mapBake(Context mContext, List<BakingResponse> responses) {
         //create object bakeList ArrayList from class Bake
-        ArrayList<Bake> bakeList=new ArrayList<>();
+        ArrayList<Bake> bakeList = new ArrayList<>();
         //get value from list responses
         if (responses != null) {
-            for (BakingResponse bakingResponse: responses) {
-                Bake myBake=new Bake();
+            for (BakingResponse bakingResponse : responses) {
+                Bake myBake = new Bake();
                 //pass value from list responses to myBake
                 myBake.setId(bakingResponse.getId());
                 myBake.setName(bakingResponse.getName());
@@ -50,7 +51,7 @@ public class BakeMapper {
                 final Uri uri = mContext.getContentResolver().insert(Contract.PATH_BAKE_URI, values);
 
                 if (uri != null) {
-                    Log.d("insert_content","addded");
+                    Log.d("insert_content", "addded");
                 }
 
             }
@@ -67,54 +68,55 @@ public class BakeMapper {
        * this method get every getIngredients array by its position inside  BakingResponse
        */
 
-    public ArrayList<Ingredients> getIngredientsList(List<BakingResponse> responses, int position){
-        ArrayList<Ingredients> ingredientsList=new ArrayList<>();
+    public ArrayList<Ingredients> getIngredientsList(List<BakingResponse> responses, int position) {
+        ArrayList<Ingredients> ingredientsList = new ArrayList<>();
         if (responses != null) {
-            for (BakingResponse bakingResponse: responses) {
+            for (BakingResponse bakingResponse : responses) {
                 //call ingredientsList method to get ingredients by its position
-                ingredientsList=  ingredientsList(responses.get(position).getIngredients());
+                ingredientsList = ingredientsList(responses.get(position).getIngredients());
             }
         }
         return ingredientsList;
     }
 
-        /*
-       * this method get every Steps array by its position inside  BakingResponse
-       */
-           public ArrayList<Steps> getStepsList(List<BakingResponse> responses,int position){
-               ArrayList<Steps> stepsList=new ArrayList<>();
-            if (responses != null) {
-                for (BakingResponse bakingResponse: responses) {
-                    //call stepsList method to get Steps by its position
-                    stepsList= stepsList(responses.get(position).getSteps());
-                }
+    /*
+   * this method get every Steps array by its position inside  BakingResponse
+   */
+    public ArrayList<Steps> getStepsList(List<BakingResponse> responses, int position) {
+        ArrayList<Steps> stepsList = new ArrayList<>();
+        if (responses != null) {
+            for (BakingResponse bakingResponse : responses) {
+                //call stepsList method to get Steps by its position
+                stepsList = stepsList(responses.get(position).getSteps());
             }
-            return stepsList;
-
-
         }
+        return stepsList;
 
 
-    private ArrayList<Ingredients> ingredientsList(BakingResponseIngredients[] bakingResponseIngredients){
-        ArrayList<Ingredients> bakeIngredientsList=new ArrayList<>();
+    }
+
+
+    private ArrayList<Ingredients> ingredientsList(BakingResponseIngredients[] bakingResponseIngredients) {
+        ArrayList<Ingredients> bakeIngredientsList = new ArrayList<>();
         if (bakingResponseIngredients != null) {
 
             for (BakingResponseIngredients bakingResponseIngredients1 : bakingResponseIngredients) {
-                Ingredients myBakeIngredients=new Ingredients();
+                Ingredients myBakeIngredients = new Ingredients();
                 myBakeIngredients.setIngredient(bakingResponseIngredients1.getIngredient());
                 myBakeIngredients.setQuantity(bakingResponseIngredients1.getQuantity());
                 myBakeIngredients.setMeasure(bakingResponseIngredients1.getMeasure());
                 bakeIngredientsList.add(myBakeIngredients);
             }
         }
-        return  bakeIngredientsList;
+        return bakeIngredientsList;
 
     }
-    private ArrayList<Steps> stepsList(BakingResponseSteps[] bakingResponseSteps){
-        ArrayList <Steps> stepsList1 =new ArrayList<>();
-        if(bakingResponseSteps !=null){
+
+    private ArrayList<Steps> stepsList(BakingResponseSteps[] bakingResponseSteps) {
+        ArrayList<Steps> stepsList1 = new ArrayList<>();
+        if (bakingResponseSteps != null) {
             for (BakingResponseSteps bakingResponseStep : bakingResponseSteps) {
-                Steps mySteps=new Steps();
+                Steps mySteps = new Steps();
                 mySteps.setDescription(bakingResponseStep.getDescription());
                 mySteps.setShortDescription(bakingResponseStep.getShortDescription());
                 mySteps.setId(bakingResponseStep.getId());

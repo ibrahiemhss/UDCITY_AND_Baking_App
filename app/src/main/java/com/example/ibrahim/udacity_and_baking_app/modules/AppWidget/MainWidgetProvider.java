@@ -15,13 +15,17 @@ import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivit
 import com.example.ibrahim.udacity_and_baking_app.modules.home.MainActivity;
 
 /**
- *
  * Created by ibrahim on 24/05/18.
  */
 public class MainWidgetProvider extends AppWidgetProvider {
+    public static final String EXTRA_ID = "BAKE_position";
     private static final String TAG = "MainWidgetProvider";
 
-    public static final String EXTRA_ID = "BAKE_position";
+    public static void sendRefreshBroadcast(Context context) {
+        Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
+        intent.setComponent(new ComponentName(context, MainWidgetProvider.class));
+        context.sendBroadcast(intent);
+    }
 
     @Override
     public void onUpdate(Context context, AppWidgetManager appWidgetManager, int[] appWidgetIds) {
@@ -44,7 +48,7 @@ public class MainWidgetProvider extends AppWidgetProvider {
 
             // template to handle the click listener for each item
             Intent clickIntentTemplate = new Intent(context, DetailsActivity.class);
-            WidgetRemoteViewsFactory widgetRemoteViewsFactory=new WidgetRemoteViewsFactory();
+            WidgetRemoteViewsFactory widgetRemoteViewsFactory = new WidgetRemoteViewsFactory();
             clickIntentTemplate.putExtra(DetailsActivity.EXTRA_POSITION, widgetRemoteViewsFactory.getPosition());
 
 
@@ -52,19 +56,11 @@ public class MainWidgetProvider extends AppWidgetProvider {
                     .addNextIntentWithParentStack(clickIntentTemplate)
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
             views.setPendingIntentTemplate(R.id.widgetListView, clickPendingIntentTemplate);
-            Log.d(TAG,"ItemWidget_postion_onSend = "+ widgetRemoteViewsFactory.getPosition());
+            Log.d(TAG, "ItemWidget_postion_onSend = " + widgetRemoteViewsFactory.getPosition());
 
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }
     }
-
-
-    public static void sendRefreshBroadcast(Context context) {
-        Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
-        intent.setComponent(new ComponentName(context, MainWidgetProvider.class));
-        context.sendBroadcast(intent);
-    }
-
 
     @Override
     public void onReceive(final Context context, Intent intent) {

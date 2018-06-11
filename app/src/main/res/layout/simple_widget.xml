@@ -1,24 +1,24 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-              android:orientation="vertical"
-              android:layout_width="match_parent"
-              android:background="@color/colorWhite"
-              android:padding="5dp"
-              android:layout_height="match_parent">
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/colorWhite"
+    android:orientation="vertical"
+    android:padding="5dp">
 
     <TextView
         android:id="@+id/tv_widgetBake"
         android:layout_width="match_parent"
-        android:textSize="24sp"
-        android:textStyle="bold"
+        android:layout_height="wrap_content"
         android:gravity="center"
         android:textColor="@color/colorAccent"
-        android:layout_height="wrap_content"/>
+        android:textSize="24sp"
+        android:textStyle="bold" />
 
     <TextView
         android:layout_width="match_parent"
-        android:textColor="@color/colorGray"
+        android:layout_height="wrap_content"
         android:gravity="center_horizontal"
-        android:layout_height="wrap_content"/>
+        android:textColor="@color/colorGray" />
 
 </LinearLayout>

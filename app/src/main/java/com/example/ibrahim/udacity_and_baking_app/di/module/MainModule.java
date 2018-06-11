@@ -8,34 +8,37 @@ import dagger.Module;
 import dagger.Provides;
 import retrofit2.Retrofit;
 //TODO (26) create class MainModule
+
 /**
- *
  * Created by ibrahim on 22/05/18.
-*MainModule should provide finalized version of BakeApiService
-*/
+ * MainModule should provide finalized version of BakeApiService
+ */
 //@SuppressWarnings("ALL")
 @Module
 public class MainModule {
 
-     /*TODO (50) add MainView*/
-      private final MainView mView;
-    /*TODO (51) create constructor to pass mView*/
-      public MainModule(MainView view){
-          //pass view reference so the providing it
-          this.mView=view;
-      }
+    /*TODO (50) add MainView*/
+    private final MainView mView;
 
-      /**TODO (32) exposed retrofit
-       * @param retrofit
-       * because we have exposed retrofit we
-       * can make dagger it knows how to pass
-       *then using that inject inside presenter
-       */
+    /*TODO (51) create constructor to pass mView*/
+    public MainModule(MainView view) {
+        //pass view reference so the providing it
+        this.mView = view;
+    }
+
+    /**
+     * TODO (32) exposed retrofit
+     *
+     * @param retrofit because we have exposed retrofit we
+     *                 can make dagger it knows how to pass
+     *                 then using that inject inside presenter
+     */
     @AppScope
     @Provides
     BakeApiService provideBakeApiService(Retrofit retrofit) {
         return retrofit.create(BakeApiService.class);
     }
+
     /*
     TODO (52) providing that dependency of mainView
     */

@@ -19,16 +19,16 @@ import butterknife.ButterKnife;
 
 
 /**
- *
  * Created by ibrahim on 01/06/18.
  */
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.Holder> {
 
     private final LayoutInflater mLayoutInflater;
-    private final List<Ingredients> mList=new ArrayList<>();
-    public IngredientsAdapter( LayoutInflater inflater){
-        mLayoutInflater=inflater;
+    private final List<Ingredients> mList = new ArrayList<>();
+
+    public IngredientsAdapter(LayoutInflater inflater) {
+        mLayoutInflater = inflater;
     }
 
     @NonNull
@@ -36,7 +36,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     public IngredientsAdapter.Holder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
 
 
-        View view= mLayoutInflater.inflate(R.layout.list_item_ingredients,parent,false);
+        View view = mLayoutInflater.inflate(R.layout.list_item_ingredients, parent, false);
 
         return new IngredientsAdapter.Holder(view);
     }
@@ -44,27 +44,28 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
     @Override
     public void onBindViewHolder(@NonNull IngredientsAdapter.Holder holder, int position) {
 
-        holder.bind(mList.get(position),position);
+        holder.bind(mList.get(position), position);
     }
 
     @Override
     public int getItemCount() {
         return mList.size();
     }
-    public void addIngredients(List<Ingredients> ingredientsList){
+
+    public void addIngredients(List<Ingredients> ingredientsList) {
         mList.addAll(ingredientsList);
         notifyDataSetChanged();
     }
+
     @SuppressWarnings({"WeakerAccess", "unused"})
     public class Holder extends RecyclerView.ViewHolder {
+        private final Context mContext;
+        @BindView(R.id.textview_preview_ingredient)
+        protected TextView mIngredient;
         @BindView(R.id.textview_quantity)
         TextView mQuantity;
         @BindView(R.id.textview_preview_measure)
         TextView mMeasure;
-        @BindView(R.id.textview_preview_ingredient)
-        protected TextView mIngredient;
-
-        private final Context mContext;
 
         public Holder(View itemView) {
             super(itemView);

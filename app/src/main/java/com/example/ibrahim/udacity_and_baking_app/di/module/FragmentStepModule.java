@@ -9,7 +9,6 @@ import dagger.Provides;
 import retrofit2.Retrofit;
 
 /**
- *
  * Created by ibrahim on 04/06/18.
  */
 @Module
@@ -17,8 +16,9 @@ public class FragmentStepModule {
 
     //add StepsView
     private final StepsView mView;
-    public FragmentStepModule(StepsView view){
-        this.mView=view;
+
+    public FragmentStepModule(StepsView view) {
+        this.mView = view;
     }
 
     //inject BakeApiService inside presenter
@@ -27,6 +27,7 @@ public class FragmentStepModule {
     BakeApiService ingredientsApiService(Retrofit retrofit) {
         return retrofit.create(BakeApiService.class);
     }
+
     //providing  dependency of StepsView
     @AppScope
     @Provides

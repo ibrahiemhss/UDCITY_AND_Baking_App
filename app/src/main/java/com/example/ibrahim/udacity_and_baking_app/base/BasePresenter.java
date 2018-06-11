@@ -18,13 +18,13 @@ import rx.schedulers.Schedulers;
  */
 
 /**
-* this class subscribing everything should be
-* protected as far is utility base class
+ * this class subscribing everything should be
+ * protected as far is utility base class
  * V extends  BaseView In the original this is interface
- * */
-public class BasePresenter <V extends BaseView>{
+ */
+public class BasePresenter<V extends BaseView> {
 
-     //TODO (41) inject View
+    //TODO (41) inject View
     @SuppressWarnings("WeakerAccess")
     @Inject
     protected V mView;
@@ -36,11 +36,13 @@ public class BasePresenter <V extends BaseView>{
         return mView;
     }
 
-    /**TODO (38) create protected void subscribe and pass observer
-     * @param  observable save RX type T
-     * @param observer the observer is part of the RX type T
+    /**
+     * TODO (38) create protected void subscribe and pass observer
+     *
+     * @param observable save RX type T
+     * @param observer   the observer is part of the RX type T
      */
-    protected  void  subscribeBakingResponse (Observable<List<BakingResponse>> observable, Observer<List<BakingResponse>> observer){
+    protected void subscribeBakingResponse(Observable<List<BakingResponse>> observable, Observer<List<BakingResponse>> observer) {
 
         /*
          * See {@link <a href="https://android.jlelse.eu/rxjava-schedulers-what-when-and-how-to-use-it-6cfc27293add">HTTP/1.1 documentation</a>}.
@@ -58,7 +60,8 @@ public class BasePresenter <V extends BaseView>{
                  * that in details later anything might be required in here */
                 .subscribe(observer);
     }
-    protected  void  subscribeDetailsLists (Observable<List<BakingResponse>> observable, Observer<List<BakingResponse>> observer){
+
+    protected void subscribeDetailsLists(Observable<List<BakingResponse>> observable, Observer<List<BakingResponse>> observer) {
 
         observable.subscribeOn(Schedulers.newThread())
                 .toSingle()

@@ -8,9 +8,9 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import retrofit2.Retrofit;
- //TODO (14) create interface ApplicationComponent
+//TODO (14) create interface ApplicationComponent
+
 /**
- *
  * Created by ibrahim on 22/05/18.
  */
 //used throughout the entire app
@@ -33,6 +33,7 @@ no dependencies so we will leave it empty as it is
 public interface ApplicationComponent {
     //TODO (28) exposeRetrofit
     Retrofit exposeRetrofit();
+
     //TODO (30) Provides Context
     Context exposeContext();
 }

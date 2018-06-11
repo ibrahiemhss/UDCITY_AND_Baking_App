@@ -17,7 +17,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 //TODO (15) create interface ApplicationModule
 
 /**
- *
  * Created by ibrahim on 22/05/18.
  */
 /*
@@ -30,17 +29,18 @@ public class ApplicationModule {
      provide any object here */
     private final String mBaseUrl;
     private final Context mContext;
-     //TODO (22)
+
+    //TODO (22)
     @Inject
-    public ApplicationModule(Context context,String baseUrl) {
+    public ApplicationModule(Context context, String baseUrl) {
         this.mBaseUrl = baseUrl;
-        this.mContext=context;
+        this.mContext = context;
     }
 
-    /**TODO (20)provide GsonConverterFactory
-     *   which need some dependency that can
-     be passed through the conserve for through this method
-
+    /**
+     * TODO (20)provide GsonConverterFactory
+     * which need some dependency that can
+     * be passed through the conserve for through this method
      */
 
     @Singleton
@@ -49,9 +49,10 @@ public class ApplicationModule {
         return GsonConverterFactory.create();
     }
 
-    /**TODO (19)provide OkHttpClient
+    /**
+     * TODO (19)provide OkHttpClient
      * which need some dependency that can
-     be passed through the conserve for through this method
+     * be passed through the conserve for through this method
      */
 
     @Singleton
@@ -75,10 +76,10 @@ public class ApplicationModule {
                 .build();
     }*/
 
-    /**TODO (21)provide RxJavaCallAdapterFactory
-     *  which need some dependency that can
-     be passed through the conserve for through this method
-
+    /**
+     * TODO (21)provide RxJavaCallAdapterFactory
+     * which need some dependency that can
+     * be passed through the conserve for through this method
      */
     @Singleton
     @Provides
@@ -86,13 +87,14 @@ public class ApplicationModule {
         return RxJavaCallAdapterFactory.create();
     }
 
-    /** TODO (18)provide retrofit
+    /**
+     * TODO (18)provide retrofit
      * which need some dependency that can
-     be passed through the conserve for through this method
-
-     *@param client
-     *@param converterFactory
-     *@param adapterFactory
+     * be passed through the conserve for through this method
+     *
+     * @param client
+     * @param converterFactory
+     * @param adapterFactory
      */
     @SuppressWarnings("JavaDoc")
     @Singleton
@@ -106,7 +108,7 @@ public class ApplicationModule {
                 .build();
     }
 
-   //TODO (29) Provides Context
+    //TODO (29) Provides Context
     @Provides
     @Singleton
     Context provideContext() {

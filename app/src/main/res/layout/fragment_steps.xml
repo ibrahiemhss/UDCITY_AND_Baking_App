@@ -10,54 +10,58 @@
         android:id="@+id/fullscreen_content"
         android:layout_width="match_parent"
         android:layout_height="250dp">
+
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
-        android:id="@+id/playerView"
-        android:layout_width="match_parent"
-            android:visibility="gone"
-        android:layout_height="match_parent"
-            />
+            android:id="@+id/playerView"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:visibility="gone" />
 
         <TextView
             android:id="@+id/tv_txt_novid"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
+            android:gravity="center"
+            android:text="@string/no_video_description"
             android:textSize="30sp"
             android:textStyle="bold"
-            android:gravity="center"
             android:visibility="gone"
-            android:text="@string/no_video_description"
 
             />
     </FrameLayout>
+
     <TextView
         android:id="@+id/tv_descriptoin"
         android:layout_width="wrap_content"
-        android:layout_below="@+id/fullscreen_content"
-        android:layout_marginTop="16dp"
-        android:layout_centerHorizontal="true"
         android:layout_height="wrap_content"
-        android:textStyle="italic"
+        android:layout_below="@+id/fullscreen_content"
+        android:layout_centerHorizontal="true"
+        android:layout_marginTop="16dp"
+        android:padding="10dp"
         android:textSize="16sp"
-        android:padding="10dp"/>
+        android:textStyle="italic" />
+
     <RelativeLayout
         android:layout_width="match_parent"
-        android:layout_alignParentBottom="true"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true">
+
         <ImageView
             android:id="@+id/move_left"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentLeft="true"
-            android:src="@drawable/ic_arrow_left"
             android:contentDescription="TODO"
+            android:src="@drawable/ic_arrow_left"
             tools:ignore="ContentDescription,HardcodedText" />
+
         <ImageView
             android:id="@+id/move_right"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_alignParentRight="true"
-            android:src="@drawable/ic_arrow_right"
             android:contentDescription="TODO"
+            android:src="@drawable/ic_arrow_right"
             tools:ignore="ContentDescription,HardcodedText" />
     </RelativeLayout>
 </RelativeLayout>

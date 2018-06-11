@@ -4,22 +4,11 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- *
  * Created by ibrahim on 29/05/18.
  */
 
 @SuppressWarnings("unused")
 public class Ingredients implements Parcelable {
-    private float quantity;
-    private String measure;
-    private String ingredient;
-
-    public Ingredients(Parcel in) {
-        quantity = in.readFloat();
-        measure = in.readString();
-        ingredient = in.readString();
-    }
-
     public static final Creator<Ingredients> CREATOR = new Creator<Ingredients>() {
         @Override
         public Ingredients createFromParcel(Parcel in) {
@@ -31,6 +20,15 @@ public class Ingredients implements Parcelable {
             return new Ingredients[size];
         }
     };
+    private float quantity;
+    private String measure;
+    private String ingredient;
+
+    public Ingredients(Parcel in) {
+        quantity = in.readFloat();
+        measure = in.readString();
+        ingredient = in.readString();
+    }
 
     public Ingredients() {
 

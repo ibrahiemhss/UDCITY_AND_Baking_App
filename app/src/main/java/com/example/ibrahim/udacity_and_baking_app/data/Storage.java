@@ -16,17 +16,11 @@
 
 package com.example.ibrahim.udacity_and_baking_app.data;
 
-import android.content.ContentValues;
 import android.content.Context;
-import android.database.Cursor;
 import android.database.SQLException;
 import android.database.sqlite.SQLiteDatabase;
 import android.database.sqlite.SQLiteOpenHelper;
 import android.util.Log;
-
-import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
-
-import java.util.ArrayList;
 
 import javax.inject.Inject;
 
@@ -55,7 +49,7 @@ public class Storage extends SQLiteOpenHelper {
             db.execSQL(CREATE_TABLE_INGREDIENT);
             db.execSQL(CREATE_TABLE_STEPS);
 
-        } catch(SQLException e) {
+        } catch (SQLException e) {
             Log.d(TAG, e.getMessage());
         }
     }

@@ -9,9 +9,8 @@ import dagger.Provides;
 import retrofit2.Retrofit;
 
 /**
- *
  * Created by ibrahim on 30/05/18.
- *
+ * <p>
  * DetailsModule should provide  BakeApiService
  */
 @Module
@@ -19,8 +18,9 @@ public class DetailsModule {
 
     //add DetailsView
     private final DetailsView mView;
-    public DetailsModule(DetailsView view){
-        this.mView=view;
+
+    public DetailsModule(DetailsView view) {
+        this.mView = view;
     }
 
     //inject BakeApiService inside presenter
@@ -29,6 +29,7 @@ public class DetailsModule {
     BakeApiService ingredientsApiService(Retrofit retrofit) {
         return retrofit.create(BakeApiService.class);
     }
+
     //providing  dependency of DetailsView
     @AppScope
     @Provides

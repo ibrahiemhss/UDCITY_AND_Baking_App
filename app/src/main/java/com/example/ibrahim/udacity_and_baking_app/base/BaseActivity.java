@@ -14,13 +14,13 @@ import com.example.ibrahim.udacity_and_baking_app.di.components.ApplicationCompo
 import butterknife.ButterKnife;
 
 //TODO (1) cr
+
 /**
- *
  * Created by ibrahim on 22/05/18.
  */
 
 @SuppressWarnings("unused")
-public abstract  class BaseActivity extends AppCompatActivity {
+public abstract class BaseActivity extends AppCompatActivity {
 
     //ProgressDialog to view any message wanted in the child activity
     private ProgressDialog mProgressDialog;
@@ -35,6 +35,7 @@ public abstract  class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         onViewReady(savedInstanceState, getIntent());
     }
+
     /*
        noted CallSuper to force the call super for the child class so anyone
         inheriting this class he will has to do  @override super thought
@@ -52,8 +53,10 @@ public abstract  class BaseActivity extends AppCompatActivity {
         ButterKnife.bind(this).unbind();
         super.onDestroy();
     }
+
     /*TODO (47) create resolveDaggerDependency*/
-    protected void resolveDaggerDependency() {}
+    protected void resolveDaggerDependency() {
+    }
 
     protected void showBackArrow() {
         ActionBar supportActionBar = getSupportActionBar();
@@ -62,7 +65,8 @@ public abstract  class BaseActivity extends AppCompatActivity {
             supportActionBar.setDisplayShowHomeEnabled(true);
         }
     }
-     //TODO (3)
+
+    //TODO (3)
     protected void showDialog(String message) {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);

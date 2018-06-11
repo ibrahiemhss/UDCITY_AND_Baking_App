@@ -1,6 +1,6 @@
 package com.example.ibrahim.udacity_and_baking_app.mvp.model;
 
- //TODO (12)
+//TODO (12)
 @SuppressWarnings("unused")
 public class BakingResponse {
     private String image;
@@ -9,6 +9,7 @@ public class BakingResponse {
     private BakingResponseIngredients[] ingredients;
     private long id;
     private BakingResponseSteps[] steps;
+
     public String getImage() {
         return this.image;
     }

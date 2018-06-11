@@ -16,11 +16,9 @@ import android.support.annotation.Nullable;
 
 public class MyContentProvider extends ContentProvider {
 
-    private Storage mDbHelper;
     public static final int BAKE_CODE = 100;
-
     public static final UriMatcher sUriMatcher = buildUriMatcher();
-
+    private Storage mDbHelper;
 
     public static UriMatcher buildUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
@@ -90,7 +88,7 @@ public class MyContentProvider extends ContentProvider {
 
                 long id = db.insert(Contract.TABLE_BAKE, null, values);
 
-                if(id > 0) {
+                if (id > 0) {
                     returnUri = ContentUris.withAppendedId(Contract.PATH_BAKE_URI, id);
                 }
 

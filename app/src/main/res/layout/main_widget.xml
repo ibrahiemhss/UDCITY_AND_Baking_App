@@ -3,9 +3,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:padding="10dp"
     android:background="@drawable/border_parents"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:padding="10dp">
 
     <FrameLayout
         android:layout_width="match_parent"
@@ -35,7 +35,7 @@
             android:background="@color/colorWhite"
             android:divider="#eeeeee"
             android:dividerHeight="1dp"
-            tools:listitem="@layout/list_item_widget"/>
+            tools:listitem="@layout/list_item_widget" />
     </LinearLayout>
 
 </LinearLayout>

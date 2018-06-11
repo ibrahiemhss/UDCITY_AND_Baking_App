@@ -11,17 +11,17 @@ import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.Toast;
 
-import com.example.ibrahim.udacity_and_baking_app.di.module.MainModule;
-import com.example.ibrahim.udacity_and_baking_app.modules.AppWidget.MainWidgetProvider;
-import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivity;
-
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.base.BaseActivity;
 import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerMainComponents;
+import com.example.ibrahim.udacity_and_baking_app.di.module.MainModule;
+import com.example.ibrahim.udacity_and_baking_app.modules.AppWidget.MainWidgetProvider;
+import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivity;
 import com.example.ibrahim.udacity_and_baking_app.modules.home.adapter.BakesAdapter;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 import com.example.ibrahim.udacity_and_baking_app.mvp.presenter.MainPresenter;
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.MainView;
+import com.example.ibrahim.udacity_and_baking_app.utilities.NetworkUtils;
 
 import java.util.ArrayList;
 
@@ -35,11 +35,23 @@ import butterknife.ButterKnife;
 @SuppressWarnings("WeakerAccess")
 public class MainActivity extends BaseActivity implements MainView {
 
-    private BakesAdapter mBakesAdapter;
+    private static final String STATE_BAKE = "state_bake";
+    private final BakesAdapter.OnBakeClickListener onBakeClickListener = new BakesAdapter.OnBakeClickListener() {
+        @Override
+        public void onClick(int position) {
+            launchDetailActivity(position);
+
+        }
+    };
     //TODO (73) bind RecyclerView
     @BindView(R.id.bake_list)
     protected RecyclerView mBake_list;
-    private static final String STATE_BAKE = "state_bake";
+    /*
+    *TODO (44) MainActivity will get any bake information  from this MainPresenter */
+    @Inject
+    protected MainPresenter mPresenter;
+    private BakesAdapter mBakesAdapter;
+    private ArrayList<Bake> mBakeArrayList;
 
     /**
      * just implement getContentView from
@@ -49,14 +61,6 @@ public class MainActivity extends BaseActivity implements MainView {
     protected int getContentView() {
         return R.layout.activity_main;
     }
-
-    /*
-    *TODO (44) MainActivity will get any bake information  from this MainPresenter */
-    @Inject
-    protected MainPresenter mPresenter;
-    private ArrayList<Bake> mBakeArrayList;
-
-
 
     //TODO (34) Override view method from BaseActivity
     @Override
@@ -68,19 +72,20 @@ public class MainActivity extends BaseActivity implements MainView {
             mBakeArrayList = savedInstanceState.getParcelableArrayList(STATE_BAKE);
             mBakesAdapter.addBakes(mBakeArrayList);
 
-        }else {
+        } else {
             GetListByScreenSize();
       /*TODO (45) get value from the object of MainPresenter class */
+
+            if (NetworkUtils.isNetAvailable(this)) {
+                mPresenter.geBaking();
+            } else {
                 mPresenter.getBakeFromDatabase();
-
-
+            }
             MainWidgetProvider.sendRefreshBroadcast(this);
 
         }
 
     }
-
-
 
     /*TODO (48) Override  resolveDaggerDependency from BaseActivity class*/
     @Override
@@ -95,15 +100,15 @@ public class MainActivity extends BaseActivity implements MainView {
                 .mainModule(new MainModule(this))
                 .build().inject(this);
     }
+//TODO (69) implements onShowDialog & onShowToast & onHideDialog to show message
 
     //TODO (67) implements onBakeLoaded
     @Override
     public void onBakeLoaded(ArrayList<Bake> bakeList) {
-        mBakeArrayList=bakeList;
+        mBakeArrayList = bakeList;
         mBakesAdapter.addBakes(mBakeArrayList);
 
     }
-//TODO (69) implements onShowDialog & onShowToast & onHideDialog to show message
 
     @Override
     public void onShowDialog(String message) {
@@ -123,27 +128,19 @@ public class MainActivity extends BaseActivity implements MainView {
         Toast.makeText(this, message, Toast.LENGTH_SHORT).show();
     }
 
-    private final BakesAdapter.OnBakeClickListener onBakeClickListener = new BakesAdapter.OnBakeClickListener() {
-        @Override
-        public void onClick(int position) {
-            launchDetailActivity(position);
-
-        }
-    };
-
-
     private void launchDetailActivity(int position) {
         Intent intent = new Intent(this, DetailsActivity.class);
         intent.putExtra(DetailsActivity.EXTRA_POSITION, position);
         startActivity(intent);
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList(STATE_BAKE, mBakeArrayList);
         super.onSaveInstanceState(outState);
     }
 
-    public void GetListByScreenSize(){
+    public void GetListByScreenSize() {
 
         assert this.getSystemService(Context.WINDOW_SERVICE) != null;
         final int rotation = ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
@@ -169,7 +166,7 @@ public class MainActivity extends BaseActivity implements MainView {
         }
     }
 
-    public  boolean isTablet() {
+    public boolean isTablet() {
         return (MainActivity.this.getResources().getConfiguration().screenLayout
                 & Configuration.SCREENLAYOUT_SIZE_MASK)
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
@@ -184,22 +181,23 @@ public class MainActivity extends BaseActivity implements MainView {
         mBake_list.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
         //Pass a list of images with inflater ​​in adapter
-        mBakesAdapter = new BakesAdapter(mPresenter.getImgId(), getLayoutInflater(),mBakeArrayList);
+        mBakesAdapter = new BakesAdapter(mPresenter.getImgId(), getLayoutInflater(), mBakeArrayList);
 
         mBakesAdapter.setBakeClickListener(onBakeClickListener);
 
         mBake_list.setAdapter(mBakesAdapter);
     }
+
     //TODO (75) create  initialiseList to show values inside mBake_list
     private void initialiseListWithsLargeSize() {
 
 
         ButterKnife.bind(this);
         mBake_list.setHasFixedSize(true);
-        mBake_list.setLayoutManager(new GridLayoutManager(this,2,
+        mBake_list.setLayoutManager(new GridLayoutManager(this, 2,
                 GridLayoutManager.VERTICAL, false));
         //Pass a list of images with inflater ​​in adapter
-        mBakesAdapter = new BakesAdapter(mPresenter.getImgId(), getLayoutInflater(),mBakeArrayList);
+        mBakesAdapter = new BakesAdapter(mPresenter.getImgId(), getLayoutInflater(), mBakeArrayList);
 
         mBakesAdapter.setBakeClickListener(onBakeClickListener);
 

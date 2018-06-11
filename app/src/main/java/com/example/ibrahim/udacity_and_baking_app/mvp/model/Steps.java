@@ -4,12 +4,22 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- *
  * Created by ibrahim on 30/05/18.
  */
 
 @SuppressWarnings("unused")
 public class Steps implements Parcelable {
+    public static final Creator<Steps> CREATOR = new Creator<Steps>() {
+        @Override
+        public Steps createFromParcel(Parcel in) {
+            return new Steps(in);
+        }
+
+        @Override
+        public Steps[] newArray(int size) {
+            return new Steps[size];
+        }
+    };
     private long id;
     private String shortDescription;
     private String description;
@@ -23,18 +33,6 @@ public class Steps implements Parcelable {
         videoURL = in.readString();
         thumbnailURL = in.readString();
     }
-
-    public static final Creator<Steps> CREATOR = new Creator<Steps>() {
-        @Override
-        public Steps createFromParcel(Parcel in) {
-            return new Steps(in);
-        }
-
-        @Override
-        public Steps[] newArray(int size) {
-            return new Steps[size];
-        }
-    };
 
     public Steps() {
 

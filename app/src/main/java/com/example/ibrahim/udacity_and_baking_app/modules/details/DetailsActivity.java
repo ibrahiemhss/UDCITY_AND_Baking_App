@@ -39,32 +39,40 @@ import static com.example.ibrahim.udacity_and_baking_app.data.Contract.EXTRA_VID
 
 
 /**
- *
- *
  * Created by ibrahim on 22/05/18.
  */
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class DetailsActivity extends BaseActivity implements DetailsView  {
-    private static final String TAG = "DetailsActivity";
-
-    @SuppressWarnings("unused")
-    public interface FragmentListener {
-        void initializePlayer(String url);
-    }
-
-    FragmentListener mCallback;
+public class DetailsActivity extends BaseActivity implements DetailsView {
     public static final String EXTRA_POSITION = "extra_position";
-    private static final int DEFAULT_POSITION = -1;
-    private static final String STATE_INGREDIENTS = "state_ingredients";
     public static final String STATE_STEPS = "state_steps";
     public static final String STATE_FRAGMENT = "state_fragment";
-
+    private static final String TAG = "DetailsActivity";
+    private static final int DEFAULT_POSITION = -1;
+    private static final String STATE_INGREDIENTS = "state_ingredients";
+    @BindView(R.id.linear_details)
+    protected LinearLayout linear_details;
+    @BindView(R.id.ingredients_list)
+    protected RecyclerView mIngredients_list;
+    @BindView(R.id.step_list)
+    protected RecyclerView mStep_list;
+    @Inject
+    protected DetailsPresenter mPresenter;
+    FragmentListener mCallback;
     boolean addNewFragment;
-    Fragment stepsFragment ;
+    Fragment stepsFragment;
     List<Steps> stepsList = new ArrayList<>();
     List<Integer> stepsListIndex;
     int urlPosition;
+    int position;
+    int i = 0;
+    int mySelectedId;
+
+    private boolean mTwoPane;
+    private IngredientsAdapter mIngredientsAdapter;
+    private StepsAdapter mStepsAdapter;
+    private ArrayList<Steps> mStepsArrayList;
+    private ArrayList<Ingredients> mIngredientsArrayList;
 
     public List<Steps> getStepsList() {
         return stepsList;
@@ -74,44 +82,18 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
         this.stepsList = stepsList;
     }
 
-    int position;
-
-    @BindView(R.id.linear_details)
-    protected LinearLayout linear_details;
-
-
-    int i = 0;
-    int mySelectedId;
-
-    private boolean mTwoPane;
-
-    @BindView(R.id.ingredients_list)
-    protected RecyclerView mIngredients_list;
-    private IngredientsAdapter mIngredientsAdapter;
-
-    @BindView(R.id.step_list)
-    protected RecyclerView mStep_list;
-    private StepsAdapter mStepsAdapter;
-
-    private ArrayList<Steps> mStepsArrayList;
-    private ArrayList<Ingredients> mIngredientsArrayList;
-
-
     @Override
     protected int getContentView() {
 
         return R.layout.activity_detials;
     }
 
-    @Inject
-    protected DetailsPresenter mPresenter;
-
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
         SharedPrefManager.getInstance(DetailsActivity.this).seSetVideoUrl();
 
-            GetFragmentByScreenSize();
+        GetFragmentByScreenSize();
 
         getPositionFromIntent();
         initialiseListIngredients();
@@ -137,6 +119,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
                 .detailsModule(new DetailsModule(this))
                 .build().inject(this);
     }
+
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putParcelableArrayList(STATE_INGREDIENTS, mIngredientsArrayList);
@@ -166,7 +149,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
         }
 
 
-
     }
 
     private void initialiseListIngredients() {
@@ -192,20 +174,18 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
 
                 if (mTwoPane) {
 
-                    stepsFragment=new StepsFragment();
+                    stepsFragment = new StepsFragment();
 
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList(StepsFragment.EXTRA_STEP_LIST_ACTIVITY, mStepsArrayList);
                     bundle.putInt(StepsFragment.EXTRA_STEP_INDEX, position);
-                    bundle.putBoolean(StepsFragment.EXTRA_LARGE_SCREEN,mTwoPane);
+                    bundle.putBoolean(StepsFragment.EXTRA_LARGE_SCREEN, mTwoPane);
 
                     stepsFragment.setArguments(bundle);
                     FragmentManager fragmentManager = getSupportFragmentManager();
                     fragmentManager.beginTransaction()
                             .replace(R.id.step_container, stepsFragment)
                             .commit();
-
-
 
 
                 } else {
@@ -224,18 +204,17 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
 
     @Override
     public void onIngredientsLoaded(ArrayList<Ingredients> ingredientsList) {
-        mIngredientsArrayList=ingredientsList;
+        mIngredientsArrayList = ingredientsList;
         mIngredientsAdapter.addIngredients(mIngredientsArrayList);
 
     }
 
     @Override
     public void onStepsLoaded(ArrayList<Steps> stepsList) {
-        mStepsArrayList=stepsList;
+        mStepsArrayList = stepsList;
         mStepsAdapter.addSteps(mStepsArrayList);
         setStepsList(mStepsArrayList);
     }
-
 
     public boolean isTablet() {
         return (DetailsActivity.this.getResources().getConfiguration().screenLayout
@@ -245,7 +224,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
 
     public void GetFragmentByScreenSize() {
 
-        assert ( this.getSystemService(Context.WINDOW_SERVICE)) != null;
+        assert (this.getSystemService(Context.WINDOW_SERVICE)) != null;
         assert this.getSystemService(Context.WINDOW_SERVICE) != null;
         final int rotation = ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
         switch (rotation) {
@@ -277,12 +256,12 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
     }
 
     private void changeVideo() {
-        stepsFragment=new StepsFragment();
+        stepsFragment = new StepsFragment();
 
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(StepsFragment.EXTRA_STEP_LIST_ACTIVITY, mStepsArrayList);
         bundle.putInt(StepsFragment.EXTRA_STEP_INDEX, 0);
-        bundle.putBoolean(StepsFragment.EXTRA_LARGE_SCREEN,mTwoPane);
+        bundle.putBoolean(StepsFragment.EXTRA_LARGE_SCREEN, mTwoPane);
 
         stepsFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -296,8 +275,13 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);
-        if(newConfig.orientation==Configuration.ORIENTATION_LANDSCAPE){
+        if (newConfig.orientation == Configuration.ORIENTATION_LANDSCAPE) {
 
         }
+    }
+
+    @SuppressWarnings("unused")
+    public interface FragmentListener {
+        void initializePlayer(String url);
     }
 }

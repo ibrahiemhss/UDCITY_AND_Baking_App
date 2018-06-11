@@ -7,15 +7,14 @@ import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivit
 import dagger.Component;
 
 /**
- *
  * Created by ibrahim on 30/05/18.
  */
 @AppScope
-@Component (modules = DetailsModule.class,dependencies = ApplicationComponent.class)
+@Component(modules = DetailsModule.class, dependencies = ApplicationComponent.class)
 public interface DetailsComponents {
-   /**
-    * @param activity the Components want inject into inside DetailsActivity
-    */
-   void inject(DetailsActivity activity);
+    /**
+     * @param activity the Components want inject into inside DetailsActivity
+     */
+    void inject(DetailsActivity activity);
 
 }

@@ -7,12 +7,11 @@ import com.example.ibrahim.udacity_and_baking_app.modules.steps.fragments.StepsF
 import dagger.Component;
 
 /**
- *
  * Created by ibrahim on 04/06/18.
  */
 @SuppressWarnings("unused")
 @AppScope
-@Component(modules = FragmentStepModule.class,dependencies = ApplicationComponent.class)
+@Component(modules = FragmentStepModule.class, dependencies = ApplicationComponent.class)
 public interface FragmentStepComponent {
     /**
      * @param stepsFragment the Components want inject into inside StepsFragment

@@ -11,7 +11,6 @@ import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 
 
 /**
- *
  * Created by ibrahim on 24/05/18.
  */
 public class SimpleAppWidgetProvider extends AppWidgetProvider {

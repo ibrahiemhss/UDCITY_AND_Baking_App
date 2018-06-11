@@ -20,8 +20,8 @@ public class getBakeUtils {
     public static ArrayList<Bake> getBake(Context context)
 
     {
-       Bake bake;
-   ArrayList<Bake> bakeArrayList = new ArrayList<>();
+        Bake bake;
+        ArrayList<Bake> bakeArrayList = new ArrayList<>();
                  /* get the ContentProvider URI */
         Uri uri = Contract.PATH_BAKE_URI;
                 /* Perform the ContentProvider query */

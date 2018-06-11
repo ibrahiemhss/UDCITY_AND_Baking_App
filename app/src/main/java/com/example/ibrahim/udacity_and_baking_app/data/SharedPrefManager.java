@@ -13,7 +13,6 @@ import android.content.SharedPreferences;
 public class SharedPrefManager {
     private static final String PREF_POSITION = "pref_position";
     private static final String PREF_VIDEO_URL = "pref_video_url";
-
     private static final String SHARED_PREF_NAME = "save_contents";
     private static SharedPrefManager mInstance;
     private final SharedPreferences pref;
