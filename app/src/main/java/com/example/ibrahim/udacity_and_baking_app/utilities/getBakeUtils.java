@@ -49,7 +49,7 @@ public class getBakeUtils {
                 /*add all new value of movie object to moviesArrayList*/
                 bakeArrayList.add(bake);
 
-                Log.i(TAG, "FetchMovies\ntitle\n" + names);
+                Log.i(TAG, "FetchBake\nnames\n" + names);
             }
             c.close();
         }
