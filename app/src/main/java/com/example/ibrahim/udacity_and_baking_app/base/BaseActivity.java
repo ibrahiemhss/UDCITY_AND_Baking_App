@@ -19,6 +19,7 @@ import butterknife.ButterKnife;
  * Created by ibrahim on 22/05/18.
  */
 
+@SuppressWarnings("unused")
 public abstract  class BaseActivity extends AppCompatActivity {
 
     //ProgressDialog to view any message wanted in the child activity

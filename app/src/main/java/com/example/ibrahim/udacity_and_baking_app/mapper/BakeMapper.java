@@ -1,5 +1,11 @@
 package com.example.ibrahim.udacity_and_baking_app.mapper;
 
+import android.content.ContentValues;
+import android.content.Context;
+import android.net.Uri;
+import android.util.Log;
+
+import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Ingredients;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakingResponse;
@@ -23,8 +29,8 @@ public class BakeMapper {
     public BakeMapper() {
     }
     /*get all values from json that come inside BakingResponse
-    * and add inide object of Bake*/
-    public ArrayList<Bake> mapBake(List<BakingResponse> responses){
+    * and add inside object of Bake*/
+    public ArrayList<Bake> mapBake(Context mContext, List<BakingResponse> responses){
         //create object bakeList ArrayList from class Bake
         ArrayList<Bake> bakeList=new ArrayList<>();
         //get value from list responses
@@ -38,7 +44,14 @@ public class BakeMapper {
                 myBake.setIngredientsArrayList(bakingResponse.getIngredients());
                 //add all value from myBake to bakeList
                 bakeList.add(myBake);
+                ContentValues values = new ContentValues();
+                values.put(Contract.COL_NAMES, bakingResponse.getName());
 
+                final Uri uri = mContext.getContentResolver().insert(Contract.PATH_BAKE_URI, values);
+
+                if (uri != null) {
+                    Log.d("insert_content","addded");
+                }
 
             }
 
@@ -50,7 +63,7 @@ public class BakeMapper {
     }
 
     /*after get all values from Observable and save inside  BakingResponse
-     * json have getIngredients  array inide BakingResponse
+     * json have getIngredients  array inside BakingResponse
        * this method get every getIngredients array by its position inside  BakingResponse
        */
 

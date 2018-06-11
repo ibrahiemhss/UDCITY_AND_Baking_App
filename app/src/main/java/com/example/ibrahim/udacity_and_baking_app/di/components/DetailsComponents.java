@@ -3,7 +3,6 @@ package com.example.ibrahim.udacity_and_baking_app.di.components;
 import com.example.ibrahim.udacity_and_baking_app.di.module.DetailsModule;
 import com.example.ibrahim.udacity_and_baking_app.di.scope.AppScope;
 import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivity;
-import com.example.ibrahim.udacity_and_baking_app.modules.steps.fragments.StepsFragment;
 
 import dagger.Component;
 

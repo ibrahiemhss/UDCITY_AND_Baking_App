@@ -9,7 +9,8 @@
         android:id="@+id/linear_details"
         android:layout_width="match_parent"
         android:orientation="vertical"
-        android:layout_height="match_parent">
+        android:layout_height="match_parent"
+        tools:ignore="UselessParent">
     <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -76,21 +77,21 @@
 <TextView
     android:layout_width="wrap_content"
     android:layout_height="wrap_content"
-    android:textSize="16sp"
+    android:textSize="12sp"
     android:layout_gravity="center"
     android:textStyle="bold"
     android:text="@string/steps"/>
         <TextView
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:textSize="10sp"
+            android:textSize="12sp"
             android:layout_gravity="center"
             android:textStyle="bold"
             android:text="@string/see_video"/>
         <android.support.v7.widget.RecyclerView
             android:id="@+id/step_list"
             android:layout_width="match_parent"
-            android:layout_height="match_parent"
+            android:layout_height="0dp"
             android:layout_weight="1"
             android:padding="2dp"
             android:scrollbars="vertical" />

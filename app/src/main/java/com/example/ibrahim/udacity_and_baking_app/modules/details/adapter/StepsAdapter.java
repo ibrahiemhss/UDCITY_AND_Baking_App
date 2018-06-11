@@ -1,8 +1,6 @@
 package com.example.ibrahim.udacity_and_baking_app.modules.details.adapter;
 
 import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -11,7 +9,6 @@ import android.view.ViewGroup;
 import android.widget.TextView;
 
 import com.example.ibrahim.udacity_and_baking_app.R;
-import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 
 import java.util.ArrayList;
@@ -25,6 +22,7 @@ import butterknife.ButterKnife;
  * Created by ibrahim on 01/06/18.
  */
 
+@SuppressWarnings("unused")
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
 
 
@@ -32,8 +30,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
     private final LayoutInflater mLayoutInflater;
     private String mVideoURL;
     private String mDescription;
-
-    private AdpaterListener mListener;
 
 
     private final List<Steps> mList=new ArrayList<>();
@@ -66,7 +62,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
         mList.addAll(stepsList);
         notifyDataSetChanged();
     }
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"WeakerAccess", "unused"})
     public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.textview_id)
         protected TextView mId;
@@ -114,19 +110,20 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
         return mVideoURL;
     }
 
-    public void setVideoURL(String mVideoURL) {
+    private void setVideoURL(String mVideoURL) {
         this.mVideoURL = mVideoURL;
     }
     public String getDescription() {
         return mDescription;
     }
 
-    public void setDescription(String mDescription) {
+    private void setDescription(String mDescription) {
         this.mDescription = mDescription;
     }
 
 
+    @SuppressWarnings("UnnecessaryLocalVariable")
     public void setAdapterListener(AdpaterListener listener) {
-        mListener = listener;
+        AdpaterListener mListener = listener;
     }
 }

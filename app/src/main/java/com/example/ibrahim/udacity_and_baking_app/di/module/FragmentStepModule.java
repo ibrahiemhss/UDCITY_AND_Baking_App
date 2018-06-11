@@ -2,7 +2,6 @@ package com.example.ibrahim.udacity_and_baking_app.di.module;
 
 import com.example.ibrahim.udacity_and_baking_app.api.BakeApiService;
 import com.example.ibrahim.udacity_and_baking_app.di.scope.AppScope;
-import com.example.ibrahim.udacity_and_baking_app.mvp.view.DetailsView;
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.StepsView;
 
 import dagger.Module;
@@ -10,6 +9,7 @@ import dagger.Provides;
 import retrofit2.Retrofit;
 
 /**
+ *
  * Created by ibrahim on 04/06/18.
  */
 @Module

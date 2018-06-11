@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -13,19 +12,18 @@ import android.view.WindowManager;
 import android.widget.Toast;
 
 import com.example.ibrahim.udacity_and_baking_app.di.module.MainModule;
+import com.example.ibrahim.udacity_and_baking_app.modules.AppWidget.MainWidgetProvider;
 import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivity;
 
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.base.BaseActivity;
 import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerMainComponents;
 import com.example.ibrahim.udacity_and_baking_app.modules.home.adapter.BakesAdapter;
-import com.example.ibrahim.udacity_and_baking_app.modules.steps.fragments.StepsFragment;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 import com.example.ibrahim.udacity_and_baking_app.mvp.presenter.MainPresenter;
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.MainView;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -42,7 +40,6 @@ public class MainActivity extends BaseActivity implements MainView {
     @BindView(R.id.bake_list)
     protected RecyclerView mBake_list;
     private static final String STATE_BAKE = "state_bake";
-
 
     /**
      * just implement getContentView from
@@ -74,8 +71,13 @@ public class MainActivity extends BaseActivity implements MainView {
         }else {
             GetListByScreenSize();
       /*TODO (45) get value from the object of MainPresenter class */
-            mPresenter.geBaking();
+                mPresenter.getBakeFromDatabase();
+
+
+            MainWidgetProvider.sendRefreshBroadcast(this);
+
         }
+
     }
 
 
@@ -143,19 +145,19 @@ public class MainActivity extends BaseActivity implements MainView {
 
     public void GetListByScreenSize(){
 
-        assert ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)) != null;
+        assert this.getSystemService(Context.WINDOW_SERVICE) != null;
         final int rotation = ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
         switch (rotation) {
             case Surface.ROTATION_0:
                 if (isTablet()) {
-                    initialiseListWithsLargSize();
+                    initialiseListWithsLargeSize();
                 } else {
                     initialiseListWithPhoneScreen();
                 }
 
                 break;
             case Surface.ROTATION_90:
-                initialiseListWithsLargSize();
+                initialiseListWithsLargeSize();
                 break;
             case Surface.ROTATION_180:
                 initialiseListWithPhoneScreen();
@@ -189,7 +191,7 @@ public class MainActivity extends BaseActivity implements MainView {
         mBake_list.setAdapter(mBakesAdapter);
     }
     //TODO (75) create  initialiseList to show values inside mBake_list
-    private void initialiseListWithsLargSize() {
+    private void initialiseListWithsLargeSize() {
 
 
         ButterKnife.bind(this);

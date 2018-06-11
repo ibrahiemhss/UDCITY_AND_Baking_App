@@ -14,11 +14,12 @@ import com.example.ibrahim.udacity_and_baking_app.mvp.view.StepsView;
  * Created by ibrahim on 01/06/18.
  */
 
+@SuppressWarnings("unused")
 public abstract class BaseFragments extends Fragment {
 
    private ProgressDialog progressDialog;
 
-    public abstract StepsView getSeps();
+    public abstract StepsView getSteps();
 
     public void showLoading() {
         showLoading(null);
@@ -27,29 +28,28 @@ public abstract class BaseFragments extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
-        if (getSeps() != null) {
-            getSeps().resume();
+        if (getSteps() != null) {
+            getSteps().resume();
         }
     }
 
     @Override
     public void onPause() {
         super.onPause();
-        if (getSeps() != null) {
-            getSeps().pause();
+        if (getSteps() != null) {
+            getSteps().pause();
         }
     }
 
     @Override
     public void onDestroy() {
         super.onDestroy();
-        if (getSeps() != null) {
-            getSeps().destroy();
+        if (getSteps() != null) {
+            getSteps().destroy();
         }
     }
-    protected void resolveDaggerDependency() {}
 
-    public void showLoading(String msg) {
+    private void showLoading(String msg) {
         if (progressDialog == null) {
             progressDialog = new ProgressDialog(getActivity());
         }

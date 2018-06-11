@@ -20,6 +20,7 @@ import rx.Observer;
  * Created by ibrahim on 02/06/18.
  */
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class StepfragmentPresenter extends BasePresenter<StepsView> implements Observer<List<BakingResponse>> {
 
     private int position;

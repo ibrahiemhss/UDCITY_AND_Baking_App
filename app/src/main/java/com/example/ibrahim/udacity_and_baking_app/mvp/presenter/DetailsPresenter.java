@@ -47,7 +47,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> implements Obse
 
     /**@param position that com from intent from DetailsActivity
      * pass information to DetailsActivity from this method*/
-    public void getDetials(int position) {
+    public void getDetails(int position) {
         /*pass <List<BakingResponse>> to get all lists of
          BakingResponseSteps [] & BakingResponseIngredients[]
         by their position that come from intent from DetailsActivity

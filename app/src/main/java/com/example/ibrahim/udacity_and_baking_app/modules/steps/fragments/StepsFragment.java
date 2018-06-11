@@ -1,13 +1,9 @@
 package com.example.ibrahim.udacity_and_baking_app.modules.steps.fragments;
 
-import android.annotation.SuppressLint;
-import android.app.ActionBar;
 import android.app.NotificationManager;
-import android.app.PendingIntent;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.ActivityInfo;
 import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
@@ -15,63 +11,36 @@ import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.NotificationCompat;
 import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
 import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
-import android.view.Surface;
-import android.view.TextureView;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.FrameLayout;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-;
 import com.example.ibrahim.udacity_and_baking_app.R;
-import com.example.ibrahim.udacity_and_baking_app.base.BaseFragments;
 import com.example.ibrahim.udacity_and_baking_app.data.SharedPrefManager;
-import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerFragmentStepComponent;
-import com.example.ibrahim.udacity_and_baking_app.di.module.FragmentStepModule;
-import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivity;
-import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.AdpaterListener;
-import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.StepsAdapter;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 import com.example.ibrahim.udacity_and_baking_app.mvp.presenter.StepfragmentPresenter;
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.StepsView;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
-import com.google.android.exoplayer2.ExoPlaybackException;
-import com.google.android.exoplayer2.ExoPlayer;
 import com.google.android.exoplayer2.ExoPlayerFactory;
-import com.google.android.exoplayer2.LoadControl;
-import com.google.android.exoplayer2.PlaybackParameters;
 import com.google.android.exoplayer2.SimpleExoPlayer;
-import com.google.android.exoplayer2.Timeline;
 import com.google.android.exoplayer2.extractor.DefaultExtractorsFactory;
-import com.google.android.exoplayer2.extractor.ExtractorsFactory;
 import com.google.android.exoplayer2.source.ExtractorMediaSource;
 import com.google.android.exoplayer2.source.MediaSource;
-import com.google.android.exoplayer2.source.TrackGroupArray;
 import com.google.android.exoplayer2.trackselection.DefaultTrackSelector;
-import com.google.android.exoplayer2.trackselection.TrackSelection;
-import com.google.android.exoplayer2.trackselection.TrackSelectionArray;
-import com.google.android.exoplayer2.trackselection.TrackSelector;
 import com.google.android.exoplayer2.ui.SimpleExoPlayerView;
-import com.google.android.exoplayer2.upstream.BandwidthMeter;
-import com.google.android.exoplayer2.upstream.DataSource;
-import com.google.android.exoplayer2.upstream.DefaultAllocator;
-import com.google.android.exoplayer2.upstream.DefaultBandwidthMeter;
-import com.google.android.exoplayer2.upstream.DefaultDataSourceFactory;
 import com.google.android.exoplayer2.upstream.DefaultHttpDataSourceFactory;
-import com.google.android.exoplayer2.upstream.TransferListener;
 import com.google.android.exoplayer2.util.Util;
 
 
 import java.util.ArrayList;
-import java.util.List;
 
 import javax.inject.Inject;
 
@@ -79,24 +48,19 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static android.content.Context.NOTIFICATION_SERVICE;
-import static com.example.ibrahim.udacity_and_baking_app.data.Contract.MAX_BUFFER_DURATION;
-import static com.example.ibrahim.udacity_and_baking_app.data.Contract.MIN_BUFFER_DURATION;
-import static com.example.ibrahim.udacity_and_baking_app.data.Contract.MIN_PLAYBACK_RESUME_BUFFER;
-import static com.example.ibrahim.udacity_and_baking_app.data.Contract.MIN_PLAYBACK_START_BUFFER;
-import static com.example.ibrahim.udacity_and_baking_app.data.Contract.VIDEO_URL;
-
 /**
+ *
  * Created by ibrahim on 01/06/18.
  */
 
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class StepsFragment extends Fragment implements StepsView, View.OnClickListener/* , Player.EventListener*/ {
-    public static final String TAG = "StepsFragment";
-    public static final String EXTRA_STEP_POSITION = "extra_step_position";
+    private static final String TAG = "StepsFragment";
+    private static final String EXTRA_STEP_POSITION = "extra_step_position";
     public static final String EXTRA_STEP_INDEX = "extra_index";
-    public static final String EXTRA_STEP_LIST = "extra_steps_list";
-    public static final String EXTRA_STEP_LIST_ACTIVITY = "extra_steps_list_avtivity";
-    public static final String EXTRA_LARG_SCREEN = "extra_larg";
+    private static final String EXTRA_STEP_LIST = "extra_steps_list";
+    public static final String EXTRA_STEP_LIST_ACTIVITY = "extra_steps_list_activity";
+    public static final String EXTRA_LARGE_SCREEN = "extra_large";
 
 
     @Override
@@ -115,14 +79,12 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
 
     @BindView(R.id.fullscreen_content) protected FrameLayout mFrameLayout;
 
-    protected SimpleExoPlayer mExoPlayer;
+    private SimpleExoPlayer mExoPlayer;
 
-    private int position;
     private int mIndex;
-    private Boolean mIsLarg;
-    boolean savStat;
+    private Boolean mIsLarge;
 
-    public int getmIndex() {
+    private int getmIndex() {
         return mIndex;
     }
 
@@ -158,7 +120,7 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
       if (bundle != null && bundle.containsKey(EXTRA_STEP_LIST_ACTIVITY) && bundle.containsKey(EXTRA_STEP_POSITION)
               &&bundle.getParcelableArray(EXTRA_STEP_LIST_ACTIVITY)!=null) {
           mStepsArrayList = bundle.getParcelableArrayList(EXTRA_STEP_LIST_ACTIVITY);
-          position = bundle.getInt(EXTRA_STEP_POSITION);
+          int position = bundle.getInt(EXTRA_STEP_POSITION);
           mIndex = SharedPrefManager.getInstance(getActivity()).getPrefPosition();
           Log.d(TAG, "bundleList 1 = " + mStepsArrayList.size());
           Log.d(TAG, "mIndex 1 = " + mIndex);
@@ -174,7 +136,7 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
 
 
 
-    Unbinder unbinder;
+    private Unbinder unbinder;
 
 
     @Inject
@@ -182,16 +144,6 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
 
 
     public StepsFragment() {
-    }
-
-    @Override
-    public void onActivityCreated(@Nullable Bundle savedInstanceState) {
-        super.onActivityCreated(savedInstanceState);
-
-
-
-
-
     }
 
     @Nullable
@@ -209,14 +161,14 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
             if (extras != null) {
                 mStepsArrayList = extras.getParcelableArrayList(EXTRA_STEP_LIST_ACTIVITY);
                 mIndex=extras.getInt(EXTRA_STEP_INDEX);
-                mIsLarg=extras.getBoolean(EXTRA_LARG_SCREEN);
+                mIsLarge=extras.getBoolean(EXTRA_LARGE_SCREEN);
                 Log.d(TAG, " mIndex getArguments = " + mIndex);
 
             }
         }
         if (savedInstanceState != null) {
             mStepsArrayList=savedInstanceState.getParcelableArrayList(EXTRA_STEP_LIST);
-            mIndex=SharedPrefManager.getInstance(getActivity()).getPrefPosition();
+            mIndex=savedInstanceState.getInt(EXTRA_STEP_INDEX);
             Log.d(TAG, " mIndex savedInstanceState = " + mIndex);
 
 
@@ -284,7 +236,7 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
 
 
 
-    public void initializePlayer(Uri mVideoUri) {
+    private void initializePlayer(Uri mVideoUri) {
 
 
 
@@ -329,12 +281,6 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
     }
 
     @Override
-    public void onResume() {
-        super.onResume();
-
-    }
-
-    @Override
     public void onClick(View view) {
         int id =view.getId();
         if (id == R.id.move_left) {
@@ -371,14 +317,15 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
 
 
     }
-    public void show() {
+    @SuppressWarnings("StatementWithEmptyBody")
+    private void show() {
 
         releasePlayer();
 
         if(mStepsArrayList.size()>0){
 
             String videoUrl = mStepsArrayList.get(getmIndex()).getVideoURL();
-            if(mIsLarg){
+            if(mIsLarge){
               //  mTxtDescription.setText(mStepsArrayList.get(mIndex).getDescription());
 
             }
@@ -415,17 +362,31 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
             MediaButtonReceiver.handleIntent(mMediaSession, intent);
         }
     }
+    @SuppressWarnings("RedundantConditionalExpression")
     @Override
     public void onSaveInstanceState(@Nullable Bundle outState) {
-        super.onSaveInstanceState(outState);
+        super.onSaveInstanceState(outState != null ? outState : null);
         outState.putInt(EXTRA_STEP_INDEX, mIndex);
-        SharedPrefManager.getInstance(getActivity()).setPrefPosition(mIndex);
         outState.putParcelableArrayList(EXTRA_STEP_LIST,mStepsArrayList);
         Log.d(TAG, "mIndex outState = " + getmIndex());
-        savStat=true;
+        boolean savStat = true;
     }
 
+private ViewGroup container;
+    private LayoutInflater inflater;
 
+public View initializeUi(){
+        View view = null;
 
+        int orientation=getActivity().getResources().getConfiguration().orientation;
+
+        if(orientation==Configuration.ORIENTATION_LANDSCAPE){
+            view =inflater.inflate(R.layout.fragment_steps,container,false);
+        }
+    if(orientation==Configuration.ORIENTATION_PORTRAIT){
+        view =inflater.inflate(R.layout.fragment_steps,container,false);
+    }
+    return view;
+}
 }
 

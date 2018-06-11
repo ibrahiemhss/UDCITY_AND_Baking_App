@@ -66,15 +66,8 @@ dependencies {
     annotationProcessor 'com.github.hotchemi:permissionsdispatcher-processor:2.4.0'
 
 
-// exo player
-/*Add ExoPlayer Dependency Here*/
     implementation 'com.google.android.exoplayer:exoplayer:r2.4.0'
-    /* Optional IMA Extension Dependency If you want to show Video Ads
-    in between Your videos Like Youtube */
 
-  //  implementation 'com.devbrackets.android:exomedia:4.2.1'
-
-    //Unit Testing
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
     androidTestImplementation 'org.mockito:mockito-core:2.18.3'

@@ -94,6 +94,7 @@ public class ApplicationModule {
      *@param converterFactory
      *@param adapterFactory
      */
+    @SuppressWarnings("JavaDoc")
     @Singleton
     @Provides
     Retrofit provideRetrofit(@Named("ok-1") OkHttpClient client, GsonConverterFactory converterFactory, RxJavaCallAdapterFactory adapterFactory) {

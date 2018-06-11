@@ -6,16 +6,11 @@ import android.content.res.Configuration;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.app.FragmentTransaction;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.Surface;
-import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.Switch;
 
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.base.BaseActivity;
@@ -26,12 +21,10 @@ import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.Ingred
 import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.StepsAdapter;
 import com.example.ibrahim.udacity_and_baking_app.modules.steps.StepsActivity;
 import com.example.ibrahim.udacity_and_baking_app.modules.steps.fragments.StepsFragment;
-import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Ingredients;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 import com.example.ibrahim.udacity_and_baking_app.mvp.presenter.DetailsPresenter;
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.DetailsView;
-import com.example.ibrahim.udacity_and_baking_app.mvp.view.StepsView;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -51,13 +44,15 @@ import static com.example.ibrahim.udacity_and_baking_app.data.Contract.EXTRA_VID
  * Created by ibrahim on 22/05/18.
  */
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class DetailsActivity extends BaseActivity implements DetailsView  {
     private static final String TAG = "DetailsActivity";
 
+    @SuppressWarnings("unused")
     public interface FragmentListener {
-        public void itializePlayer(String url);
-    };
+        void initializePlayer(String url);
+    }
+
     FragmentListener mCallback;
     public static final String EXTRA_POSITION = "extra_position";
     private static final int DEFAULT_POSITION = -1;
@@ -114,7 +109,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
-        SharedPrefManager.getInstance(DetailsActivity.this).seSetVideoUrl(null);
+        SharedPrefManager.getInstance(DetailsActivity.this).seSetVideoUrl();
 
             GetFragmentByScreenSize();
 
@@ -165,9 +160,8 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
               inside json i get every Arraylist alone by its position inside general JsonAArray
               that all of its value come from BakeApiService by retrofit with
               Observable inside BakingResponse class */
-            mPresenter.getDetials(position);
+            mPresenter.getDetails(position);
             SharedPrefManager.getInstance(this).setPrefPosition(position);
-            Log.d("mypossssssssss1",String.valueOf(position));
 
         }
 
@@ -203,7 +197,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
                     Bundle bundle = new Bundle();
                     bundle.putParcelableArrayList(StepsFragment.EXTRA_STEP_LIST_ACTIVITY, mStepsArrayList);
                     bundle.putInt(StepsFragment.EXTRA_STEP_INDEX, position);
-                    bundle.putBoolean(StepsFragment.EXTRA_LARG_SCREEN,mTwoPane);
+                    bundle.putBoolean(StepsFragment.EXTRA_LARGE_SCREEN,mTwoPane);
 
                     stepsFragment.setArguments(bundle);
                     FragmentManager fragmentManager = getSupportFragmentManager();
@@ -252,6 +246,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
     public void GetFragmentByScreenSize() {
 
         assert ( this.getSystemService(Context.WINDOW_SERVICE)) != null;
+        assert this.getSystemService(Context.WINDOW_SERVICE) != null;
         final int rotation = ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
         switch (rotation) {
             case Surface.ROTATION_0:
@@ -287,7 +282,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(StepsFragment.EXTRA_STEP_LIST_ACTIVITY, mStepsArrayList);
         bundle.putInt(StepsFragment.EXTRA_STEP_INDEX, 0);
-        bundle.putBoolean(StepsFragment.EXTRA_LARG_SCREEN,mTwoPane);
+        bundle.putBoolean(StepsFragment.EXTRA_LARGE_SCREEN,mTwoPane);
 
         stepsFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
@@ -297,6 +292,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView  {
 
     }
 
+    @SuppressWarnings("StatementWithEmptyBody")
     @Override
     public void onConfigurationChanged(Configuration newConfig) {
         super.onConfigurationChanged(newConfig);

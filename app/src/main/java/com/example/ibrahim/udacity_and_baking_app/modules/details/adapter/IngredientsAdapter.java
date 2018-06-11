@@ -55,7 +55,7 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         mList.addAll(ingredientsList);
         notifyDataSetChanged();
     }
-    @SuppressWarnings("WeakerAccess")
+    @SuppressWarnings({"WeakerAccess", "unused"})
     public class Holder extends RecyclerView.ViewHolder {
         @BindView(R.id.textview_quantity)
         TextView mQuantity;

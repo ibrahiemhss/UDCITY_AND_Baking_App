@@ -24,6 +24,7 @@ import butterknife.ButterKnife;
  */
 
 
+@SuppressWarnings("unused")
 public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
 
     private final Integer[] imgId;
@@ -58,6 +59,7 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
         notifyDataSetChanged();
     }
 
+    @SuppressWarnings("unused")
     public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @BindView(R.id.bake_img)
         ImageView mBakeIcon;

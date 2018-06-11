@@ -9,6 +9,7 @@ import android.content.SharedPreferences;
  *
  * @see <a href="https://github.com/ibrahiemhss/Mashaweer-master/blob/master/app/src/main/java/com/mashaweer/ibrahim/mashaweer/data/SharedPrefManager.java"">https://github.com</a>
  */
+@SuppressWarnings("unused")
 public class SharedPrefManager {
     private static final String PREF_POSITION = "pref_position";
     private static final String PREF_VIDEO_URL = "pref_video_url";
@@ -47,9 +48,9 @@ public class SharedPrefManager {
 
     }
 
-    public void seSetVideoUrl(String videoUrl) {
+    public void seSetVideoUrl() {
         SharedPreferences.Editor editor = pref.edit();
-        editor.putString(PREF_VIDEO_URL, videoUrl);
+        editor.putString(PREF_VIDEO_URL, null);
         editor.apply();
         editor.commit();
 

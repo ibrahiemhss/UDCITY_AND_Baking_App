@@ -8,6 +8,7 @@ import android.os.Parcelable;
  * Created by ibrahim on 29/05/18.
  */
 
+@SuppressWarnings("unused")
 public class Ingredients implements Parcelable {
     private float quantity;
     private String measure;

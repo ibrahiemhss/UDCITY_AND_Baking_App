@@ -1,5 +1,6 @@
 package com.example.ibrahim.udacity_and_baking_app.mvp.model;
 
+@SuppressWarnings("unused")
 public class BakingResponseSteps {
     private String videoURL;
     private String description;

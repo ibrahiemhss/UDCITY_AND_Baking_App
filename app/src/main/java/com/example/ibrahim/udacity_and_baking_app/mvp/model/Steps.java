@@ -8,6 +8,7 @@ import android.os.Parcelable;
  * Created by ibrahim on 30/05/18.
  */
 
+@SuppressWarnings("unused")
 public class Steps implements Parcelable {
     private long id;
     private String shortDescription;
@@ -15,7 +16,7 @@ public class Steps implements Parcelable {
     private String videoURL;
     private String thumbnailURL;
 
-    public Steps(Parcel in) {
+    private Steps(Parcel in) {
         id = in.readLong();
         shortDescription = in.readString();
         description = in.readString();

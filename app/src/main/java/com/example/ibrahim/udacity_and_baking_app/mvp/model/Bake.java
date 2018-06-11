@@ -5,23 +5,20 @@ package com.example.ibrahim.udacity_and_baking_app.mvp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-import java.security.Policy;
-
 /**
  *
  * Created by ibrahim on 24/05/18.
  */
 
+@SuppressWarnings("unused")
 public class Bake implements Parcelable{
     //TODO (63) create variables as in json and setter & getter
     private long id;
     private String name;
-
-
     private String image;
     private BakingResponseIngredients[] ingredientsArrayList;
 
-    public Bake(Parcel in) {
+    private Bake(Parcel in) {
         id = in.readLong();
         name = in.readString();
         image = in.readString();

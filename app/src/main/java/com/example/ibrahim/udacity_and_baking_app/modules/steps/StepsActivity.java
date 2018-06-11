@@ -13,6 +13,7 @@ import static com.example.ibrahim.udacity_and_baking_app.data.Contract.EXTRA_DES
 import static com.example.ibrahim.udacity_and_baking_app.data.Contract.EXTRA_VIDEO_URL;
 
 /**
+ *
  * Created by ibrahim on 03/06/18.
  */
 
@@ -30,14 +31,14 @@ public class StepsActivity extends BaseActivity {
         super.onViewReady(savedInstanceState, intent);
 
         final Bundle extras = getIntent().getExtras();
-        if (extras.getString(EXTRA_VIDEO_URL) != null) {
+        if ((extras != null ? extras.getString(EXTRA_VIDEO_URL) : null) != null) {
             mVideoURL = extras.getString(EXTRA_VIDEO_URL);
             Log.d("videoURL",mVideoURL);
 
         }
          if (extras.getString(EXTRA_DESCRIPTION)!=null){
             mDescription=extras.getString(EXTRA_DESCRIPTION);
-            Log.d("sescription",mDescription);
+            Log.d("description",mDescription);
 
         }
         StepsFragment stepsFragment =new StepsFragment();

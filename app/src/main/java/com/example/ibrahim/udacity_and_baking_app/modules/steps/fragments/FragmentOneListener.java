@@ -5,9 +5,11 @@ import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 import java.util.ArrayList;
 
 /**
+ *
  * Created by ibrahim on 07/06/18.
  */
 
+@SuppressWarnings("unused")
 public interface FragmentOneListener {
     void setStep(int index , ArrayList<Steps> steps);
 

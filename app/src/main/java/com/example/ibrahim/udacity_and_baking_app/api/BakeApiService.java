@@ -14,6 +14,7 @@ import rx.Observable;
  *
  * Created by ibrahim on 22/05/18.
  */
+@SuppressWarnings("unused")
 public interface BakeApiService {
 
      //TODO (11)

@@ -1,6 +1,7 @@
 package com.example.ibrahim.udacity_and_baking_app.application;
 
 import android.app.Application;
+import android.content.Context;
 
 import com.example.ibrahim.udacity_and_baking_app.di.components.ApplicationComponent;
 import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerApplicationComponent;
@@ -26,13 +27,16 @@ public class BakeApplication extends Application {
      *from {@Link BasActivity.class}
      */
     private ApplicationComponent mApplicationComponent;
+    private static Context context;
 
      //TODO (6)
     @Override
     public void onCreate() {
         super.onCreate();
         initializeApplicationComponents();
+
     }
+
     //TODO (23)
     private void initializeApplicationComponents() {
         /*TODO (57) get value from dagger*/
