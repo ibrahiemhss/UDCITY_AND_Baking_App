@@ -8,6 +8,7 @@ import android.content.UriMatcher;
 import android.database.Cursor;
 import android.database.sqlite.SQLiteDatabase;
 import android.net.Uri;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
 /**
@@ -16,11 +17,12 @@ import android.support.annotation.Nullable;
 
 public class MyContentProvider extends ContentProvider {
 
-    public static final int BAKE_CODE = 100;
-    public static final UriMatcher sUriMatcher = buildUriMatcher();
-    private Storage mDbHelper;
+    private static final int BAKE_CODE = 100;
 
-    public static UriMatcher buildUriMatcher() {
+    private static final UriMatcher sUriMatcher = buildUriMatcher();
+    private DbHelper mDbHelper;
+
+    private static UriMatcher buildUriMatcher() {
         UriMatcher uriMatcher = new UriMatcher(UriMatcher.NO_MATCH);
 
         uriMatcher.addURI(Contract.AUTHORITY, Contract.PATH_BAKE, BAKE_CODE);
@@ -32,14 +34,14 @@ public class MyContentProvider extends ContentProvider {
     @Override
     public boolean onCreate() {
         Context context = getContext();
-        mDbHelper = new Storage(context);
+        mDbHelper = new DbHelper(context);
 
         return true;
     }
 
     @Nullable
     @Override
-    public Cursor query(Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
+    public Cursor query(@NonNull Uri uri, String[] projection, String selection, String[] selectionArgs, String sortOrder) {
         final SQLiteDatabase db = mDbHelper.getReadableDatabase();
 
         int match = sUriMatcher.match(uri);
@@ -49,7 +51,7 @@ public class MyContentProvider extends ContentProvider {
         switch (match) {
             case BAKE_CODE:
 
-                retCursor = db.query(Contract.TABLE_BAKE,
+                retCursor = db.query(Contract.BakeEntry.TABLE_BAKE,
                         projection,
                         selection,
                         selectionArgs,
@@ -69,13 +71,13 @@ public class MyContentProvider extends ContentProvider {
 
     @Nullable
     @Override
-    public String getType(Uri uri) {
+    public String getType(@NonNull Uri uri) {
         return null;
     }
 
     @Nullable
     @Override
-    public Uri insert(Uri uri, ContentValues values) {
+    public Uri insert(@NonNull Uri uri, ContentValues values) {
 
         final SQLiteDatabase db = mDbHelper.getWritableDatabase();
 
@@ -86,10 +88,10 @@ public class MyContentProvider extends ContentProvider {
         switch (match) {
             case BAKE_CODE:
 
-                long id = db.insertWithOnConflict(Contract.TABLE_BAKE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
+                long id = db.insertWithOnConflict(Contract.BakeEntry.TABLE_BAKE, null, values, SQLiteDatabase.CONFLICT_REPLACE);
 
                 if (id > 0) {
-                    returnUri = ContentUris.withAppendedId(Contract.PATH_BAKE_URI, id);
+                    returnUri = ContentUris.withAppendedId(Contract.BakeEntry.PATH_BAKE_URI, id);
                 }
 
                 break;
@@ -103,12 +105,12 @@ public class MyContentProvider extends ContentProvider {
     }
 
     @Override
-    public int delete(Uri uri, String selection, String[] selectionArgs) {
+    public int delete(@NonNull Uri uri, String selection, String[] selectionArgs) {
         return 0;
     }
 
     @Override
-    public int update(Uri uri, ContentValues values, String selection, String[] selectionArgs) {
+    public int update(@NonNull Uri uri, ContentValues values, String selection, String[] selectionArgs) {
         return 0;
     }
 }

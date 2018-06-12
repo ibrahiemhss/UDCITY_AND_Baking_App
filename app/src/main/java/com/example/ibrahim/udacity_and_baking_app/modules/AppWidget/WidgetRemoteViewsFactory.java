@@ -12,12 +12,13 @@ import android.widget.RemoteViewsService;
 
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.data.Contract;
+import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivity;
 
 
 /**
  * Created by ibrahim on 24/05/18.
  */
-public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
+class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory {
 
     private static final String TAG = "WidgetRemoteViewsFactor";
 
@@ -28,18 +29,11 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
     public WidgetRemoteViewsFactory() {
     }
 
+    @SuppressWarnings("unused")
     public WidgetRemoteViewsFactory(Context applicationContext, Intent intent) {
         mContext = applicationContext;
     }
 
-    //this position will send to detailsActivity inside intent
-    public int getPosition() {
-        return position;
-    }
-
-    public void setPosition(int position) {
-        this.position = position;
-    }
 
     @Override
     public void onCreate() {
@@ -55,12 +49,12 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
         }
 
         final long identityToken = Binder.clearCallingIdentity();
-        Uri uri = Contract.PATH_BAKE_URI;
+        Uri uri = Contract.BakeEntry.PATH_BAKE_URI;
         mCursor = mContext.getContentResolver().query(uri,
                 null,
                 null,
                 null,
-                Contract.ID + " DESC");
+                Contract._ID + " DESC");
 
         Binder.restoreCallingIdentity(identityToken);
 
@@ -91,6 +85,8 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
         Intent fillInIntent = new Intent();
         fillInIntent.putExtra(MainWidgetProvider.EXTRA_ID, mCursor.getInt(1));
+        Log.d(TAG, "ItemWidget_id_send = " + position);
+        fillInIntent.putExtra(DetailsActivity.EXTRA_POSITION, position);
 
         rv.setOnClickFillInIntent(R.id.widgetItemContainer, fillInIntent);
 
@@ -109,8 +105,6 @@ public class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsF
 
     @Override
     public long getItemId(int position) {
-        Log.d(TAG, "ItemWidget_postion = " + position);
-        setPosition(position);
         return mCursor.moveToPosition(position) ? mCursor.getLong(0) : position;
     }
 

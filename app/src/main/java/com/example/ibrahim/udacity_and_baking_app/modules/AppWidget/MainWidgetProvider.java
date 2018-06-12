@@ -7,7 +7,6 @@ import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
 import android.support.v4.app.TaskStackBuilder;
-import android.util.Log;
 import android.widget.RemoteViews;
 
 import com.example.ibrahim.udacity_and_baking_app.R;
@@ -19,7 +18,6 @@ import com.example.ibrahim.udacity_and_baking_app.modules.home.MainActivity;
  */
 public class MainWidgetProvider extends AppWidgetProvider {
     public static final String EXTRA_ID = "BAKE_position";
-    private static final String TAG = "MainWidgetProvider";
 
     public static void sendRefreshBroadcast(Context context) {
         Intent intent = new Intent(AppWidgetManager.ACTION_APPWIDGET_UPDATE);
@@ -48,15 +46,13 @@ public class MainWidgetProvider extends AppWidgetProvider {
 
             // template to handle the click listener for each item
             Intent clickIntentTemplate = new Intent(context, DetailsActivity.class);
-            WidgetRemoteViewsFactory widgetRemoteViewsFactory = new WidgetRemoteViewsFactory();
-            clickIntentTemplate.putExtra(DetailsActivity.EXTRA_POSITION, widgetRemoteViewsFactory.getPosition());
 
 
             PendingIntent clickPendingIntentTemplate = TaskStackBuilder.create(context)
                     .addNextIntentWithParentStack(clickIntentTemplate)
                     .getPendingIntent(0, PendingIntent.FLAG_UPDATE_CURRENT);
             views.setPendingIntentTemplate(R.id.widgetListView, clickPendingIntentTemplate);
-            Log.d(TAG, "ItemWidget_postion_onSend = " + widgetRemoteViewsFactory.getPosition());
+
 
             appWidgetManager.updateAppWidget(appWidgetId, views);
         }

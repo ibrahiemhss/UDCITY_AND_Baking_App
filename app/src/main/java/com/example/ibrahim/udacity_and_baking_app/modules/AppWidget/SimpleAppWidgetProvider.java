@@ -1,13 +1,6 @@
 package com.example.ibrahim.udacity_and_baking_app.modules.AppWidget;
 
-import android.appwidget.AppWidgetManager;
 import android.appwidget.AppWidgetProvider;
-import android.content.Context;
-import android.database.Cursor;
-import android.widget.RemoteViews;
-
-import com.example.ibrahim.udacity_and_baking_app.R;
-import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 
 
 /**
@@ -15,7 +8,7 @@ import com.example.ibrahim.udacity_and_baking_app.data.Contract;
  */
 public class SimpleAppWidgetProvider extends AppWidgetProvider {
 
-    public static final String ACTION_DETAILS_ACTIVITY = "ACTION_DETAILS_ACTIVITY";
+    /*public static final String ACTION_DETAILS_ACTIVITY = "ACTION_DETAILS_ACTIVITY";
     public static final String EXTRA_SYMBOL = "SYMBOL";
     private static final String TAG = "SimpleAppWidgetProvider";
     private static final String REFRESH_ACTION = "com.example.ibrahim.udacity_and_baking_app.action.REFRESH";
@@ -32,7 +25,7 @@ public class SimpleAppWidgetProvider extends AppWidgetProvider {
             );
 
             Cursor cursor = context.getContentResolver().query(
-                    Contract.PATH_BAKE_URI,
+                    Contract.BakeEntry.PATH_BAKE_URI,
                     new String[]{"count(*)"},
                     null,
                     null,
@@ -47,5 +40,5 @@ public class SimpleAppWidgetProvider extends AppWidgetProvider {
         }
 
     }
-
+*/
 }

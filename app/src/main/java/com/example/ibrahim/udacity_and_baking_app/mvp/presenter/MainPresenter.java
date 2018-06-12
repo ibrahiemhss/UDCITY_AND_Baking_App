@@ -8,7 +8,7 @@ import android.util.Log;
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.api.BakeApiService;
 import com.example.ibrahim.udacity_and_baking_app.base.BasePresenter;
-import com.example.ibrahim.udacity_and_baking_app.data.Storage;
+import com.example.ibrahim.udacity_and_baking_app.data.DbHelper;
 import com.example.ibrahim.udacity_and_baking_app.mapper.BakeMapper;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakingResponse;
@@ -29,11 +29,12 @@ import rx.Observer;
  */
 //TODO (37) extends BasePresenter
 //TODO (42) <MainView>
+@SuppressWarnings("WeakerAccess")
 public class MainPresenter extends BasePresenter<MainView> implements Observer<List<BakingResponse>> {
     private final Context mContext;
     @SuppressWarnings("WeakerAccess")
     @Inject
-    protected Storage mStorage;
+    protected DbHelper mDbHelper;
     @Inject
     protected BakeApiService mApiService;
     /*inject BakeMapper */

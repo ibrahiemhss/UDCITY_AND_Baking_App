@@ -13,6 +13,7 @@ import static com.example.ibrahim.udacity_and_baking_app.data.Contract.EXTRA_DES
 import static com.example.ibrahim.udacity_and_baking_app.data.Contract.EXTRA_VIDEO_URL;
 
 /**
+ *
  * Created by ibrahim on 03/06/18.
  */
 

@@ -44,6 +44,7 @@ import static com.example.ibrahim.udacity_and_baking_app.data.Contract.EXTRA_VID
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class DetailsActivity extends BaseActivity implements DetailsView {
+
     public static final String EXTRA_POSITION = "extra_position";
     public static final String STATE_STEPS = "state_steps";
     public static final String STATE_FRAGMENT = "state_fragment";

@@ -12,10 +12,12 @@
       <w>gson</w>
       <w>iservice</w>
       <w>larg</w>
+      <w>listview</w>
       <w>mainview</w>
       <w>maper</w>
       <w>moveright</w>
       <w>novid</w>
+      <w>remoteviews</w>
       <w>setm</w>
       <w>snackbar</w>
       <w>stepfragment</w>

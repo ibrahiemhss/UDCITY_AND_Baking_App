@@ -1,5 +1,9 @@
 package com.example.ibrahim.udacity_and_baking_app.mvp.model;
 
+
+/**
+ * Created by ibrahim on 24/05/18.
+ */
 @SuppressWarnings("unused")
 public class BakingResponseIngredients {
     private float quantity;

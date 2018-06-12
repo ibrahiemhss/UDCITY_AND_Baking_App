@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.CallSuper;
 import android.support.annotation.Nullable;
-import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 
 import com.example.ibrahim.udacity_and_baking_app.application.BakeApplication;
@@ -13,13 +12,15 @@ import com.example.ibrahim.udacity_and_baking_app.di.components.ApplicationCompo
 
 import butterknife.ButterKnife;
 
-//TODO (1) cr
 
-/**
+/*
+ *
  * Created by ibrahim on 22/05/18.
  */
 
-@SuppressWarnings("unused")
+/**
+ * the parent Activity for all activities in app
+ */
 public abstract class BaseActivity extends AppCompatActivity {
 
     //ProgressDialog to view any message wanted in the child activity
@@ -30,7 +31,6 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
           /*this getContentView  will inherit by the
            child classes to pass their layout */
-        //TODO (2)
         setContentView(getContentView());
         ButterKnife.bind(this);
         onViewReady(savedInstanceState, getIntent());
@@ -40,7 +40,6 @@ public abstract class BaseActivity extends AppCompatActivity {
        noted CallSuper to force the call super for the child class so anyone
         inheriting this class he will has to do  @override super thought
         */
-    //TODO (4)
     @CallSuper
     //to be used by child activities
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
@@ -54,19 +53,17 @@ public abstract class BaseActivity extends AppCompatActivity {
         super.onDestroy();
     }
 
-    /*TODO (47) create resolveDaggerDependency*/
+    /*method will get Dependency inside child activity*/
     protected void resolveDaggerDependency() {
     }
 
-    protected void showBackArrow() {
-        ActionBar supportActionBar = getSupportActionBar();
-        if (supportActionBar != null) {
-            supportActionBar.setDisplayHomeAsUpEnabled(true);
-            supportActionBar.setDisplayShowHomeEnabled(true);
-        }
-    }
 
-    //TODO (3)
+    /**using generally in child activities to display status of coming data
+     * using here
+     *{@linkplain com.example.ibrahim.udacity_and_baking_app.mvp.view.MainView}
+     *{@linkplain com.example.ibrahim.udacity_and_baking_app.mvp.presenter}
+     *{@linkplain  com.example.ibrahim.udacity_and_baking_app.modules.home}
+     * */
     protected void showDialog(String message) {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);
@@ -82,7 +79,7 @@ public abstract class BaseActivity extends AppCompatActivity {
             mProgressDialog.dismiss();
         }
     }
-    //TODO (55) create getApplicationComponent to pass the ApplicationComponent
+    //getApplicationComponent to pass the ApplicationComponent
 
     protected ApplicationComponent getApplicationComponent() {
         return ((BakeApplication) getApplication()).getApplicationComponent();

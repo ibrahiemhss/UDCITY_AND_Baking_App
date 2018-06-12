@@ -5,6 +5,7 @@
     android:layout_height="match_parent"
     tools:context="com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivity">
 
+
     <LinearLayout
         android:id="@+id/linear_details"
         android:layout_width="match_parent"

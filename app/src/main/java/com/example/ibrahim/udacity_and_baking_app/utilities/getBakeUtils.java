@@ -11,6 +11,7 @@ import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 import java.util.ArrayList;
 
 /**
+ *
  * Created by ibrahim on 11/06/18.
  */
 
@@ -23,7 +24,7 @@ public class getBakeUtils {
         Bake bake;
         ArrayList<Bake> bakeArrayList = new ArrayList<>();
                  /* get the ContentProvider URI */
-        Uri uri = Contract.PATH_BAKE_URI;
+        Uri uri = Contract.BakeEntry.PATH_BAKE_URI;
                 /* Perform the ContentProvider query */
         Cursor c = context.getContentResolver().query(uri,
                 /* Columns; leaving this null returns every column in the table */
@@ -42,7 +43,7 @@ public class getBakeUtils {
                 bake = new Bake();
                 /*get all value by cursor while moving by get its column name and get value inside it*/
 
-                String names = c.getString(c.getColumnIndexOrThrow(Contract.COL_NAMES));
+                String names = c.getString(c.getColumnIndexOrThrow(Contract.BakeEntry.COL_NAMES));
                 /*while cursor movement will get value of every column this value will save inside all movie object from Movies Class*/
                 bake.setName(names);
 

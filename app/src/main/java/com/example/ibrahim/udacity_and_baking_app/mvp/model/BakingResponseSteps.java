@@ -1,5 +1,9 @@
 package com.example.ibrahim.udacity_and_baking_app.mvp.model;
 
+
+/**
+ * Created by ibrahim on 24/05/18.
+ */
 @SuppressWarnings("unused")
 public class BakingResponseSteps {
     private String videoURL;
@@ -27,6 +31,7 @@ public class BakingResponseSteps {
     public int getId() {
         return this.id;
     }
+
     public void setId(int id) {
         this.id = id;
     }

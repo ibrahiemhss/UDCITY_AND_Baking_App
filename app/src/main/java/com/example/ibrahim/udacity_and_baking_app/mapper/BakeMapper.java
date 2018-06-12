@@ -47,16 +47,16 @@ public class BakeMapper {
                 //add all value from myBake to bakeList
                 bakeList.add(myBake);
                 ContentValues values = new ContentValues();
-                values.put(Contract.COL_NAMES, bakingResponse.getName());
+                values.put(Contract.BakeEntry.COL_NAMES, bakingResponse.getName());
 
                 if (getBakeUtils.getBake(mContext).size() > 3) {
                     Log.d("insert_content", "recall_added");
 
                 } else {
-                    final Uri uri = mContext.getContentResolver().insert(Contract.PATH_BAKE_URI, values);
+                    final Uri uri = mContext.getContentResolver().insert(Contract.BakeEntry.PATH_BAKE_URI, values);
 
                     if (uri != null) {
-                        Log.d("insert_content", "first_addded");
+                        Log.d("insert_content", "first_added");
                     }
 
                 }
@@ -112,6 +112,8 @@ public class BakeMapper {
                 myBakeIngredients.setQuantity(bakingResponseIngredients1.getQuantity());
                 myBakeIngredients.setMeasure(bakingResponseIngredients1.getMeasure());
                 bakeIngredientsList.add(myBakeIngredients);
+
+
             }
         }
         return bakeIngredientsList;
