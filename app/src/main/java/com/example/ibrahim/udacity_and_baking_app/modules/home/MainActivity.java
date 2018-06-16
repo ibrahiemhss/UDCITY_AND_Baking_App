@@ -4,6 +4,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -11,6 +12,7 @@ import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.Toast;
 
+import com.example.ibrahim.udacity_and_baking_app.IdlingResource.EspressoIdlingResource;
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.base.BaseActivity;
 import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerMainComponents;
@@ -36,13 +38,6 @@ import butterknife.ButterKnife;
 public class MainActivity extends BaseActivity implements MainView {
 
     private static final String STATE_BAKE = "state_bake";
-    private final BakesAdapter.OnBakeClickListener onBakeClickListener = new BakesAdapter.OnBakeClickListener() {
-        @Override
-        public void onClick(int position) {
-            launchDetailActivity(position);
-
-        }
-    };
     //TODO (73) bind RecyclerView
     @BindView(R.id.bake_list)
     protected RecyclerView mBake_list;
@@ -50,8 +45,17 @@ public class MainActivity extends BaseActivity implements MainView {
     *TODO (44) MainActivity will get any bake information  from this MainPresenter */
     @Inject
     protected MainPresenter mPresenter;
+    CountingIdlingResource idlingResource = new CountingIdlingResource("Data laoding");
     private BakesAdapter mBakesAdapter;
     private ArrayList<Bake> mBakeArrayList;
+    private final BakesAdapter.OnBakeClickListener onBakeClickListener = new BakesAdapter.OnBakeClickListener() {
+        @Override
+        public void onClick(int position) {
+
+            launchDetailActivity(position);
+
+        }
+    };
 
     /**
      * just implement getContentView from
@@ -75,18 +79,32 @@ public class MainActivity extends BaseActivity implements MainView {
         } else {
             GetListByScreenSize();
       /*TODO (45) get value from the object of MainPresenter class */
+            EspressoIdlingResource.increment(); // stops Espresso tests from going forward
 
-            if (NetworkUtils.isNetAvailable(this)) {
+
+                            /*TODO (45) get value from the object of MainPresenter class */
+            if (NetworkUtils.isNetAvailable(MainActivity.this)) {
                 mPresenter.geBaking();
             } else {
                 mPresenter.getBakeFromDatabase();
             }
-            MainWidgetProvider.sendRefreshBroadcast(this);
+            MainWidgetProvider.sendRefreshBroadcast(MainActivity.this);
+            EspressoIdlingResource.decrement(); // Tells Espresso test to resume
+
 
         }
 
     }
 
+    /**
+     * We call Bakeloading.downloadImage from onStart or onResume instead of in onCreate
+     * to ensure there is enougth time to register IdlingResource if the download is done
+     * too early (i.e. in onCreate)
+     */
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
     /*TODO (48) Override  resolveDaggerDependency from BaseActivity class*/
     @Override
     protected void resolveDaggerDependency() {
@@ -130,7 +148,11 @@ public class MainActivity extends BaseActivity implements MainView {
 
     private void launchDetailActivity(int position) {
         Intent intent = new Intent(this, DetailsActivity.class);
-        intent.putExtra(DetailsActivity.EXTRA_POSITION, position);
+        Bundle extras = new Bundle();
+        extras.putInt(DetailsActivity.EXTRA_POSITION, position);
+        String name = mBakeArrayList.get(position).getName();
+        extras.putString(DetailsActivity.EXTRA_BAKE_NAME, name);
+        intent.putExtras(extras);
         startActivity(intent);
     }
 
@@ -203,4 +225,5 @@ public class MainActivity extends BaseActivity implements MainView {
 
         mBake_list.setAdapter(mBakesAdapter);
     }
+
 }

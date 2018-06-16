@@ -11,7 +11,9 @@ import android.support.v7.widget.RecyclerView;
 import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 
+import com.example.ibrahim.udacity_and_baking_app.IdlingResource.EspressoIdlingResource;
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.base.BaseActivity;
 import com.example.ibrahim.udacity_and_baking_app.data.SharedPrefManager;
@@ -45,7 +47,9 @@ import static com.example.ibrahim.udacity_and_baking_app.data.Contract.EXTRA_VID
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class DetailsActivity extends BaseActivity implements DetailsView {
 
+
     public static final String EXTRA_POSITION = "extra_position";
+    public static final String EXTRA_BAKE_NAME = "extra_bake";
     public static final String STATE_STEPS = "state_steps";
     public static final String STATE_FRAGMENT = "state_fragment";
     private static final String TAG = "DetailsActivity";
@@ -57,6 +61,8 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     protected RecyclerView mIngredients_list;
     @BindView(R.id.step_list)
     protected RecyclerView mStep_list;
+    @BindView(R.id.tv_baking_name)
+    protected TextView mTxtBake;
     @Inject
     protected DetailsPresenter mPresenter;
     FragmentListener mCallback;
@@ -68,12 +74,16 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     int position;
     int i = 0;
     int mySelectedId;
-
     private boolean mTwoPane;
     private IngredientsAdapter mIngredientsAdapter;
     private StepsAdapter mStepsAdapter;
     private ArrayList<Steps> mStepsArrayList;
     private ArrayList<Ingredients> mIngredientsArrayList;
+
+    public boolean isInProgress() {
+        // return true if progress is visible
+        return true;
+    }
 
     public List<Steps> getStepsList() {
         return stepsList;
@@ -94,11 +104,17 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         super.onViewReady(savedInstanceState, intent);
         SharedPrefManager.getInstance(DetailsActivity.this).seSetVideoUrl();
 
+
         GetFragmentByScreenSize();
+
+        EspressoIdlingResource.increment(); // stops Espresso tests from going forward
 
         getPositionFromIntent();
         initialiseListIngredients();
         initialiseListSteps();
+
+        EspressoIdlingResource.decrement(); // Tells Espresso test to resume
+
         if (savedInstanceState != null
                 && savedInstanceState.containsKey(STATE_INGREDIENTS)
                 && savedInstanceState.containsKey(STATE_STEPS)) {
@@ -110,8 +126,14 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
 
         }
+
+
     }
 
+    @Override
+    protected void onStart() {
+        super.onStart();
+    }
     @Override
     protected void resolveDaggerDependency() {
 
@@ -131,23 +153,24 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     private void getPositionFromIntent() {
 
         //intent come MainActivity
-        Intent intent = getIntent();
-        if (intent != null) {
-            position = intent.getIntExtra(EXTRA_POSITION
-                    , DEFAULT_POSITION);
+        Bundle extras = getIntent().getExtras();
+        assert extras != null;
 
+
+        mTxtBake.setText(extras.getString(EXTRA_BAKE_NAME));
              /*pass position to DetailsPresenter class
              to get the value as list objects from Ingredients class
              and Steps class
                ----- NOTE----------------------
-                because i have 2 array which is <<ingredients>> and <<steps>>
-              inside json i get every Arraylist alone by its position inside general JsonAArray
+                jason have 2 array which is <<ingredients>> and <<steps>>
+               get every Arraylist alone by its position inside general JsonAArray
               that all of its value come from BakeApiService by retrofit with
               Observable inside BakingResponse class */
-            mPresenter.getDetails(position);
-            SharedPrefManager.getInstance(this).setPrefPosition(position);
 
-        }
+        mPresenter.getDetails(position);
+
+
+        SharedPrefManager.getInstance(this).setPrefPosition(position);
 
 
     }
@@ -280,6 +303,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
         }
     }
+
 
     @SuppressWarnings("unused")
     public interface FragmentListener {

@@ -87,6 +87,7 @@ class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
         fillInIntent.putExtra(MainWidgetProvider.EXTRA_ID, mCursor.getInt(1));
         Log.d(TAG, "ItemWidget_id_send = " + position);
         fillInIntent.putExtra(DetailsActivity.EXTRA_POSITION, position);
+        fillInIntent.putExtra(DetailsActivity.EXTRA_BAKE_NAME, mCursor.getString(1));
 
         rv.setOnClickFillInIntent(R.id.widgetItemContainer, fillInIntent);
 
