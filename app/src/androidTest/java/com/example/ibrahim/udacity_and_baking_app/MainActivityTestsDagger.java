@@ -61,7 +61,7 @@ public class MainActivityTestsDagger implements MainView {
     }
 
     @Test
-    public void getUsers() throws Exception {
+    public void getComponents() throws Exception {
 
 
         getmBakeArrayList();
