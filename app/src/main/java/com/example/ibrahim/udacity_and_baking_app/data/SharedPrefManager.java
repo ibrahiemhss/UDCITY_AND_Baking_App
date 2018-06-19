@@ -11,7 +11,11 @@ import android.content.SharedPreferences;
  */
 @SuppressWarnings("unused")
 public class SharedPrefManager {
-    private static final String PREF_POSITION = "pref_position";
+    private static final String PREF_INDEX = "pref_index";
+    private static final String PREF_IS_FIRST_OPEN = "pref_first_open";
+    private static final String PREF_DETAILS_POSITION = "pref_position";
+    private static final String PREF_BAKE_NAME = "pref_bake_name";
+
     private static final String PREF_VIDEO_URL = "pref_video_url";
     private static final String SHARED_PREF_NAME = "save_contents";
     private static SharedPrefManager mInstance;
@@ -29,14 +33,41 @@ public class SharedPrefManager {
         return mInstance;
     }
 
-    public int getPrefPosition() {
-        return pref.getInt(PREF_POSITION, 0);
+    public int getPrefDetailsPosition() {
+        return pref.getInt(PREF_DETAILS_POSITION, 0);
 
     }
 
-    public void setPrefPosition(int position) {
+    public void setPrefDetailsPosition(int position) {
         SharedPreferences.Editor editor = pref.edit();
-        editor.putInt(PREF_POSITION, position);
+        editor.putInt(PREF_DETAILS_POSITION, position);
+        editor.apply();
+        editor.commit();
+
+    }
+
+    public String getPrefBakeName() {
+        return pref.getString(PREF_BAKE_NAME, null);
+
+    }
+
+    public void setPrefBakeName(String bakeName) {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putString(PREF_BAKE_NAME, bakeName);
+        editor.apply();
+        editor.commit();
+
+    }
+
+
+    public int getPrefIndex() {
+        return pref.getInt(PREF_INDEX, 0);
+
+    }
+
+    public void setPrefIndex(int index) {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt(PREF_INDEX, index);
         editor.apply();
         editor.commit();
 
@@ -54,4 +85,27 @@ public class SharedPrefManager {
         editor.commit();
 
     }
+
+    public void setOpned() {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putBoolean(PREF_VIDEO_URL, false);
+        editor.apply();
+        editor.commit();
+
+    }
+
+    public boolean isOpened() {
+        return pref.getBoolean(PREF_IS_FIRST_OPEN, false);
+
+    }
+
+    public void setOpened(boolean isOpen) {
+        SharedPreferences.Editor editor = pref.edit();
+        editor = pref.edit();
+        editor.putBoolean(PREF_IS_FIRST_OPEN, isOpen);
+        editor.apply();
+        editor.commit();
+
+    }
+
 }

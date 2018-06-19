@@ -18,12 +18,15 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.FrameLayout;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.ibrahim.udacity_and_baking_app.R;
+import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 import com.example.ibrahim.udacity_and_baking_app.data.SharedPrefManager;
+import com.example.ibrahim.udacity_and_baking_app.modules.steps.StepsActivity;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 import com.example.ibrahim.udacity_and_baking_app.mvp.presenter.StepfragmentPresenter;
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.StepsView;
@@ -47,6 +50,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
+import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
+
 /**
  *
  * Created by ibrahim on 01/06/18.
@@ -54,7 +59,6 @@ import butterknife.Unbinder;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class StepsFragment extends Fragment implements StepsView, View.OnClickListener/* , Player.EventListener*/ {
-    public static final String EXTRA_STEP_INDEX = "extra_index";
     public static final String EXTRA_STEP_LIST_ACTIVITY = "extra_steps_list_activity";
     public static final String EXTRA_LARGE_SCREEN = "extra_large";
     private static final String TAG = "StepsFragment";
@@ -63,6 +67,7 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
     private static final int UI_ANIMATION_DELAY = 300;
     private static MediaSessionCompat mMediaSession;
     private final Handler mHideHandler = new Handler();
+
     @BindView(R.id.tv_descriptoin)
     protected TextView mTxtDescription;
     @BindView(R.id.tv_txt_novid)
@@ -74,9 +79,14 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
     @BindView(R.id.playerView)
     protected SimpleExoPlayerView mPlayerView;
     @BindView(R.id.fullscreen_content)
-    protected FrameLayout mFrameLayout;
+    protected LinearLayout mLinearLayout;
+    @BindView(R.id.rv_details)
+    protected RelativeLayout mRelativeLayout;
+
     @Inject
     protected StepfragmentPresenter mPresenter;
+
+    private boolean mRotation;
     private Bundle savedState = null;
     private SimpleExoPlayer mExoPlayer;
     private int mIndex;
@@ -91,42 +101,27 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
     private ViewGroup container;
     private LayoutInflater inflater;
 
-    public StepsFragment() {
-    }
-
-    public static StepsFragment newInstance(ArrayList<Steps> stepsArrayList, int position) {
-        Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(EXTRA_STEP_LIST_ACTIVITY, stepsArrayList);
-        bundle.putInt(EXTRA_STEP_POSITION, position);
-
-        StepsFragment fragment = new StepsFragment();
-        fragment.setArguments(bundle);
-
-        return fragment;
-    }
+    private StepsActivity mStepsActivity;
 
     @Override
     public void onStepsLoaded(ArrayList<Steps> stepsList) {
         //  mStepsArrayList = stepsList;
     }
 
-    private int getmIndex() {
-        return mIndex;
-    }
 
-    public void setmIndex(int mIndex) {
-        this.mIndex = mIndex;
-    }
 
     private void readBundle(Bundle bundle) {
-        if (bundle != null && bundle.containsKey(EXTRA_STEP_LIST_ACTIVITY) && bundle.containsKey(EXTRA_STEP_POSITION)
-                && bundle.getParcelableArray(EXTRA_STEP_LIST_ACTIVITY) != null) {
-            mStepsArrayList = bundle.getParcelableArrayList(EXTRA_STEP_LIST_ACTIVITY);
-            int position = bundle.getInt(EXTRA_STEP_POSITION);
-            mIndex = SharedPrefManager.getInstance(getActivity()).getPrefPosition();
-            Log.d(TAG, "bundleList 1 = " + mStepsArrayList.size());
-            Log.d(TAG, "mIndex 1 = " + mIndex);
-            Log.d(TAG, "mIndex id  = " + mStepsArrayList.get(mIndex).getId());
+        if (bundle != null && bundle.containsKey(Contract.EXTRA_STATE_STEPS) && bundle.containsKey(Contract.EXTRA_STEP_INDEX)) {
+            mStepsArrayList = bundle.getParcelableArrayList(Contract.EXTRA_STATE_STEPS);
+            mIndex = bundle.getInt(Contract.EXTRA_STEP_INDEX);
+            mRotation = bundle.getBoolean(Contract.EXTRA_ROTATION);
+
+            if (mStepsArrayList != null) {
+                Log.d(TAG, "bundleList recieved= " + String.valueOf(mStepsArrayList.size()));
+
+            }
+            Log.d(TAG, "mIndex savedInstanceStateFragment = " + mIndex);
+            Log.d(TAG, "mRotation savedInstanceStateFragment = " + String.valueOf(mRotation));
 
         }
 
@@ -143,35 +138,45 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
 
         Bundle extras = this.getArguments();
 
-        if (savedInstanceState == null) {
             if (extras != null) {
-                mStepsArrayList = extras.getParcelableArrayList(EXTRA_STEP_LIST_ACTIVITY);
-                mIndex = extras.getInt(EXTRA_STEP_INDEX);
-                mIsLarge = extras.getBoolean(EXTRA_LARGE_SCREEN);
-                Log.d(TAG, " mIndex getArguments = " + mIndex);
+                readBundle(extras);
+                Log.d(TAG, " mIndex after getArguments = " + mIndex);
+                Log.d(TAG, "mRotation after getArguments = " + String.valueOf(mRotation));
 
             }
+
+        if (mRotation) {
+            unbinder = ButterKnife.bind(this, view);
+
+            mLinearLayout = new LinearLayout(getActivity());
+            mLinearLayout.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
+            mRelativeLayout.setVisibility(View.GONE);
+
+
+        } else {
+            mLinearLayout = new LinearLayout(getActivity());
+            mLinearLayout.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, 250));
+            mRelativeLayout.setVisibility(View.VISIBLE);
+
         }
-        if (savedInstanceState != null) {
-            mStepsArrayList = savedInstanceState.getParcelableArrayList(EXTRA_STEP_LIST);
-            mIndex = savedInstanceState.getInt(EXTRA_STEP_INDEX);
-            Log.d(TAG, " mIndex savedInstanceState = " + mIndex);
-
-
-        }
-
-
         if (mStepsArrayList != null && mStepsArrayList.size() > 0) {
             show();
         }
         // mPresenter.getSteps(position);
 
 
+        if (mIndex == 0) {
+            mImgMoveright.setVisibility(View.INVISIBLE);
+        }
+        if (mIndex == mStepsArrayList.size()) {
+            mImgMoveLeft.setVisibility(View.INVISIBLE);
+        }
         mImgMoveLeft.setOnClickListener(this);
         mImgMoveright.setOnClickListener(this);
 
         return view;
     }
+
 
     @Override
     public void onDestroyView() {
@@ -260,33 +265,46 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
     public void onClick(View view) {
         int id = view.getId();
         if (id == R.id.move_left) {
-            mIndex++;
-            if (mIndex >= mStepsArrayList.size()) {
-                mIndex = mStepsArrayList.size() - 1;
-                mImgMoveLeft.setVisibility(View.INVISIBLE);
-                mImgMoveright.setVisibility(View.VISIBLE);
 
-            } else {
-                mImgMoveright.setVisibility(View.VISIBLE);
 
+            if (mStepsArrayList != null) {
+                mIndex++;
+                if (mIndex >= mStepsArrayList.size()) {
+                    mIndex = mStepsArrayList.size() - 1;
+                    mImgMoveLeft.setVisibility(View.INVISIBLE);
+                    mImgMoveright.setVisibility(View.VISIBLE);
+
+                } else {
+                    mImgMoveright.setVisibility(View.VISIBLE);
+
+                }
+                Log.d(TAG, "mIndex move_left = " + mIndex);
+                mStepsActivity = new StepsActivity();
+
+                SharedPrefManager.getInstance(getActivity()).setPrefIndex(mIndex);
+                show();
             }
-            Log.d(TAG, "mIndex move_left = " + mIndex);
-
-            show();
         } else if (id == R.id.move_right) {
-            if (mIndex == 0)
-                return;
-            mIndex--;
-            if (mIndex <= 0) {
-                mImgMoveright.setVisibility(View.INVISIBLE);
-                mImgMoveLeft.setVisibility(View.VISIBLE);
 
-            } else {
-                mImgMoveLeft.setVisibility(View.VISIBLE);
+
+            if (mStepsArrayList != null) {
+
+                if (mIndex == 0)
+                    return;
+                mIndex--;
+
+                if (mIndex <= 0) {
+                    mImgMoveright.setVisibility(View.INVISIBLE);
+                    mImgMoveLeft.setVisibility(View.VISIBLE);
+
+                } else {
+                    mImgMoveLeft.setVisibility(View.VISIBLE);
+
+                }
+                Log.d(TAG, "mIndex move_right = " + mIndex);
+                SharedPrefManager.getInstance(getActivity()).setPrefIndex(mIndex);
 
             }
-            Log.d(TAG, "mIndex move_right = " + mIndex);
-
             show();
         }
 
@@ -300,11 +318,10 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
 
         if (mStepsArrayList.size() > 0) {
 
-            String videoUrl = mStepsArrayList.get(getmIndex()).getVideoURL();
-            if (mIsLarge) {
+            String videoUrl = mStepsArrayList.get(mIndex).getVideoURL();
                 //  mTxtDescription.setText(mStepsArrayList.get(mIndex).getDescription());
 
-            }
+
 
             if (!videoUrl.isEmpty()) {
 
@@ -329,9 +346,9 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
     @Override
     public void onSaveInstanceState(@Nullable Bundle outState) {
         super.onSaveInstanceState(outState != null ? outState : null);
-        outState.putInt(EXTRA_STEP_INDEX, mIndex);
+        outState.putInt(Contract.EXTRA_STEP_INDEX, mIndex);
         outState.putParcelableArrayList(EXTRA_STEP_LIST, mStepsArrayList);
-        Log.d(TAG, "mIndex outState = " + getmIndex());
+        Log.d(TAG, "mIndex outState = " + mIndex);
         boolean savStat = true;
     }
 

@@ -34,8 +34,7 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.details.DetailsActivity"
-            android:configChanges="orientation|screenSize" />
+            android:name=".modules.details.DetailsActivity" />
         <activity android:name=".modules.steps.StepsActivity" />
 
         <receiver android:name=".modules.AppWidget.MainWidgetProvider">
@@ -55,8 +54,8 @@
             android:permission="android.permission.BIND_REMOTEVIEWS" />
 
         <provider
-            android:authorities="com.example.ibrahim.udacity_and_baking_app"
             android:name="com.example.ibrahim.udacity_and_baking_app.data.MyContentProvider"
+            android:authorities="com.example.ibrahim.udacity_and_baking_app"
             android:exported="false"/>
 
 

@@ -8,6 +8,7 @@ import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.Surface;
 import android.view.WindowManager;
 import android.widget.LinearLayout;
@@ -16,6 +17,7 @@ import android.widget.TextView;
 import com.example.ibrahim.udacity_and_baking_app.IdlingResource.EspressoIdlingResource;
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.base.BaseActivity;
+import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 import com.example.ibrahim.udacity_and_baking_app.data.SharedPrefManager;
 import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerDetailsComponents;
 import com.example.ibrahim.udacity_and_baking_app.di.module.DetailsModule;
@@ -36,9 +38,6 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-import static com.example.ibrahim.udacity_and_baking_app.data.Contract.EXTRA_DESCRIPTION;
-import static com.example.ibrahim.udacity_and_baking_app.data.Contract.EXTRA_VIDEO_URL;
-
 
 /**
  * Created by ibrahim on 22/05/18.
@@ -48,13 +47,9 @@ import static com.example.ibrahim.udacity_and_baking_app.data.Contract.EXTRA_VID
 public class DetailsActivity extends BaseActivity implements DetailsView {
 
 
-    public static final String EXTRA_POSITION = "extra_position";
-    public static final String EXTRA_BAKE_NAME = "extra_bake";
-    public static final String STATE_STEPS = "state_steps";
-    public static final String STATE_FRAGMENT = "state_fragment";
+
     private static final String TAG = "DetailsActivity";
     private static final int DEFAULT_POSITION = -1;
-    private static final String STATE_INGREDIENTS = "state_ingredients";
     @BindView(R.id.linear_details)
     protected LinearLayout linear_details;
     @BindView(R.id.ingredients_list)
@@ -66,31 +61,27 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     @Inject
     protected DetailsPresenter mPresenter;
     FragmentListener mCallback;
-    boolean addNewFragment;
     Fragment stepsFragment;
-    List<Steps> stepsList = new ArrayList<>();
     List<Integer> stepsListIndex;
     int urlPosition;
-    int position;
+    // int position;
     int i = 0;
+    int mIndex;
     int mySelectedId;
     private boolean mTwoPane;
+    private boolean mRotation;
+    private boolean mFirstOpen;
     private IngredientsAdapter mIngredientsAdapter;
     private StepsAdapter mStepsAdapter;
     private ArrayList<Steps> mStepsArrayList;
     private ArrayList<Ingredients> mIngredientsArrayList;
 
-    public boolean isInProgress() {
-        // return true if progress is visible
-        return true;
+    public int getmIndex() {
+        return mIndex;
     }
 
-    public List<Steps> getStepsList() {
-        return stepsList;
-    }
-
-    public void setStepsList(List<Steps> stepsList) {
-        this.stepsList = stepsList;
+    public void setmIndex(int mIndex) {
+        this.mIndex = mIndex;
     }
 
     @Override
@@ -104,36 +95,55 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         super.onViewReady(savedInstanceState, intent);
         SharedPrefManager.getInstance(DetailsActivity.this).seSetVideoUrl();
 
-
-        GetFragmentByScreenSize();
+        ButterKnife.bind(this);
+        stepsFragment = new StepsFragment();
 
         EspressoIdlingResource.increment(); // stops Espresso tests from going forward
 
-        getPositionFromIntent();
-        initialiseListIngredients();
-        initialiseListSteps();
-
+        getAllData();
         EspressoIdlingResource.decrement(); // Tells Espresso test to resume
 
-        if (savedInstanceState != null
-                && savedInstanceState.containsKey(STATE_INGREDIENTS)
-                && savedInstanceState.containsKey(STATE_STEPS)) {
-            mIngredientsArrayList = savedInstanceState.getParcelableArrayList(STATE_INGREDIENTS);
-            mStepsArrayList = savedInstanceState.getParcelableArrayList(STATE_STEPS);
 
-            mIngredientsAdapter.addIngredients(mIngredientsArrayList);
-            mStepsAdapter.addSteps(mStepsArrayList);
+        if (savedInstanceState == null) {
+            mIndex = 0;
+            mFirstOpen = false;
+            initialiseListIngredients();
+            initialiseListSteps();
 
 
         }
+        if (savedInstanceState != null
+                && savedInstanceState.containsKey(Contract.EXTRA_STATE_INGREDIENTS)
+                && savedInstanceState.containsKey(Contract.EXTRA_STATE_FRAGMENT)
+                && savedInstanceState.containsKey(Contract.EXTRA_STATE_INDEX)
+                && savedInstanceState.containsKey(Contract.EXTRA_STATE_FIRST_OPEN)) {
 
+            mFirstOpen = savedInstanceState.getBoolean(Contract.EXTRA_STATE_FIRST_OPEN);
+            mIngredientsArrayList = savedInstanceState.getParcelableArrayList(Contract.EXTRA_STATE_INGREDIENTS);
+            mStepsArrayList = savedInstanceState.getParcelableArrayList(Contract.EXTRA_STATE_STEPS);
+            // stepsFragment = getSupportFragmentManager().getFragment(savedInstanceState, Contract.STATE_FRAGMENT);
+            mIndex = savedInstanceState.getInt(Contract.EXTRA_STATE_INDEX);
+            Log.d(TAG, "mIndex OnsaveInActivity = " + mIndex);
+
+            initialiseListIngredients();
+            initialiseListSteps();
+            GetFragmentByScreenSize(mIndex);
+
+        }
+        onClickStepsAdapter();
 
     }
 
     @Override
-    protected void onStart() {
-        super.onStart();
+    protected void onPause() {
+        super.onPause();
+        Bundle extras = getIntent().getExtras();
+        assert extras != null;
+
+
+        mTxtBake.setText(extras.getString(Contract.EXTRA_BAKE_NAME));
     }
+
     @Override
     protected void resolveDaggerDependency() {
 
@@ -145,20 +155,49 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     @Override
     public void onSaveInstanceState(Bundle outState) {
-        outState.putParcelableArrayList(STATE_INGREDIENTS, mIngredientsArrayList);
-        outState.putParcelableArrayList(STATE_STEPS, mStepsArrayList);
+        outState.putParcelableArrayList(Contract.EXTRA_STATE_INGREDIENTS, mIngredientsArrayList);
+        outState.putParcelableArrayList(Contract.EXTRA_STATE_STEPS, mStepsArrayList);
+
+        outState.putBoolean(Contract.EXTRA_STATE_FIRST_OPEN, true);
+        outState.putInt(Contract.EXTRA_STATE_INDEX, mIndex);
+
+        // getSupportFragmentManager().putFragment(outState, Contract.STATE_FRAGMENT, stepsFragment);
+        Log.d(TAG, "mIndex outStateInActiviy = " + mIndex);
+
         super.onSaveInstanceState(outState);
     }
 
-    private void getPositionFromIntent() {
+
+    @Override
+    protected void onRestart() {
+
+        super.onRestart();
+        getAllData();
+        initialiseListIngredients();
+        initialiseListSteps();
+        GetFragmentByScreenSize(mIndex);
+        onClickStepsAdapter();
+        Log.d(TAG, "onRestartDetails IngredientsArrayList = " + String.valueOf(mIngredientsArrayList.size()));
+
+        Log.d(TAG, "onRestartDetails StepsArrayList = " + String.valueOf(mStepsArrayList.size()));
+
+    }
+
+    private void getAllData() {
 
         //intent come MainActivity
         Bundle extras = getIntent().getExtras();
         assert extras != null;
 
 
-        mTxtBake.setText(extras.getString(EXTRA_BAKE_NAME));
-             /*pass position to DetailsPresenter class
+        int position = 0;
+        if (extras != null &&
+                extras.containsKey(Contract.EXTRA_POSITION)
+                && extras.containsKey(Contract.EXTRA_BAKE_NAME)) {
+            position = extras.getInt(Contract.EXTRA_POSITION);
+            mTxtBake.setText(extras.getString(Contract.EXTRA_BAKE_NAME));
+
+                         /*pass position to DetailsPresenter class
              to get the value as list objects from Ingredients class
              and Steps class
                ----- NOTE----------------------
@@ -167,17 +206,49 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
               that all of its value come from BakeApiService by retrofit with
               Observable inside BakingResponse class */
 
-        mPresenter.getDetails(position);
+
+            mPresenter.getDetails(position);
+
+        } else {
+            mTxtBake.setText(SharedPrefManager.getInstance(DetailsActivity.this).getPrefBakeName());
+            mPresenter.getDetails(SharedPrefManager.getInstance(DetailsActivity.this).getPrefDetailsPosition());
 
 
-        SharedPrefManager.getInstance(this).setPrefPosition(position);
+        }
 
+
+
+
+    }
+
+    @Override
+    protected void onRestoreInstanceState(Bundle savedInstanceState) {
+        super.onRestoreInstanceState(savedInstanceState);
+
+        if (savedInstanceState != null
+                && savedInstanceState.containsKey(Contract.EXTRA_STATE_INGREDIENTS)
+                && savedInstanceState.containsKey(Contract.EXTRA_STATE_FRAGMENT)
+                && savedInstanceState.containsKey(Contract.EXTRA_STATE_INDEX)
+                && savedInstanceState.containsKey(Contract.EXTRA_STATE_FIRST_OPEN)) {
+
+            mFirstOpen = savedInstanceState.getBoolean(Contract.EXTRA_STATE_FIRST_OPEN);
+            mIngredientsArrayList = savedInstanceState.getParcelableArrayList(Contract.EXTRA_STATE_INGREDIENTS);
+            mStepsArrayList = savedInstanceState.getParcelableArrayList(Contract.EXTRA_STATE_STEPS);
+            // stepsFragment = getSupportFragmentManager().getFragment(savedInstanceState, Contract.STATE_FRAGMENT);
+            mIndex = savedInstanceState.getInt(Contract.EXTRA_STATE_INDEX);
+            Log.d(TAG, "mIndex onRestoreInstanceState = " + mIndex);
+
+            initialiseListIngredients();
+            initialiseListSteps();
+            GetFragmentByScreenSize(mIndex);
+
+        }
+        onClickStepsAdapter();
 
     }
 
     private void initialiseListIngredients() {
 
-        ButterKnife.bind(this);
         mIngredients_list.setHasFixedSize(true);
         mIngredients_list.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.HORIZONTAL, false));
@@ -187,49 +258,45 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     private void initialiseListSteps() {
 
-        ButterKnife.bind(this);
         mStep_list.setHasFixedSize(true);
         mStep_list.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
         mStepsAdapter = new StepsAdapter(getLayoutInflater());
+
+        mStep_list.setAdapter(mStepsAdapter);
+    }
+
+    public void onClickStepsAdapter() {
         mStepsAdapter.setStepsClickListener(new StepsAdapter.OnStepsClickListener() {
             @Override
             public void onClick(int position) {
 
                 if (mTwoPane) {
 
-                    stepsFragment = new StepsFragment();
-
-                    Bundle bundle = new Bundle();
-                    bundle.putParcelableArrayList(StepsFragment.EXTRA_STEP_LIST_ACTIVITY, mStepsArrayList);
-                    bundle.putInt(StepsFragment.EXTRA_STEP_INDEX, position);
-                    bundle.putBoolean(StepsFragment.EXTRA_LARGE_SCREEN, mTwoPane);
-
-                    stepsFragment.setArguments(bundle);
-                    FragmentManager fragmentManager = getSupportFragmentManager();
-                    fragmentManager.beginTransaction()
-                            .replace(R.id.step_container, stepsFragment)
-                            .commit();
+                    initializeFragment(position);
+                    mIndex = position;
+                    Log.d(TAG, "mIndex afterOnClickpPosition = " + String.valueOf(mIndex));
 
 
                 } else {
                     Intent intent = new Intent(DetailsActivity.this, StepsActivity.class);
                     Bundle extras = new Bundle();
-                    extras.putString(EXTRA_VIDEO_URL, mStepsAdapter.getVideoURL());
-                    extras.putString(EXTRA_DESCRIPTION, mStepsAdapter.getDescription());
+                    mIndex = position;
+                    extras.putInt(Contract.EXTRA_STATE_INDEX, mIndex);
+                    extras.putParcelableArrayList(Contract.EXTRA_STATE_STEPS, mStepsArrayList);
                     intent.putExtras(extras);
                     startActivity(intent);
                 }
 
             }
         });
-        mStep_list.setAdapter(mStepsAdapter);
     }
 
     @Override
     public void onIngredientsLoaded(ArrayList<Ingredients> ingredientsList) {
+        mIngredientsAdapter.addIngredients(ingredientsList);
         mIngredientsArrayList = ingredientsList;
-        mIngredientsAdapter.addIngredients(mIngredientsArrayList);
+
 
     }
 
@@ -237,7 +304,16 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     public void onStepsLoaded(ArrayList<Steps> stepsList) {
         mStepsArrayList = stepsList;
         mStepsAdapter.addSteps(mStepsArrayList);
-        setStepsList(mStepsArrayList);
+
+        if (!mFirstOpen) {
+            GetFragmentByScreenSize(0);
+            mFirstOpen = true;
+            Log.d(TAG, "bundleList onStepsLoaded = " + String.valueOf(mStepsArrayList.size()));
+
+        }
+
+
+
     }
 
     public boolean isTablet() {
@@ -246,7 +322,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
-    public void GetFragmentByScreenSize() {
+    public void GetFragmentByScreenSize(int index) {
 
         assert (this.getSystemService(Context.WINDOW_SERVICE)) != null;
         assert this.getSystemService(Context.WINDOW_SERVICE) != null;
@@ -254,8 +330,8 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         switch (rotation) {
             case Surface.ROTATION_0:
                 if (isTablet()) {
+                    initializeFragment(index);
 
-                    changeVideo();
 
                     mTwoPane = true;
                 }
@@ -263,14 +339,19 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                 break;
             case Surface.ROTATION_90:
 
-                changeVideo();
+
+                initializeFragment(index);
+
+
+
 
                 mTwoPane = true;
 
                 break;
             case Surface.ROTATION_180:
+                initializeFragment(index);
 
-                changeVideo();
+
 
                 mTwoPane = true;
 
@@ -279,14 +360,19 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         }
     }
 
-    private void changeVideo() {
+    private void initializeFragment(int index) {
         stepsFragment = new StepsFragment();
 
         Bundle bundle = new Bundle();
-        bundle.putParcelableArrayList(StepsFragment.EXTRA_STEP_LIST_ACTIVITY, mStepsArrayList);
-        bundle.putInt(StepsFragment.EXTRA_STEP_INDEX, 0);
+        bundle.putParcelableArrayList(Contract.EXTRA_STATE_STEPS, mStepsArrayList);
+        bundle.putInt(Contract.EXTRA_STEP_INDEX,
+                index);
         bundle.putBoolean(StepsFragment.EXTRA_LARGE_SCREEN, mTwoPane);
+        bundle.putBoolean(Contract.EXTRA_ROTATION, false);
 
+        Log.d(TAG, "bundleList send from DetailsActivity = " + String.valueOf(mStepsArrayList.size()));
+
+        mIndex = index;
         stepsFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
@@ -294,6 +380,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                 .commit();
 
     }
+
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override

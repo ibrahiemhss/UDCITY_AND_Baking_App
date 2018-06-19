@@ -18,6 +18,17 @@ public class Contract implements BaseColumns {
     public static final String EXTRA_VIDEO_URL = "extra_video_url ";
     public static final String EXTRA_DESCRIPTION = "extra_description ";
 
+    public static final String EXTRA_STATE_FIRST_OPEN = "state_fisrt_open";
+    public static final String EXTRA_STATE_INGREDIENTS = "state_ingredients";
+    public static final String EXTRA_POSITION = "extra_position";
+    public static final String EXTRA_BAKE_NAME = "extra_bake";
+    public static final String EXTRA_STATE_STEPS = "state_steps";
+    public static final String EXTRA_STATE_FRAGMENT = "state_fragment";
+    public static final String EXTRA_STATE_INDEX = "state_index";
+    public static final String EXTRA_ROTATION = "state_rotation";
+    public static final String EXTRA_STEP_INDEX = "extra_index";
+
+
     //content provider
     protected static final String PATH_BAKE = "bake";
     protected static final String AUTHORITY = "com.example.ibrahim.udacity_and_baking_app";

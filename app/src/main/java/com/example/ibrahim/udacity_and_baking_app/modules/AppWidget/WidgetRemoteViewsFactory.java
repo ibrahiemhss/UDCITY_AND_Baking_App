@@ -12,7 +12,6 @@ import android.widget.RemoteViewsService;
 
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.data.Contract;
-import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivity;
 
 
 /**
@@ -86,8 +85,8 @@ class WidgetRemoteViewsFactory implements RemoteViewsService.RemoteViewsFactory 
         Intent fillInIntent = new Intent();
         fillInIntent.putExtra(MainWidgetProvider.EXTRA_ID, mCursor.getInt(1));
         Log.d(TAG, "ItemWidget_id_send = " + position);
-        fillInIntent.putExtra(DetailsActivity.EXTRA_POSITION, position);
-        fillInIntent.putExtra(DetailsActivity.EXTRA_BAKE_NAME, mCursor.getString(1));
+        fillInIntent.putExtra(Contract.EXTRA_POSITION, position);
+        fillInIntent.putExtra(Contract.EXTRA_BAKE_NAME, mCursor.getString(1));
 
         rv.setOnClickFillInIntent(R.id.widgetItemContainer, fillInIntent);
 

@@ -26,6 +26,10 @@ public class BakeApplication extends Application {
      */
     private ApplicationComponent mApplicationComponent;
 
+    public void setmApplicationComponent(ApplicationComponent mApplicationComponent) {
+        this.mApplicationComponent = mApplicationComponent;
+    }
+
     @Override
     public void onCreate() {
         super.onCreate();

@@ -15,6 +15,8 @@ import android.widget.Toast;
 import com.example.ibrahim.udacity_and_baking_app.IdlingResource.EspressoIdlingResource;
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.base.BaseActivity;
+import com.example.ibrahim.udacity_and_baking_app.data.Contract;
+import com.example.ibrahim.udacity_and_baking_app.data.SharedPrefManager;
 import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerMainComponents;
 import com.example.ibrahim.udacity_and_baking_app.di.module.MainModule;
 import com.example.ibrahim.udacity_and_baking_app.modules.AppWidget.MainWidgetProvider;
@@ -101,10 +103,13 @@ public class MainActivity extends BaseActivity implements MainView {
      * to ensure there is enougth time to register IdlingResource if the download is done
      * too early (i.e. in onCreate)
      */
-    @Override
-    protected void onStart() {
-        super.onStart();
+
+
+    public ArrayList<Bake> getmBakeArrayList() {
+        return mBakeArrayList;
     }
+
+
     /*TODO (48) Override  resolveDaggerDependency from BaseActivity class*/
     @Override
     protected void resolveDaggerDependency() {
@@ -149,9 +154,11 @@ public class MainActivity extends BaseActivity implements MainView {
     private void launchDetailActivity(int position) {
         Intent intent = new Intent(this, DetailsActivity.class);
         Bundle extras = new Bundle();
-        extras.putInt(DetailsActivity.EXTRA_POSITION, position);
+        extras.putInt(Contract.EXTRA_POSITION, position);
         String name = mBakeArrayList.get(position).getName();
-        extras.putString(DetailsActivity.EXTRA_BAKE_NAME, name);
+        extras.putString(Contract.EXTRA_BAKE_NAME, name);
+        SharedPrefManager.getInstance(this).setPrefDetailsPosition(position);
+        SharedPrefManager.getInstance(this).setPrefBakeName(name);
         intent.putExtras(extras);
         startActivity(intent);
     }
