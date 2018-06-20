@@ -35,7 +35,9 @@
         </activity>
         <activity
             android:name=".modules.details.DetailsActivity" />
-        <activity android:name=".modules.steps.StepsActivity" />
+        <activity
+            android:name=".modules.steps.StepsActivity"
+            android:theme="@style/AppTheme_No_Action" />
 
         <receiver android:name=".modules.AppWidget.MainWidgetProvider">
             <intent-filter>

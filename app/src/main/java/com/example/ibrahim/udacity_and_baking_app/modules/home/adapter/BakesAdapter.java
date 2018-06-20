@@ -24,7 +24,6 @@ import butterknife.ButterKnife;
  */
 
 
-@SuppressWarnings("unused")
 public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
 
     private final Integer[] imgId;
@@ -90,7 +89,6 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
 
         public void bind(Bake bake, int position) {
             mBakeName.setText(bake.getName());
-            mBakeIcon.setImageResource(imgId[position]);
 
 
         }

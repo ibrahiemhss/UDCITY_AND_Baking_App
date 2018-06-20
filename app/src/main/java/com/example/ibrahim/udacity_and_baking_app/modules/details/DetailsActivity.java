@@ -23,8 +23,8 @@ import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerDetailsCom
 import com.example.ibrahim.udacity_and_baking_app.di.module.DetailsModule;
 import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.IngredientsAdapter;
 import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.StepsAdapter;
+import com.example.ibrahim.udacity_and_baking_app.modules.fragments.StepsFragment;
 import com.example.ibrahim.udacity_and_baking_app.modules.steps.StepsActivity;
-import com.example.ibrahim.udacity_and_baking_app.modules.steps.fragments.StepsFragment;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Ingredients;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 import com.example.ibrahim.udacity_and_baking_app.mvp.presenter.DetailsPresenter;
@@ -114,7 +114,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         }
         if (savedInstanceState != null
                 && savedInstanceState.containsKey(Contract.EXTRA_STATE_INGREDIENTS)
-                && savedInstanceState.containsKey(Contract.EXTRA_STATE_FRAGMENT)
                 && savedInstanceState.containsKey(Contract.EXTRA_STATE_INDEX)
                 && savedInstanceState.containsKey(Contract.EXTRA_STATE_FIRST_OPEN)) {
 
@@ -130,7 +129,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             GetFragmentByScreenSize(mIndex);
 
         }
-        onClickStepsAdapter();
 
     }
 
@@ -176,7 +174,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         initialiseListIngredients();
         initialiseListSteps();
         GetFragmentByScreenSize(mIndex);
-        onClickStepsAdapter();
         Log.d(TAG, "onRestartDetails IngredientsArrayList = " + String.valueOf(mIngredientsArrayList.size()));
 
         Log.d(TAG, "onRestartDetails StepsArrayList = " + String.valueOf(mStepsArrayList.size()));
@@ -243,7 +240,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             GetFragmentByScreenSize(mIndex);
 
         }
-        onClickStepsAdapter();
 
     }
 
@@ -261,12 +257,10 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         mStep_list.setHasFixedSize(true);
         mStep_list.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
-        mStepsAdapter = new StepsAdapter(getLayoutInflater());
+        mStepsAdapter = new StepsAdapter(getLayoutInflater(), DetailsActivity.this);
 
         mStep_list.setAdapter(mStepsAdapter);
-    }
 
-    public void onClickStepsAdapter() {
         mStepsAdapter.setStepsClickListener(new StepsAdapter.OnStepsClickListener() {
             @Override
             public void onClick(int position) {
@@ -283,6 +277,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                     Bundle extras = new Bundle();
                     mIndex = position;
                     extras.putInt(Contract.EXTRA_STATE_INDEX, mIndex);
+                    SharedPrefManager.getInstance(DetailsActivity.this).setPrefIndex(mIndex);
                     extras.putParcelableArrayList(Contract.EXTRA_STATE_STEPS, mStepsArrayList);
                     intent.putExtras(extras);
                     startActivity(intent);
@@ -292,10 +287,12 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         });
     }
 
+
     @Override
     public void onIngredientsLoaded(ArrayList<Ingredients> ingredientsList) {
-        mIngredientsAdapter.addIngredients(ingredientsList);
         mIngredientsArrayList = ingredientsList;
+        initialiseListIngredients();
+        mIngredientsAdapter.addIngredients(mIngredientsArrayList);
 
 
     }
@@ -303,10 +300,11 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     @Override
     public void onStepsLoaded(ArrayList<Steps> stepsList) {
         mStepsArrayList = stepsList;
+        initialiseListSteps();
         mStepsAdapter.addSteps(mStepsArrayList);
 
         if (!mFirstOpen) {
-            GetFragmentByScreenSize(0);
+            GetFragmentByScreenSize(mIndex);
             mFirstOpen = true;
             Log.d(TAG, "bundleList onStepsLoaded = " + String.valueOf(mStepsArrayList.size()));
 
@@ -367,7 +365,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         bundle.putParcelableArrayList(Contract.EXTRA_STATE_STEPS, mStepsArrayList);
         bundle.putInt(Contract.EXTRA_STEP_INDEX,
                 index);
-        bundle.putBoolean(StepsFragment.EXTRA_LARGE_SCREEN, mTwoPane);
+        //bundle.putBoolean(StepsFragment.EXTRA_LARGE_SCREEN, mTwoPane);
         bundle.putBoolean(Contract.EXTRA_ROTATION, false);
 
         Log.d(TAG, "bundleList send from DetailsActivity = " + String.valueOf(mStepsArrayList.size()));

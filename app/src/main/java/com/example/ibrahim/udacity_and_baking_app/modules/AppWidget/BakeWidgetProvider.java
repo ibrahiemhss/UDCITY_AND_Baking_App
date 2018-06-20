@@ -6,11 +6,11 @@ import android.appwidget.AppWidgetProvider;
 /**
  * Created by ibrahim on 24/05/18.
  */
-public class SimpleAppWidgetProvider extends AppWidgetProvider {
+public class BakeWidgetProvider extends AppWidgetProvider {
 
     /*public static final String ACTION_DETAILS_ACTIVITY = "ACTION_DETAILS_ACTIVITY";
     public static final String EXTRA_SYMBOL = "SYMBOL";
-    private static final String TAG = "SimpleAppWidgetProvider";
+    private static final String TAG = "BakeWidgetProvider";
     private static final String REFRESH_ACTION = "com.example.ibrahim.udacity_and_baking_app.action.REFRESH";
 
     @Override

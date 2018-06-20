@@ -1,4 +1,4 @@
-package com.example.ibrahim.udacity_and_baking_app.modules.steps.fragments;
+package com.example.ibrahim.udacity_and_baking_app.modules.fragments;
 
 import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
@@ -26,10 +26,9 @@ import android.widget.TextView;
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 import com.example.ibrahim.udacity_and_baking_app.data.SharedPrefManager;
+import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.StepsAdapter;
 import com.example.ibrahim.udacity_and_baking_app.modules.steps.StepsActivity;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
-import com.example.ibrahim.udacity_and_baking_app.mvp.presenter.StepfragmentPresenter;
-import com.example.ibrahim.udacity_and_baking_app.mvp.view.StepsView;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -44,8 +43,6 @@ import com.google.android.exoplayer2.util.Util;
 
 import java.util.ArrayList;
 
-import javax.inject.Inject;
-
 import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
@@ -58,16 +55,15 @@ import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
  */
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class StepsFragment extends Fragment implements StepsView, View.OnClickListener/* , Player.EventListener*/ {
-    public static final String EXTRA_STEP_LIST_ACTIVITY = "extra_steps_list_activity";
-    public static final String EXTRA_LARGE_SCREEN = "extra_large";
+public class StepsFragment extends Fragment implements View.OnClickListener/* , Player.EventListener*/ {
+    //  public static final String EXTRA_STEP_LIST_ACTIVITY = "extra_steps_list_activity";
+    //  public static final String EXTRA_LARGE_SCREEN = "extra_large";
     private static final String TAG = "StepsFragment";
-    private static final String EXTRA_STEP_POSITION = "extra_step_position";
-    private static final String EXTRA_STEP_LIST = "extra_steps_list";
-    private static final int UI_ANIMATION_DELAY = 300;
+    //  private static final String EXTRA_STEP_POSITION = "extra_step_position";
+    //  private static final String EXTRA_STEP_LIST = "extra_steps_list";
+    // private static final int UI_ANIMATION_DELAY = 300;
     private static MediaSessionCompat mMediaSession;
     private final Handler mHideHandler = new Handler();
-
     @BindView(R.id.tv_descriptoin)
     protected TextView mTxtDescription;
     @BindView(R.id.tv_txt_novid)
@@ -82,10 +78,7 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
     protected LinearLayout mLinearLayout;
     @BindView(R.id.rv_details)
     protected RelativeLayout mRelativeLayout;
-
-    @Inject
-    protected StepfragmentPresenter mPresenter;
-
+    private StepsAdapter.OnStepsClickListener mOnStepsClickListener;
     private boolean mRotation;
     private Bundle savedState = null;
     private SimpleExoPlayer mExoPlayer;
@@ -100,13 +93,11 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
     private Unbinder unbinder;
     private ViewGroup container;
     private LayoutInflater inflater;
+    private StepsAdapter mStepsAdapter;
+
 
     private StepsActivity mStepsActivity;
 
-    @Override
-    public void onStepsLoaded(ArrayList<Steps> stepsList) {
-        //  mStepsArrayList = stepsList;
-    }
 
 
 
@@ -135,7 +126,7 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
         View view = inflater.inflate(R.layout.fragment_steps, container, false);
 
         unbinder = ButterKnife.bind(this, view);
-
+        mStepsAdapter = new StepsAdapter(getLayoutInflater(), getActivity());
         Bundle extras = this.getArguments();
 
             if (extras != null) {
@@ -143,22 +134,21 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
                 Log.d(TAG, " mIndex after getArguments = " + mIndex);
                 Log.d(TAG, "mRotation after getArguments = " + String.valueOf(mRotation));
 
+                if (mRotation) {
+                    unbinder = ButterKnife.bind(this, view);
+                    mLinearLayout.setLayoutParams(new RelativeLayout.LayoutParams(
+                            RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
+                    mRelativeLayout.setVisibility(View.GONE);
+
+
+                } else {
+                    mLinearLayout = new LinearLayout(getActivity());
+                    mLinearLayout.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, 250));
+                    mRelativeLayout.setVisibility(View.VISIBLE);
+
+                }
             }
 
-        if (mRotation) {
-            unbinder = ButterKnife.bind(this, view);
-
-            mLinearLayout = new LinearLayout(getActivity());
-            mLinearLayout.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT));
-            mRelativeLayout.setVisibility(View.GONE);
-
-
-        } else {
-            mLinearLayout = new LinearLayout(getActivity());
-            mLinearLayout.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, 250));
-            mRelativeLayout.setVisibility(View.VISIBLE);
-
-        }
         if (mStepsArrayList != null && mStepsArrayList.size() > 0) {
             show();
         }
@@ -200,23 +190,9 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
         this.mDescription = mDescription;
     }
 
-    @Override
-    public void resume() {
-        // mExoPlayer.setPlayWhenReady(true);
-        super.onResume();
-    }
 
-    @Override
-    public void pause() {
-        // mExoPlayer.setPlayWhenReady(false);
-        super.onPause();
-    }
 
-    @Override
-    public void destroy() {
-        //  mExoPlayer.release();
-        super.onDestroy();
-    }
+
 
     private void initializePlayer(Uri mVideoUri) {
 
@@ -245,6 +221,7 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
         }
     }
 
+
     @Override
     public void onPause() {
         super.onPause();
@@ -268,7 +245,10 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
 
 
             if (mStepsArrayList != null) {
+                if (mIndex == mStepsArrayList.size())
+                    return;
                 mIndex++;
+
                 if (mIndex >= mStepsArrayList.size()) {
                     mIndex = mStepsArrayList.size() - 1;
                     mImgMoveLeft.setVisibility(View.INVISIBLE);
@@ -280,8 +260,8 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
                 }
                 Log.d(TAG, "mIndex move_left = " + mIndex);
                 mStepsActivity = new StepsActivity();
-
                 SharedPrefManager.getInstance(getActivity()).setPrefIndex(mIndex);
+
                 show();
             }
         } else if (id == R.id.move_right) {
@@ -311,7 +291,6 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
 
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     private void show() {
 
         releasePlayer();
@@ -342,15 +321,6 @@ public class StepsFragment extends Fragment implements StepsView, View.OnClickLi
 
     }
 
-    @SuppressWarnings("RedundantConditionalExpression")
-    @Override
-    public void onSaveInstanceState(@Nullable Bundle outState) {
-        super.onSaveInstanceState(outState != null ? outState : null);
-        outState.putInt(Contract.EXTRA_STEP_INDEX, mIndex);
-        outState.putParcelableArrayList(EXTRA_STEP_LIST, mStepsArrayList);
-        Log.d(TAG, "mIndex outState = " + mIndex);
-        boolean savStat = true;
-    }
 
     public View initializeUi() {
         View view = null;

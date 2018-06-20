@@ -29,10 +29,16 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
     private final List<Steps> mList = new ArrayList<>();
     private String mVideoURL;
     private String mDescription;
+
+
+    private Context context;
+
     private StepsAdapter.OnStepsClickListener mBakeClickListener;
 
-    public StepsAdapter(LayoutInflater inflater) {
+    public StepsAdapter(LayoutInflater inflater, Context context) {
         mLayoutInflater = inflater;
+        this.context = context;
+
     }
 
     @NonNull
@@ -82,10 +88,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
         this.mDescription = mDescription;
     }
 
-    @SuppressWarnings("UnnecessaryLocalVariable")
-    public void setAdapterListener(AdpaterListener listener) {
-        AdpaterListener mListener = listener;
-    }
+
 
     public interface OnStepsClickListener {
 
@@ -104,6 +107,8 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
             super(itemView);
             mContext = itemView.getContext();
             itemView.setOnClickListener(this);
+
+
             ButterKnife.bind(this, itemView);
         }
 
@@ -111,6 +116,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
             mId.setText(String.valueOf(steps.getId()));
             mShortDescription.setText(steps.getShortDescription());
             setVideoURL(steps.getVideoURL());
+
             setDescription(steps.getDescription());
 
 
@@ -120,6 +126,8 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
         public void onClick(View view) {
             if (mBakeClickListener != null) {
                 mBakeClickListener.onClick(getAdapterPosition());
+                view.setBackgroundResource(R.color.colorWhite);
+
             }
 
         }

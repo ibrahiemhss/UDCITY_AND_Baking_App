@@ -4,18 +4,22 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v4.app.FragmentManager;
+import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Surface;
+import android.view.View;
 import android.view.WindowManager;
 
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.base.BaseActivity;
 import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 import com.example.ibrahim.udacity_and_baking_app.data.SharedPrefManager;
-import com.example.ibrahim.udacity_and_baking_app.modules.steps.fragments.StepsFragment;
+import com.example.ibrahim.udacity_and_baking_app.modules.fragments.StepsFragment;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 
 import java.util.ArrayList;
+
+import butterknife.BindView;
 
 /**
  *
@@ -25,6 +29,8 @@ import java.util.ArrayList;
 public class StepsActivity extends BaseActivity {
 
     private static final String TAG = "StepsActivity";
+    @BindView(R.id.toolbar)
+    protected Toolbar mToolbar;
     private int mIndex;
     private ArrayList<Steps> mArrayList;
     private StepsFragment mStepsFragment;
@@ -38,6 +44,7 @@ public class StepsActivity extends BaseActivity {
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
+
 
         final Bundle extras = getIntent().getExtras();
         if (savedInstanceState == null) {
@@ -54,6 +61,7 @@ public class StepsActivity extends BaseActivity {
             }
 
         }
+        setSupportActionBar(mToolbar);
 
         if (savedInstanceState != null
                 && savedInstanceState.containsKey(Contract.EXTRA_STATE_INDEX)
@@ -66,7 +74,28 @@ public class StepsActivity extends BaseActivity {
 
         }
 
+        if (isRotated()) {
 
+            mToolbar.setVisibility(View.GONE);
+        } else {
+            mToolbar.setVisibility(View.VISIBLE);
+
+        }
+
+    }
+
+
+    @Override
+    protected void onRestart() {
+        super.onRestart();
+
+        if (isRotated()) {
+
+            mToolbar.setVisibility(View.GONE);
+        } else {
+            mToolbar.setVisibility(View.VISIBLE);
+
+        }
     }
 
     @Override
@@ -86,13 +115,13 @@ public class StepsActivity extends BaseActivity {
         bundle.putParcelableArrayList(Contract.EXTRA_STATE_STEPS, mArrayList);
         bundle.putInt(Contract.EXTRA_STEP_INDEX,
                 mIndex);
-        if (getScreenSize()) {
+        if (isRotated()) {
             bundle.putBoolean(Contract.EXTRA_ROTATION, true);
-            Log.d(TAG, "mRotation  On rotation StepActivity = " + String.valueOf(getScreenSize()));
+            Log.d(TAG, "mRotation  On rotation StepActivity = " + String.valueOf(isRotated()));
 
         } else {
             bundle.putBoolean(Contract.EXTRA_ROTATION, false);
-            Log.d(TAG, "mRotation  On not rotation StepActivity = " + String.valueOf(getScreenSize()));
+            Log.d(TAG, "mRotation  On not rotation StepActivity = " + String.valueOf(isRotated()));
 
         }
 
@@ -107,7 +136,7 @@ public class StepsActivity extends BaseActivity {
 
     }
 
-    public boolean getScreenSize() {
+    public boolean isRotated() {
 
         boolean mRotation = false;
         assert (this.getSystemService(Context.WINDOW_SERVICE)) != null;
