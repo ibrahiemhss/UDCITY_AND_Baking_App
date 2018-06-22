@@ -39,7 +39,9 @@
             android:name=".modules.steps.StepsActivity"
             android:theme="@style/AppTheme_No_Action" />
 
-        <receiver android:name=".modules.AppWidget.MainWidgetProvider">
+        <receiver
+            android:name=".modules.AppWidget.MainWidgetProvider"
+            tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
 
@@ -53,7 +55,8 @@
         <service
             android:name=".modules.AppWidget.WidgetRemoteViewsService"
             android:exported="false"
-            android:permission="android.permission.BIND_REMOTEVIEWS" />
+            android:permission="android.permission.BIND_REMOTEVIEWS"
+            tools:ignore="InnerclassSeparator" />
 
         <provider
             android:name="com.example.ibrahim.udacity_and_baking_app.data.MyContentProvider"

@@ -11,14 +11,12 @@ import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 
-/**
- * Created by Indian Dollar on 1/10/2017.
+/*Created by Indian Dollar on 1/10/2017.
  */
 
 public class MyContentProvider extends ContentProvider {
 
     private static final int BAKE_CODE = 100;
-
     private static final UriMatcher sUriMatcher = buildUriMatcher();
     private DbHelper mDbHelper;
 
@@ -29,7 +27,6 @@ public class MyContentProvider extends ContentProvider {
 
         return uriMatcher;
     }
-
 
     @Override
     public boolean onCreate() {

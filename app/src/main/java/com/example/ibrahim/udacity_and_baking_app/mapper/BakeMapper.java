@@ -18,7 +18,6 @@ import java.util.ArrayList;
 import java.util.List;
 
 import javax.inject.Inject;
-//TODO (64) create class BakeMapper
 
 /**
  * Created by ibrahim on 24/05/18.
@@ -26,6 +25,7 @@ import javax.inject.Inject;
  */
 
 public class BakeMapper {
+    @SuppressWarnings("unused")
     @Inject
     public BakeMapper() {
     }

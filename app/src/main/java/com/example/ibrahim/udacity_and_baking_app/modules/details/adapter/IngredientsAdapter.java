@@ -18,8 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-/**
- * Created by ibrahim on 01/06/18.
+/*Created by ibrahim on 01/06/18.
  */
 
 public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.Holder> {
@@ -70,7 +69,6 @@ public class IngredientsAdapter extends RecyclerView.Adapter<IngredientsAdapter.
         public Holder(View itemView) {
             super(itemView);
             mContext = itemView.getContext();
-            //   itemView.setOnClickListener(this);
             ButterKnife.bind(this, itemView);
         }
 

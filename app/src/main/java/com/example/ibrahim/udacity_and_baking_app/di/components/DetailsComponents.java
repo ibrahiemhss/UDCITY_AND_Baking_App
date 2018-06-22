@@ -6,9 +6,9 @@ import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivit
 
 import dagger.Component;
 
-/**
- * Created by ibrahim on 30/05/18.
+/*Created by ibrahim on 30/05/18.
  */
+@SuppressWarnings("unused")
 @AppScope
 @Component(modules = DetailsModule.class, dependencies = ApplicationComponent.class)
 public interface DetailsComponents {

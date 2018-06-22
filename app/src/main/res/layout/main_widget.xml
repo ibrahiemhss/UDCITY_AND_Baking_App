@@ -1,38 +1,40 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:background="@drawable/border_parents"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:layout_alignWithParentIfMissing="true"
+    android:background="@drawable/border_dark"
     android:orientation="vertical"
     android:padding="10dp">
 
     <FrameLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:background="@drawable/border_parents">
 
         <TextView
             android:id="@+id/widgetTitle"
             android:layout_width="match_parent"
             android:layout_height="@dimen/widget_title_min_height"
-            android:background="@color/colorPrimary"
             android:gravity="center"
             android:text="@string/app_name"
             android:textAllCaps="true"
-            android:textColor="@color/colorWhite"
+            android:textColor="@color/colorBink"
             android:textSize="18sp" />
     </FrameLayout>
 
 
     <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="10dp">
 
         <ListView
             android:id="@+id/widgetListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:background="@color/colorWhite"
+            android:background="@color/colorIvory"
             android:divider="#eeeeee"
             android:dividerHeight="1dp"
             tools:listitem="@layout/list_item_widget" />

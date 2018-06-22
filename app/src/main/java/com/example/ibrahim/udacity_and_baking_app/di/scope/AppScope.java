@@ -5,7 +5,6 @@ import java.lang.annotation.RetentionPolicy;
 
 import javax.inject.Scope;
 
-//TODO (16) create interface AppScope
 @Scope
 /* this type of scope is per activity so can be per fragment
 * per view ,per service etc..*/

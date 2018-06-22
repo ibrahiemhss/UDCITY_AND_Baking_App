@@ -9,6 +9,7 @@ import android.support.test.rule.ActivityTestRule;
 import android.support.test.runner.AndroidJUnit4;
 
 import com.example.ibrahim.udacity_and_baking_app.IdlingResource.EspressoIdlingResource;
+import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivity;
 
 import org.junit.After;
@@ -23,11 +24,12 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 /**
+ *
  * Created by ibrahim on 13/06/18.
  */
 @RunWith(AndroidJUnit4.class)
 public class DetailsActivityTest {
-    int position = 1;
+    private final int mPosition = 1;
     /*test on click on item in RecyclerView  in DetailsActivity */
     @Rule
     public ActivityTestRule<DetailsActivity> mActivityTestRule = new ActivityTestRule<DetailsActivity>(DetailsActivity.class) {
@@ -36,9 +38,9 @@ public class DetailsActivityTest {
             Context targetContext = InstrumentationRegistry.getInstrumentation().getTargetContext();
             Intent result = new Intent(targetContext, DetailsActivity.class);
             /*sending bundle to DetailsActivity by its position in arraylist*/
-            result.putExtra(DetailsActivity.EXTRA_BAKE_NAME, getListValue(position));
+            result.putExtra(Contract.EXTRA_BAKE_NAME, getListValue(mPosition));
             //send position
-            result.putExtra(DetailsActivity.EXTRA_POSITION, position);
+            result.putExtra(Contract.EXTRA_POSITION, mPosition);
 
             return result;
         }
@@ -54,11 +56,11 @@ public class DetailsActivityTest {
     @Test
     public void scrollToPosition() {
         /*get recyclerView by id and but the number of item position chosen to test */
-        onView(withId(R.id.step_list)).perform(RecyclerViewActions.scrollToPosition(position));
-        onView(withId(R.id.ingredients_list)).perform(RecyclerViewActions.scrollToPosition(position));
+        onView(withId(R.id.step_list)).perform(RecyclerViewActions.scrollToPosition(mPosition));
+        onView(withId(R.id.ingredients_list)).perform(RecyclerViewActions.scrollToPosition(mPosition));
 
         /*test the specific text with specific position in arraylist*/
-        onView(withId(R.id.tv_baking_name)).check(matches(withText(getListValue(position))));
+        onView(withId(R.id.tv_baking_name)).check(matches(withText(getListValue(mPosition))));
 
 
     }
@@ -71,15 +73,15 @@ public class DetailsActivityTest {
         }
     }
 
-    public String getListValue(int postion) {
+    public String getListValue(int position) {
         String getValue = null;
-        if (postion == 0) {
+        if (position == 0) {
             getValue = "Nutella Pie";
-        } else if (postion == 1) {
+        } else if (position == 1) {
             getValue = "Brownies";
-        } else if (postion == 2) {
+        } else if (position == 2) {
             getValue = "Yellow Cake";
-        } else if (postion == 3) {
+        } else if (position == 3) {
             getValue = "Cheesecake";
         }
 

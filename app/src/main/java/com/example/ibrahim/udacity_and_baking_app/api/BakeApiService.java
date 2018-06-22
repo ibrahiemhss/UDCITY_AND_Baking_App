@@ -4,10 +4,8 @@ import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakingResponse;
 
 import java.util.List;
 
-import retrofit2.Call;
 import retrofit2.http.GET;
 import rx.Observable;
-//TODO (10) create interface BakeApiService
 
 /**
  *
@@ -24,8 +22,5 @@ public interface BakeApiService {
      <type> the type of object from BakingResponse
      */
     Observable<List<BakingResponse>> getBake();
-
-    @GET("/topher/2017/May/59121517_baking/baking.json")
-    Call<List<BakingResponse>> getTheCakes();
 
 }

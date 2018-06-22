@@ -3,8 +3,7 @@ package com.example.ibrahim.udacity_and_baking_app.data;
 import android.net.Uri;
 import android.provider.BaseColumns;
 
-/**
- * Created by ibrahim on 26/05/18.
+/*Created by ibrahim on 26/05/18.
  */
 @SuppressWarnings("unused")
 public class Contract implements BaseColumns {
@@ -14,11 +13,10 @@ public class Contract implements BaseColumns {
     //internet url
     public static final String BASE_URL = "https://d17h27t6h515a5.cloudfront.net";
 
-    //extra strings save bundle
-    public static final String EXTRA_VIDEO_URL = "extra_video_url ";
-    public static final String EXTRA_DESCRIPTION = "extra_description ";
-
-    public static final String EXTRA_STATE_FIRST_OPEN = "state_fisrt_open";
+    //extra strings saved in bundle
+    public static final String EXTRA_VIDEO_URL = "extra_video_url";
+    public static final String EXTRA_DESCRIPTION = "extra_description";
+    public static final String EXTRA_STATE_FIRST_OPEN = "state_first_open";
     public static final String EXTRA_STATE_INGREDIENTS = "state_ingredients";
     public static final String EXTRA_POSITION = "extra_position";
     public static final String EXTRA_BAKE_NAME = "extra_bake";
@@ -26,8 +24,9 @@ public class Contract implements BaseColumns {
     public static final String EXTRA_STATE_FRAGMENT = "state_fragment";
     public static final String EXTRA_STATE_INDEX = "state_index";
     public static final String EXTRA_ROTATION = "state_rotation";
+    public static final String EXTRA_NO_ROTATION = "state_no_rotation";
     public static final String EXTRA_STEP_INDEX = "extra_index";
-
+    public static final String EXTRA_IS_TABLET = "extra_tablet";
 
     //content provider
     protected static final String PATH_BAKE = "bake";

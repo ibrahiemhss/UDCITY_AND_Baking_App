@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
-import android.support.test.espresso.idling.CountingIdlingResource;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -34,20 +33,19 @@ import javax.inject.Inject;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-//TODO (33) extends BaseActivity class to get what  we need from it
-//TODO (43) implements MainView interface to get Value of all injected View in it
+//extends BaseActivity class to get what  we need from it
+//implements MainView interface to get Value of all injected View in it
 @SuppressWarnings("WeakerAccess")
 public class MainActivity extends BaseActivity implements MainView {
 
     private static final String STATE_BAKE = "state_bake";
-    //TODO (73) bind RecyclerView
+    //bind RecyclerView
     @BindView(R.id.bake_list)
     protected RecyclerView mBake_list;
-    /*
-    *TODO (44) MainActivity will get any bake information  from this MainPresenter */
+    @SuppressWarnings("unused")
+    /*MainActivity will get any bake information  from this MainPresenter */
     @Inject
     protected MainPresenter mPresenter;
-    CountingIdlingResource idlingResource = new CountingIdlingResource("Data laoding");
     private BakesAdapter mBakesAdapter;
     private ArrayList<Bake> mBakeArrayList;
     private final BakesAdapter.OnBakeClickListener onBakeClickListener = new BakesAdapter.OnBakeClickListener() {
@@ -68,7 +66,7 @@ public class MainActivity extends BaseActivity implements MainView {
         return R.layout.activity_main;
     }
 
-    //TODO (34) Override view method from BaseActivity
+    //Override view method from BaseActivity
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
@@ -80,12 +78,10 @@ public class MainActivity extends BaseActivity implements MainView {
 
         } else {
             GetListByScreenSize();
-      /*TODO (45) get value from the object of MainPresenter class */
             EspressoIdlingResource.increment(); // stops Espresso tests from going forward
 
-
-                            /*TODO (45) get value from the object of MainPresenter class */
             if (NetworkUtils.isNetAvailable(MainActivity.this)) {
+                /*get value from the object of MainPresenter class */
                 mPresenter.geBaking();
             } else {
                 mPresenter.getBakeFromDatabase();
@@ -99,33 +95,28 @@ public class MainActivity extends BaseActivity implements MainView {
     }
 
     /**
-     * We call Bakeloading.downloadImage from onStart or onResume instead of in onCreate
-     * to ensure there is enougth time to register IdlingResource if the download is done
+     * calling Bakeloading.downloadImage from onStart or onResume instead of in onCreate
+     * to ensure there is enough time to register IdlingResource if the download is done
      * too early (i.e. in onCreate)
      */
 
 
-    public ArrayList<Bake> getmBakeArrayList() {
-        return mBakeArrayList;
-    }
 
-
-    /*TODO (48) Override  resolveDaggerDependency from BaseActivity class*/
+    /*Override  resolveDaggerDependency from BaseActivity class*/
     @Override
     protected void resolveDaggerDependency() {
 
-        /*TODO (54) build component*/
+        /*build component*/
         DaggerMainComponents.builder()
-                /*TODO (58) add getApplicationComponent from
-                * BaseActivity.class*/
+                /*add getApplicationComponent from BaseActivity.class*/
                 .applicationComponent(getApplicationComponent())
                 //MainModule requiring a view being implements by that
                 .mainModule(new MainModule(this))
                 .build().inject(this);
     }
-//TODO (69) implements onShowDialog & onShowToast & onHideDialog to show message
 
-    //TODO (67) implements onBakeLoaded
+    //implements onShowDialog & onShowToast & onHideDialog to show message
+    //implements onBakeLoaded
     @Override
     public void onBakeLoaded(ArrayList<Bake> bakeList) {
         mBakeArrayList = bakeList;
@@ -201,7 +192,7 @@ public class MainActivity extends BaseActivity implements MainView {
                 >= Configuration.SCREENLAYOUT_SIZE_LARGE;
     }
 
-    //TODO (75) create  initialiseList to show values inside mBake_list
+    //initialiseList to show values inside mBake_list
     private void initialiseListWithPhoneScreen() {
 
 
@@ -210,14 +201,14 @@ public class MainActivity extends BaseActivity implements MainView {
         mBake_list.setLayoutManager(new LinearLayoutManager(this,
                 LinearLayoutManager.VERTICAL, false));
         //Pass a list of images with inflater ​​in adapter
-        mBakesAdapter = new BakesAdapter(mPresenter.getImgId(), getLayoutInflater(), mBakeArrayList);
+        mBakesAdapter = new BakesAdapter(mPresenter.getImgId(), getLayoutInflater());
 
         mBakesAdapter.setBakeClickListener(onBakeClickListener);
 
         mBake_list.setAdapter(mBakesAdapter);
     }
 
-    //TODO (75) create  initialiseList to show values inside mBake_list
+    //initialiseList to show values inside mBake_list
     private void initialiseListWithsLargeSize() {
 
 
@@ -226,7 +217,7 @@ public class MainActivity extends BaseActivity implements MainView {
         mBake_list.setLayoutManager(new GridLayoutManager(this, 2,
                 GridLayoutManager.VERTICAL, false));
         //Pass a list of images with inflater ​​in adapter
-        mBakesAdapter = new BakesAdapter(mPresenter.getImgId(), getLayoutInflater(), mBakeArrayList);
+        mBakesAdapter = new BakesAdapter(mPresenter.getImgId(), getLayoutInflater());
 
         mBakesAdapter.setBakeClickListener(onBakeClickListener);
 

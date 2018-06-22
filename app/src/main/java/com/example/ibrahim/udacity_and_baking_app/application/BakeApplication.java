@@ -10,7 +10,7 @@ import static com.example.ibrahim.udacity_and_baking_app.data.Contract.BASE_URL;
 
 /**
  * Created by ibrahim on 22/05/18.
- *
+ * <p>
  * application is a singleton object which will
  * be available throughout the entire lifecycle of
  * app and initialize most of the things that might be
@@ -21,14 +21,10 @@ import static com.example.ibrahim.udacity_and_baking_app.data.Contract.BASE_URL;
 public class BakeApplication extends Application {
 
     /**
-     *  initialise ApplicationComponent method
+     * initialise ApplicationComponent method
      * from {@linkplain com.example.ibrahim.udacity_and_baking_app.base.BaseActivity}
      */
     private ApplicationComponent mApplicationComponent;
-
-    public void setmApplicationComponent(ApplicationComponent mApplicationComponent) {
-        this.mApplicationComponent = mApplicationComponent;
-    }
 
     @Override
     public void onCreate() {

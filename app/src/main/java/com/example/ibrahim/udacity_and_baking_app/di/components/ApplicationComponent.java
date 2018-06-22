@@ -8,18 +8,18 @@ import javax.inject.Singleton;
 
 import dagger.Component;
 import retrofit2.Retrofit;
-//TODO (14) create interface ApplicationComponent
 
 /**
- *
  * Created by ibrahim on 22/05/18.
+ *
  */
 //used throughout the entire app
 
 /*noted as a @Singleton that might be used
  throughout the entire app so that the type of scope*/
+@SuppressWarnings("unused")
 @Singleton
-/*TODO (17)noted as a @Component  each component at least issued refer to modules or dependencies
+/*noted as a @Component  each component at least issued refer to modules or dependencies
   >>>attention<<<
    this ApplicationComponent might not have a pattern
    class that means it might not depending to another
@@ -32,9 +32,9 @@ no dependencies so we will leave it empty as it is
  */
 @Component(modules = ApplicationModule.class)
 public interface ApplicationComponent {
-    //TODO (28) exposeRetrofit
+    //exposeRetrofit
     Retrofit exposeRetrofit();
 
-    //TODO (30) Provides Context
+    //Provides Context
     Context exposeContext();
 }

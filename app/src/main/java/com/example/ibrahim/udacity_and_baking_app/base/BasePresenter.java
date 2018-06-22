@@ -21,6 +21,7 @@ import rx.schedulers.Schedulers;
  * protected as far is utility base class
  * V extends  BaseView In the original this is interface
  */
+@SuppressWarnings("unused")
 public class BasePresenter<V extends BaseView> {
 
     //inject View

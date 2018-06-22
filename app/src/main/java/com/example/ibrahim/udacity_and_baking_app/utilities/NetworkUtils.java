@@ -6,9 +6,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.net.NetworkInfo;
 
-/**
- *
- * Created by ibrahim on 11/06/18.
+/*Created by ibrahim on 11/06/18.
  */
 
 public class NetworkUtils {

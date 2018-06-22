@@ -6,8 +6,7 @@ import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 import java.util.ArrayList;
 
 /**
- *
- * Created by ibrahim on 30/05/18.
+ *Created by ibrahim on 30/05/18.
  */
 
 public interface DetailsView extends BaseView {

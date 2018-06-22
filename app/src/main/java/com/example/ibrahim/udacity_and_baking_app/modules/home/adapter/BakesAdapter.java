@@ -20,7 +20,7 @@ import butterknife.ButterKnife;
 //TODO (74) create  BakesAdapter
 
 /**
- * Created by ibrahim on 25/05/18.
+ *Created by ibrahim on 25/05/18.
  */
 
 
@@ -33,7 +33,7 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
     private final ArrayList<Bake> mBakeList = new ArrayList<>();
     private OnBakeClickListener mBakeClickListener;
 
-    public BakesAdapter(Integer[] imgId, LayoutInflater inflater, ArrayList<Bake> mBakeList) {
+    public BakesAdapter(Integer[] imgId, LayoutInflater inflater) {
         this.imgId = imgId;
         mLayoutInflater = inflater;
     }
@@ -89,6 +89,7 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
 
         public void bind(Bake bake, int position) {
             mBakeName.setText(bake.getName());
+            mBakeIcon.setImageResource(imgId[position]);
 
 
         }

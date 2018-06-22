@@ -27,7 +27,6 @@ import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 import com.example.ibrahim.udacity_and_baking_app.data.SharedPrefManager;
 import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.StepsAdapter;
-import com.example.ibrahim.udacity_and_baking_app.modules.steps.StepsActivity;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -50,18 +49,13 @@ import butterknife.Unbinder;
 import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
 
 /**
- *
- * Created by ibrahim on 01/06/18.
+ *Created by ibrahim on 01/06/18.
  */
 
 @SuppressWarnings({"WeakerAccess", "unused"})
-public class StepsFragment extends Fragment implements View.OnClickListener/* , Player.EventListener*/ {
-    //  public static final String EXTRA_STEP_LIST_ACTIVITY = "extra_steps_list_activity";
-    //  public static final String EXTRA_LARGE_SCREEN = "extra_large";
+public class StepsFragment extends Fragment implements View.OnClickListener {
+
     private static final String TAG = "StepsFragment";
-    //  private static final String EXTRA_STEP_POSITION = "extra_step_position";
-    //  private static final String EXTRA_STEP_LIST = "extra_steps_list";
-    // private static final int UI_ANIMATION_DELAY = 300;
     private static MediaSessionCompat mMediaSession;
     private final Handler mHideHandler = new Handler();
     @BindView(R.id.tv_descriptoin)
@@ -78,12 +72,14 @@ public class StepsFragment extends Fragment implements View.OnClickListener/* , 
     protected LinearLayout mLinearLayout;
     @BindView(R.id.rv_details)
     protected RelativeLayout mRelativeLayout;
+
     private StepsAdapter.OnStepsClickListener mOnStepsClickListener;
     private boolean mRotation;
     private Bundle savedState = null;
     private SimpleExoPlayer mExoPlayer;
     private int mIndex;
-    private Boolean mIsLarge;
+    private Boolean mIstablet;
+    private Boolean mNoRotation;
     private PlaybackStateCompat.Builder mStateBuilder;
     private NotificationManager mNotificationManager;
     private View mContentView;
@@ -93,12 +89,6 @@ public class StepsFragment extends Fragment implements View.OnClickListener/* , 
     private Unbinder unbinder;
     private ViewGroup container;
     private LayoutInflater inflater;
-    private StepsAdapter mStepsAdapter;
-
-
-    private StepsActivity mStepsActivity;
-
-
 
 
     private void readBundle(Bundle bundle) {
@@ -106,9 +96,11 @@ public class StepsFragment extends Fragment implements View.OnClickListener/* , 
             mStepsArrayList = bundle.getParcelableArrayList(Contract.EXTRA_STATE_STEPS);
             mIndex = bundle.getInt(Contract.EXTRA_STEP_INDEX);
             mRotation = bundle.getBoolean(Contract.EXTRA_ROTATION);
+            mIstablet = bundle.getBoolean(Contract.EXTRA_IS_TABLET);
+            mNoRotation = bundle.getBoolean(Contract.EXTRA_NO_ROTATION);
 
             if (mStepsArrayList != null) {
-                Log.d(TAG, "bundleList recieved= " + String.valueOf(mStepsArrayList.size()));
+                Log.d(TAG, "bundleList received= " + String.valueOf(mStepsArrayList.size()));
 
             }
             Log.d(TAG, "mIndex savedInstanceStateFragment = " + mIndex);
@@ -126,28 +118,31 @@ public class StepsFragment extends Fragment implements View.OnClickListener/* , 
         View view = inflater.inflate(R.layout.fragment_steps, container, false);
 
         unbinder = ButterKnife.bind(this, view);
-        mStepsAdapter = new StepsAdapter(getLayoutInflater(), getActivity());
         Bundle extras = this.getArguments();
 
-            if (extras != null) {
-                readBundle(extras);
-                Log.d(TAG, " mIndex after getArguments = " + mIndex);
-                Log.d(TAG, "mRotation after getArguments = " + String.valueOf(mRotation));
+        if (extras != null) {
+            readBundle(extras);
+            Log.d(TAG, " mIndex after getArguments = " + mIndex);
+            Log.d(TAG, "mRotation after getArguments = " + String.valueOf(mRotation));
 
-                if (mRotation) {
-                    unbinder = ButterKnife.bind(this, view);
-                    mLinearLayout.setLayoutParams(new RelativeLayout.LayoutParams(
-                            RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT));
-                    mRelativeLayout.setVisibility(View.GONE);
+            if (mRotation) {
+                unbinder = ButterKnife.bind(this, view);
+                LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
+                        RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                mLinearLayout.setPadding(0, 0, 0, 0);
+                mLinearLayout.setLayoutParams(layoutParams);
 
 
-                } else {
-                    mLinearLayout = new LinearLayout(getActivity());
-                    mLinearLayout.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, 250));
-                    mRelativeLayout.setVisibility(View.VISIBLE);
+                mRelativeLayout.setVisibility(View.GONE);
 
-                }
+
+            } else {
+                mLinearLayout = new LinearLayout(getActivity());
+                mLinearLayout.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, 250));
+                mRelativeLayout.setVisibility(View.VISIBLE);
+
             }
+        }
 
         if (mStepsArrayList != null && mStepsArrayList.size() > 0) {
             show();
@@ -189,9 +184,6 @@ public class StepsFragment extends Fragment implements View.OnClickListener/* , 
     public void setmDescription(String mDescription) {
         this.mDescription = mDescription;
     }
-
-
-
 
 
     private void initializePlayer(Uri mVideoUri) {
@@ -259,7 +251,6 @@ public class StepsFragment extends Fragment implements View.OnClickListener/* , 
 
                 }
                 Log.d(TAG, "mIndex move_left = " + mIndex);
-                mStepsActivity = new StepsActivity();
                 SharedPrefManager.getInstance(getActivity()).setPrefIndex(mIndex);
 
                 show();
@@ -297,9 +288,11 @@ public class StepsFragment extends Fragment implements View.OnClickListener/* , 
 
         if (mStepsArrayList.size() > 0) {
 
-            String videoUrl = mStepsArrayList.get(mIndex).getVideoURL();
-                //  mTxtDescription.setText(mStepsArrayList.get(mIndex).getDescription());
+            String videoUrl = getVideoUrl(mIndex);
+            if (mNoRotation || mIstablet) {
+                mTxtDescription.setText(mStepsArrayList.get(mIndex).getDescription());
 
+            }
 
 
             if (!videoUrl.isEmpty()) {
@@ -321,6 +314,15 @@ public class StepsFragment extends Fragment implements View.OnClickListener/* , 
 
     }
 
+    private String getVideoUrl(int index) {
+        String videoStream;
+        if (mStepsArrayList.get(index).getVideoURL().isEmpty()) {
+            videoStream = mStepsArrayList.get(index).getThumbnailURL();
+        } else {
+            videoStream = mStepsArrayList.get(index).getVideoURL();
+        }
+        return videoStream;
+    }
 
     public View initializeUi() {
         View view = null;

@@ -58,12 +58,13 @@ public abstract class BaseActivity extends AppCompatActivity {
     }
 
 
-    /**using generally in child activities to display status of coming data
+    /**
+     * using generally in child activities to display status of coming data
      * using here
-     *{@linkplain com.example.ibrahim.udacity_and_baking_app.mvp.view.MainView}
-     *{@linkplain com.example.ibrahim.udacity_and_baking_app.mvp.presenter}
-     *{@linkplain  com.example.ibrahim.udacity_and_baking_app.modules.home}
-     * */
+     * {@linkplain com.example.ibrahim.udacity_and_baking_app.mvp.view.MainView}
+     * {@linkplain com.example.ibrahim.udacity_and_baking_app.mvp.presenter}
+     * {@linkplain  com.example.ibrahim.udacity_and_baking_app.modules.home}
+     */
     protected void showDialog(String message) {
         if (mProgressDialog == null) {
             mProgressDialog = new ProgressDialog(this);

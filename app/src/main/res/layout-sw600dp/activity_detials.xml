@@ -6,21 +6,27 @@
     android:orientation="vertical"
     tools:context="com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivity">
 
+    <TextView
+        android:id="@+id/tv_baking_name"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_alignParentTop="true"
+        android:layout_centerInParent="true"
+        android:layout_gravity="center"
+        android:padding="10dp"
+        android:textColor="@color/colorBink"
+        android:textSize="32sp"
+        android:textStyle="bold" />
     <LinearLayout
         android:id="@+id/linear_details"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
+        android:layout_below="@+id/tv_baking_name"
         android:layout_toLeftOf="@+id/view"
         android:layout_toStartOf="@+id/view"
         android:orientation="vertical">
 
-        <TextView
-            android:id="@+id/tv_baking_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center"
-            android:textSize="16sp"
-            android:textStyle="bold" />
+
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
@@ -37,7 +43,8 @@
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
                 android:text="@string/ingredients"
-                android:textSize="16sp"
+                android:textColor="@color/colorTextTitle"
+                android:textSize="18sp"
                 android:textStyle="bold" />
 
             <RelativeLayout
@@ -45,69 +52,112 @@
                 android:layout_height="wrap_content"
                 android:orientation="horizontal">
 
-                <View
-                    android:id="@+id/v1"
+                <ImageView
+                    android:id="@+id/v_Ingredient_back"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_alignParentLeft="true"
                     android:layout_alignParentStart="true"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/ic_arrow_left" />
+                    android:background="@drawable/ic_arrow_left"
+                    android:contentDescription="TODO"
+                    tools:ignore="ContentDescription,HardcodedText" />
 
                 <android.support.v7.widget.RecyclerView
                     android:id="@+id/ingredients_list"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_toLeftOf="@+id/v2"
-                    android:layout_toRightOf="@+id/v1"
+                    android:layout_toLeftOf="@+id/v_ingredient_next"
+                    android:layout_toRightOf="@+id/v_Ingredient_back"
                     android:padding="2dp"
                     android:scrollbars="vertical" />
 
-                <View
-                    android:id="@+id/v2"
+                <ImageView
+                    android:id="@+id/v_ingredient_next"
                     android:layout_width="48dp"
                     android:layout_height="48dp"
                     android:layout_alignParentEnd="true"
                     android:layout_alignParentRight="true"
                     android:layout_centerInParent="true"
-                    android:background="@drawable/ic_arrow_right" />
+                    android:background="@drawable/ic_arrow_right"
+                    android:contentDescription="TODO"
+                    tools:ignore="ContentDescription,HardcodedText" />
             </RelativeLayout>
         </LinearLayout>
 
         <LinearLayout
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            android:layout_height="0dp"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
+            android:layout_weight="1"
             android:background="@drawable/border_parents"
-            android:orientation="vertical"
+            android:orientation="horizontal"
             android:padding="5dp">
 
-            <TextView
+            <RelativeLayout
                 android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/steps"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                android:layout_height="match_parent"
+                android:orientation="vertical">
 
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="@string/see_video"
-                android:textSize="16sp"
-                android:textStyle="bold" />
+                <ImageView
+                    android:id="@+id/v_step_up"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentLeft="true"
+                    android:layout_alignParentTop="true"
+                    android:background="@drawable/ic_arrow_up"
+                    android:contentDescription="TODO"
+                    tools:ignore="ContentDescription,HardcodedText" />
 
-            <android.support.v7.widget.RecyclerView
-                android:id="@+id/step_list"
+                <ImageView
+                    android:id="@+id/v_step_down"
+                    android:layout_width="48dp"
+                    android:layout_height="48dp"
+                    android:layout_alignParentBottom="true"
+                    android:layout_alignParentLeft="true"
+                    android:background="@drawable/ic_arrow_down"
+                    android:contentDescription="TODO"
+                    tools:ignore="ContentDescription,HardcodedText" />
+
+            </RelativeLayout>
+
+            <LinearLayout
                 android:layout_width="match_parent"
-                android:layout_height="0dp"
-                android:layout_weight="1"
-                android:padding="2dp"
-                android:scrollbars="vertical" />
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/steps"
+                    android:textColor="@color/colorTextTitle"
+                    android:textSize="18sp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:text="@string/see_video"
+                    android:textColor="@color/colorTextTitle"
+                    android:textSize="14sp"
+                    android:textStyle="bold" />
+
+
+                <android.support.v7.widget.RecyclerView
+                    android:id="@+id/step_list"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:padding="2dp"
+                    android:scrollbars="vertical" />
+
+
+            </LinearLayout>
         </LinearLayout>
     </LinearLayout>
 
@@ -115,14 +165,16 @@
         android:id="@+id/view"
         android:layout_width="1dp"
         android:layout_height="match_parent"
+        android:layout_below="@+id/tv_baking_name"
         android:layout_toLeftOf="@+id/step_linear_layout"
         android:background="@android:color/darker_gray" />
 
     <RelativeLayout
         android:id="@+id/step_linear_layout"
-        android:layout_width="400dp"
+        android:layout_width="500dp"
         android:layout_height="match_parent"
-        android:layout_alignParentRight="true">
+        android:layout_alignParentRight="true"
+        android:layout_below="@+id/tv_baking_name">
 
         <FrameLayout
             android:id="@+id/step_container"

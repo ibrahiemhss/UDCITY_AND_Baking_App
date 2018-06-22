@@ -12,11 +12,9 @@ import android.content.SharedPreferences;
 @SuppressWarnings("unused")
 public class SharedPrefManager {
     private static final String PREF_INDEX = "pref_index";
-    private static final String PREF_IS_FIRST_OPEN = "pref_first_open";
     private static final String PREF_DETAILS_POSITION = "pref_position";
     private static final String PREF_BAKE_NAME = "pref_bake_name";
 
-    private static final String PREF_VIDEO_URL = "pref_video_url";
     private static final String SHARED_PREF_NAME = "save_contents";
     private static SharedPrefManager mInstance;
     private final SharedPreferences pref;
@@ -73,39 +71,5 @@ public class SharedPrefManager {
 
     }
 
-    public String getVideoUrl() {
-        return pref.getString(PREF_VIDEO_URL, null);
-
-    }
-
-    public void seSetVideoUrl() {
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putString(PREF_VIDEO_URL, null);
-        editor.apply();
-        editor.commit();
-
-    }
-
-    public void setOpned() {
-        SharedPreferences.Editor editor = pref.edit();
-        editor.putBoolean(PREF_VIDEO_URL, false);
-        editor.apply();
-        editor.commit();
-
-    }
-
-    public boolean isOpened() {
-        return pref.getBoolean(PREF_IS_FIRST_OPEN, false);
-
-    }
-
-    public void setOpened(boolean isOpen) {
-        SharedPreferences.Editor editor = pref.edit();
-        editor = pref.edit();
-        editor.putBoolean(PREF_IS_FIRST_OPEN, isOpen);
-        editor.apply();
-        editor.commit();
-
-    }
 
 }

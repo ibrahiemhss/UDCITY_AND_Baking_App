@@ -13,6 +13,7 @@ import retrofit2.Retrofit;
  * <p>
  * DetailsModule should provide  BakeApiService
  */
+@SuppressWarnings("unused")
 @Module
 public class DetailsModule {
 

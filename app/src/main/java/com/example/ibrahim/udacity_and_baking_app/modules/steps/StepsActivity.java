@@ -22,18 +22,17 @@ import java.util.ArrayList;
 import butterknife.BindView;
 
 /**
- *
- * Created by ibrahim on 03/06/18.
+ *Created by ibrahim on 03/06/18.
  */
 
 public class StepsActivity extends BaseActivity {
 
     private static final String TAG = "StepsActivity";
+    @SuppressWarnings("WeakerAccess")
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
     private int mIndex;
     private ArrayList<Steps> mArrayList;
-    private StepsFragment mStepsFragment;
 
     @Override
     protected int getContentView() {
@@ -53,7 +52,7 @@ public class StepsActivity extends BaseActivity {
                     extras.containsKey(Contract.EXTRA_STATE_STEPS))) {
                 mIndex = extras.getInt(Contract.EXTRA_STATE_INDEX);
                 mArrayList = extras.getParcelableArrayList(Contract.EXTRA_STATE_STEPS);
-                Log.d(TAG, "mInex StepsActivity =" + String.valueOf(mIndex));
+                Log.d(TAG, "mIndex StepsActivity =" + String.valueOf(mIndex));
                 Log.d(TAG, "bundleList StepsActivity =" + String.valueOf(mArrayList.size()));
 
                 initializeView();
@@ -102,14 +101,14 @@ public class StepsActivity extends BaseActivity {
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt(Contract.EXTRA_STATE_INDEX, SharedPrefManager.getInstance(StepsActivity.this).getPrefIndex());
         outState.putParcelableArrayList(Contract.EXTRA_STATE_STEPS, mArrayList);
-        Log.d(TAG, "mIndex outStateInStepsActiviy = " + SharedPrefManager.getInstance(StepsActivity.this).getPrefIndex());
+        Log.d(TAG, "mIndex outStateInStepsActivity = " + SharedPrefManager.getInstance(StepsActivity.this).getPrefIndex());
         super.onSaveInstanceState(outState);
     }
 
 
-    public void initializeView() {
+    private void initializeView() {
 
-        mStepsFragment = new StepsFragment();
+        StepsFragment mStepsFragment = new StepsFragment();
 
         Bundle bundle = new Bundle();
         bundle.putParcelableArrayList(Contract.EXTRA_STATE_STEPS, mArrayList);
@@ -124,6 +123,13 @@ public class StepsActivity extends BaseActivity {
             Log.d(TAG, "mRotation  On not rotation StepActivity = " + String.valueOf(isRotated()));
 
         }
+        if (notRotated()) {
+            bundle.putBoolean(Contract.EXTRA_NO_ROTATION, true);
+
+        } else {
+            bundle.putBoolean(Contract.EXTRA_NO_ROTATION, false);
+
+        }
 
         Log.d(TAG, "bundleList send from StepsActivity = " + String.valueOf(mArrayList.size()));
 
@@ -136,9 +142,9 @@ public class StepsActivity extends BaseActivity {
 
     }
 
-    public boolean isRotated() {
+    private boolean isRotated() {
 
-        boolean mRotation = false;
+        boolean mRotation;
         assert (this.getSystemService(Context.WINDOW_SERVICE)) != null;
         assert this.getSystemService(Context.WINDOW_SERVICE) != null;
         final int rotation = ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
@@ -160,5 +166,27 @@ public class StepsActivity extends BaseActivity {
         Log.d(TAG, "mRotation  On StepActivity getScreenSize = " + String.valueOf(mRotation));
 
         return mRotation;
+    }
+
+    private boolean notRotated() {
+
+        boolean mNoRotation;
+        assert (this.getSystemService(Context.WINDOW_SERVICE)) != null;
+        assert this.getSystemService(Context.WINDOW_SERVICE) != null;
+        final int rotation = ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
+        switch (rotation) {
+
+            case Surface.ROTATION_0:
+                mNoRotation = true;
+                break;
+
+            default:
+                mNoRotation = false;
+
+        }
+
+        Log.d(TAG, "mNoRotation  On StepActivity getScreenSize = " + String.valueOf(mNoRotation));
+
+        return mNoRotation;
     }
 }

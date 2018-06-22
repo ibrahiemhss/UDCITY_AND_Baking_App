@@ -14,6 +14,7 @@ import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivit
 import com.example.ibrahim.udacity_and_baking_app.modules.home.MainActivity;
 
 /**
+ *
  * Created by ibrahim on 24/05/18.
  */
 public class MainWidgetProvider extends AppWidgetProvider {

@@ -27,9 +27,8 @@ import rx.Observer;
  * Created by ibrahim on 22/05/18.
  * get injected View that MainView
  */
-//TODO (37) extends BasePresenter
-//TODO (42) <MainView>
-@SuppressWarnings("WeakerAccess")
+//extends BasePresenter<MainView>
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class MainPresenter extends BasePresenter<MainView> implements Observer<List<BakingResponse>> {
     private final Context mContext;
     @SuppressWarnings("WeakerAccess")
@@ -41,13 +40,13 @@ public class MainPresenter extends BasePresenter<MainView> implements Observer<L
     @SuppressWarnings("WeakerAccess")
     @Inject
     protected BakeMapper mBakeMapper;
-    /*TODO (59) inject APIservice
+    /*inject APIservice
      presenter what we can do we have provide
      the view then can also provide the APIservice not
      */
     private ArrayList<Bake> mBakeList;
 
-    /*TODO (49) Inject  MainPresenter
+    /*Inject  MainPresenter
     because Bakepresenter injected add Inject annotation
       * to easily inject dagger will automatically generate
       * for */
@@ -61,18 +60,18 @@ public class MainPresenter extends BasePresenter<MainView> implements Observer<L
     public ArrayList<Bake> geBaking() {
         //pass a message
         getView().onShowDialog(mContext.getApplicationContext().getResources().getString(R.string.loading));
-  /*TODO (60) get Observable from BakingResponse
+  /*get Observable from BakingResponse
    because we have provided it up in the parent class
      */
         Observable<List<BakingResponse>> bakePresenterObservable = mApiService.getBake();
-        //TODO (61) implement observer to BakeResponse List<BakingResponse>
+        //implement observer to BakeResponse List<BakingResponse>
         subscribeBakingResponse(bakePresenterObservable, this);
         return mBakeList;
     }
 
     @Override
     public void onCompleted() {
-        //TODO (70) pass a message after completed
+        //pass a message after completed
         getView().onShowToast();
         getView().onHideDialog(mContext.getApplicationContext().getResources().getString(R.string.loading_completed));
 
@@ -80,7 +79,7 @@ public class MainPresenter extends BasePresenter<MainView> implements Observer<L
 
     @Override
     public void onError(Throwable e) {
-        //TODO (71) pass a message with error
+        //pass a message with error
         getView().onShowToast();
         getView().onHideDialog(mContext.getApplicationContext().getResources().getString(R.string.loading_error) + String.valueOf(e.getMessage()));
         Log.v("errorJson", String.valueOf(e.getMessage()));
@@ -91,8 +90,7 @@ public class MainPresenter extends BasePresenter<MainView> implements Observer<L
     @Override
     public void onNext(List<BakingResponse> bakingResponses) {
 
-    /*
-    * TODO (65) get list of BakeMap with  bakingResponse that will get list of bake*/
+    /*get list of BakeMap with  bakingResponse that will get list of bake*/
         mBakeList = mBakeMapper.mapBake(mContext, bakingResponses);
    /*pass bakeList into getView that come from basepresenter
     in MainPresenter that have specified
@@ -112,9 +110,9 @@ public class MainPresenter extends BasePresenter<MainView> implements Observer<L
         };
     }
 
+    /*other choice this method to get data of bake from local storage that inserted*/
     public void getBakeFromDatabase() {
         ArrayList<Bake> bakes = getBakeUtils.getBake(mContext);
-        //getView().onClearItems();
         getView().onBakeLoaded(bakes);
     }
 

@@ -14,8 +14,9 @@
         android:layout_gravity="center"
         android:layout_weight="1"
         android:padding="5dp"
-        android:textSize="16sp"
-        android:textStyle="bold"
+        android:textColor="@color/colorText"
+        android:textSize="18sp"
+        android:textStyle="italic"
         tools:ignore="HardcodedText" />
 
     <TextView
@@ -25,7 +26,9 @@
         android:layout_gravity="center"
         android:layout_weight="1"
         android:paddingLeft="5dp"
-        android:textSize="13sp"
+        android:textColor="@color/colorText"
+        android:textSize="14sp"
+        android:textStyle="italic"
         tools:ignore="HardcodedText,RtlSymmetry" />
 
     <TextView
@@ -35,7 +38,9 @@
         android:layout_gravity="center"
         android:layout_weight="1"
         android:paddingLeft="5dp"
-        android:textSize="13sp"
+        android:textColor="@color/colorText"
+        android:textSize="14sp"
+        android:textStyle="italic"
         tools:ignore="HardcodedText,RtlSymmetry" />
 
 </LinearLayout>

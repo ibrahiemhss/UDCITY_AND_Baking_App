@@ -21,7 +21,7 @@ import rx.Observer;
  * Created by ibrahim on 30/05/18.
  */
 
-@SuppressWarnings("WeakerAccess")
+@SuppressWarnings({"WeakerAccess", "unused"})
 public class DetailsPresenter extends BasePresenter<DetailsView> implements Observer<List<BakingResponse>> {
     @Inject
     protected BakeApiService mApiService;

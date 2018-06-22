@@ -18,6 +18,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
+ *
  * Created by ibrahim on 01/06/18.
  */
 
@@ -29,15 +30,10 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
     private final List<Steps> mList = new ArrayList<>();
     private String mVideoURL;
     private String mDescription;
-
-
-    private Context context;
-
     private StepsAdapter.OnStepsClickListener mBakeClickListener;
 
-    public StepsAdapter(LayoutInflater inflater, Context context) {
+    public StepsAdapter(LayoutInflater inflater) {
         mLayoutInflater = inflater;
-        this.context = context;
 
     }
 
@@ -88,8 +84,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
         this.mDescription = mDescription;
     }
 
-
-
     public interface OnStepsClickListener {
 
         void onClick(int position);
@@ -116,9 +110,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
             mId.setText(String.valueOf(steps.getId()));
             mShortDescription.setText(steps.getShortDescription());
             setVideoURL(steps.getVideoURL());
-
             setDescription(steps.getDescription());
-
 
         }
 
@@ -126,7 +118,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
         public void onClick(View view) {
             if (mBakeClickListener != null) {
                 mBakeClickListener.onClick(getAdapterPosition());
-                view.setBackgroundResource(R.color.colorWhite);
 
             }
 

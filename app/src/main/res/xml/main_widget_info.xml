@@ -3,7 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:initialLayout="@layout/main_widget"
     android:minHeight="170dp"
-    android:minWidth="100dp"
+    android:minWidth="120dp"
     android:previewImage="@drawable/bake_widget_preview"
     android:resizeMode="horizontal|vertical"
     android:updatePeriodMillis="3600000"

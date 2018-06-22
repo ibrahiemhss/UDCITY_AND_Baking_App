@@ -14,15 +14,14 @@ import okhttp3.OkHttpClient;
 import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava.RxJavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
-//TODO (15) create interface ApplicationModule
 
 /**
- *
- * Created by ibrahim on 22/05/18.
+ *Created by ibrahim on 22/05/18.
  */
 /*
 * noted as modules because anything
 * that provided here*/
+@SuppressWarnings("unused")
 @Module
 public class ApplicationModule {
 
@@ -31,7 +30,6 @@ public class ApplicationModule {
     private final String mBaseUrl;
     private final Context mContext;
 
-    //TODO (22)
     @Inject
     public ApplicationModule(Context context, String baseUrl) {
         this.mBaseUrl = baseUrl;
@@ -39,7 +37,7 @@ public class ApplicationModule {
     }
 
     /**
-     * TODO (20)provide GsonConverterFactory
+     * provide GsonConverterFactory
      * which need some dependency that can
      * be passed through the conserve for through this method
      */
@@ -51,7 +49,7 @@ public class ApplicationModule {
     }
 
     /**
-     * TODO (19)provide OkHttpClient
+     * provide OkHttpClient
      * which need some dependency that can
      * be passed through the conserve for through this method
      */
@@ -66,19 +64,8 @@ public class ApplicationModule {
                 .build();
     }
 
-
-    /*@Singleton
-    @Provides
-    @Named("ok-2")
-    OkHttpClient provideOkHttpClient2() {
-        return new OkHttpClient.Builder()
-                .connectTimeout(60, TimeUnit.SECONDS)
-                .readTimeout(60, TimeUnit.SECONDS)
-                .build();
-    }*/
-
     /**
-     * TODO (21)provide RxJavaCallAdapterFactory
+     * provide RxJavaCallAdapterFactory
      * which need some dependency that can
      * be passed through the conserve for through this method
      */
@@ -89,7 +76,7 @@ public class ApplicationModule {
     }
 
     /**
-     * TODO (18)provide retrofit
+     * provide retrofit
      * which need some dependency that can
      * be passed through the conserve for through this method
      *
@@ -109,7 +96,7 @@ public class ApplicationModule {
                 .build();
     }
 
-    //TODO (29) Provides Context
+    //Provides Context
     @Provides
     @Singleton
     Context provideContext() {
