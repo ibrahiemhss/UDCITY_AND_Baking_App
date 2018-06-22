@@ -129,7 +129,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             GetFragmentByScreenSize(mIndex);
 
         }
-
     }
 
     @Override
@@ -201,7 +200,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
              come back from StepActivity there no intent in this case*/
             mTxtBake.setText(SharedPrefManager.getInstance(DetailsActivity.this).getPrefBakeName());
             mPresenter.getDetails(SharedPrefManager.getInstance(DetailsActivity.this).getPrefDetailsPosition());
-
         }
     }
 
@@ -293,11 +291,9 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                     intent.putExtras(extras);
                     startActivity(intent);
                 }
-
             }
         });
     }
-
 
     //this get Ingredients values from dagger
     @Override
@@ -308,8 +304,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         initialiseListIngredients();
         //add mIngredientsArrayList to IngredientsAdapter
         mIngredientsAdapter.addIngredients(mIngredientsArrayList);
-
-
     }
 
     //this get Steps values from dagger
@@ -331,10 +325,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             //after correct call make mFirstOpen true to call fragment after rotation
             mFirstOpen = true;
             Log.d(TAG, "bundleList onStepsLoaded = " + String.valueOf(mStepsArrayList.size()));
-
         }
-
-
     }
 
     //this return true if device is tablet
@@ -397,7 +388,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         Log.d(TAG, "bundleList send from DetailsActivity = " + String.valueOf(mStepsArrayList.size()));
 
     }
-
 
     @SuppressWarnings("StatementWithEmptyBody")
     @Override
