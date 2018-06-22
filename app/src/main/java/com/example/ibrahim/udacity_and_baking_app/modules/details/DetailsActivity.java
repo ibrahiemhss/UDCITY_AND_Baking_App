@@ -194,8 +194,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                get every Arraylist alone by its position inside general JsonAArray
               that all of its value come from BakeApiService by retrofit with
               Observable inside BakingResponse class */
-
-
             mPresenter.getDetails(position);
 
         } else {
