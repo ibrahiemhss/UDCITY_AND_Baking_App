@@ -19,6 +19,6 @@
         android:layout_weight="1"
         android:gravity="start"
         android:textAlignment="center"
-        android:textColor="@color/colorText" />
+        android:textColor="@color/colorWhite" />
 
 </LinearLayout>

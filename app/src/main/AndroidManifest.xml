@@ -25,7 +25,6 @@
         android:theme="@style/AppTheme"
         tools:ignore="GoogleAppIndexingWarning">
 
-        <!-- //TODO (8) register application.BakeApplication -->
         <activity android:name=".modules.home.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

@@ -1,5 +1,6 @@
 package com.example.ibrahim.udacity_and_baking_app.modules.steps;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
@@ -25,28 +26,33 @@ import butterknife.BindView;
  *Created by ibrahim on 03/06/18.
  */
 
+@SuppressWarnings("WeakerAccess")
 public class StepsActivity extends BaseActivity {
 
     private static final String TAG = "StepsActivity";
-    @SuppressWarnings("WeakerAccess")
+
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
     private int mIndex;
     private ArrayList<Steps> mArrayList;
 
+    //getContent view from BaseActivity
     @Override
     protected int getContentView() {
         return R.layout.activity_steps;
-
     }
 
+    //onViewReady view from BaseActivity
     @Override
     protected void onViewReady(Bundle savedInstanceState, Intent intent) {
         super.onViewReady(savedInstanceState, intent);
 
-
+        //get Bundle with intent come from DetailsActivity
         final Bundle extras = getIntent().getExtras();
+
+        //first entry after oncreate
         if (savedInstanceState == null) {
+            //get all values inside Bundle with intent
             if ((extras != null &&
                     extras.containsKey(Contract.EXTRA_STATE_INDEX) &&
                     extras.containsKey(Contract.EXTRA_STATE_STEPS))) {
@@ -56,12 +62,12 @@ public class StepsActivity extends BaseActivity {
                 Log.d(TAG, "bundleList StepsActivity =" + String.valueOf(mArrayList.size()));
 
                 initializeView();
-
             }
-
         }
+        //set the custom toolbar
         setSupportActionBar(mToolbar);
 
+        //get last value of all data showed that saved in savedInstanceState
         if (savedInstanceState != null
                 && savedInstanceState.containsKey(Contract.EXTRA_STATE_INDEX)
                 && savedInstanceState.containsKey(Contract.EXTRA_STATE_STEPS)) {
@@ -70,33 +76,28 @@ public class StepsActivity extends BaseActivity {
             mIndex = savedInstanceState.getInt(Contract.EXTRA_STATE_INDEX);
             Log.d(TAG, "mIndex OnsaveInStepsActivity = " + mIndex);
             initializeView();
-
         }
 
+        //hide toolbar if isRotated() true
         if (isRotated()) {
-
             mToolbar.setVisibility(View.GONE);
         } else {
             mToolbar.setVisibility(View.VISIBLE);
-
         }
-
     }
 
-
+    //hide toolbar if isRotated() true
     @Override
     protected void onRestart() {
         super.onRestart();
-
         if (isRotated()) {
-
             mToolbar.setVisibility(View.GONE);
         } else {
             mToolbar.setVisibility(View.VISIBLE);
-
         }
     }
 
+    //pass wanted data to show after rotation
     @Override
     public void onSaveInstanceState(Bundle outState) {
         outState.putInt(Contract.EXTRA_STATE_INDEX, SharedPrefManager.getInstance(StepsActivity.this).getPrefIndex());
@@ -105,43 +106,31 @@ public class StepsActivity extends BaseActivity {
         super.onSaveInstanceState(outState);
     }
 
-
+    //method will show every things
     private void initializeView() {
 
         StepsFragment mStepsFragment = new StepsFragment();
-
         Bundle bundle = new Bundle();
+        //pass step ArrayList to StepsFragment
         bundle.putParcelableArrayList(Contract.EXTRA_STATE_STEPS, mArrayList);
-        bundle.putInt(Contract.EXTRA_STEP_INDEX,
-                mIndex);
-        if (isRotated()) {
-            bundle.putBoolean(Contract.EXTRA_ROTATION, true);
-            Log.d(TAG, "mRotation  On rotation StepActivity = " + String.valueOf(isRotated()));
-
-        } else {
-            bundle.putBoolean(Contract.EXTRA_ROTATION, false);
-            Log.d(TAG, "mRotation  On not rotation StepActivity = " + String.valueOf(isRotated()));
-
-        }
-        if (notRotated()) {
-            bundle.putBoolean(Contract.EXTRA_NO_ROTATION, true);
-
-        } else {
-            bundle.putBoolean(Contract.EXTRA_NO_ROTATION, false);
-
-        }
-
+        //pass mIndex to StepsFragment
+        bundle.putInt(Contract.EXTRA_STEP_INDEX, mIndex);
+        //pass the rotation case true or false
+        bundle.putBoolean(Contract.EXTRA_ROTATION, isRotated());
+        Log.d(TAG, "mRotation  On rotation StepActivity = " + String.valueOf(isRotated()));
+        //pass the no rotation case true or false will used to display description text
+        bundle.putBoolean(Contract.EXTRA_NO_ROTATION, notRotated());
         Log.d(TAG, "bundleList send from StepsActivity = " + String.valueOf(mArrayList.size()));
 
+        //create StepsFragment and pass all value inside bundle
         mStepsFragment.setArguments(bundle);
         FragmentManager fragmentManager = getSupportFragmentManager();
         fragmentManager.beginTransaction()
                 .replace(R.id.step_container, mStepsFragment)
                 .commit();
-
-
     }
 
+    @SuppressLint("SwitchIntDef")
     private boolean isRotated() {
 
         boolean mRotation;
@@ -149,7 +138,6 @@ public class StepsActivity extends BaseActivity {
         assert this.getSystemService(Context.WINDOW_SERVICE) != null;
         final int rotation = ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
         switch (rotation) {
-
             case Surface.ROTATION_90:
                 mRotation = true;
                 break;
@@ -160,14 +148,12 @@ public class StepsActivity extends BaseActivity {
 
             default:
                 mRotation = false;
-
         }
-
         Log.d(TAG, "mRotation  On StepActivity getScreenSize = " + String.valueOf(mRotation));
-
         return mRotation;
     }
 
+    @SuppressLint("SwitchIntDef")
     private boolean notRotated() {
 
         boolean mNoRotation;
@@ -175,7 +161,6 @@ public class StepsActivity extends BaseActivity {
         assert this.getSystemService(Context.WINDOW_SERVICE) != null;
         final int rotation = ((WindowManager) this.getSystemService(Context.WINDOW_SERVICE)).getDefaultDisplay().getOrientation();
         switch (rotation) {
-
             case Surface.ROTATION_0:
                 mNoRotation = true;
                 break;
@@ -184,9 +169,7 @@ public class StepsActivity extends BaseActivity {
                 mNoRotation = false;
 
         }
-
         Log.d(TAG, "mNoRotation  On StepActivity getScreenSize = " + String.valueOf(mNoRotation));
-
         return mNoRotation;
     }
 }

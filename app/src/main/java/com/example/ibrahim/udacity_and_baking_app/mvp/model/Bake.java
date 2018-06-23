@@ -1,6 +1,5 @@
 package com.example.ibrahim.udacity_and_baking_app.mvp.model;
 
-//TODO (62) create class Bake
 
 import android.os.Parcel;
 import android.os.Parcelable;

@@ -1,5 +1,6 @@
 package com.example.ibrahim.udacity_and_baking_app.modules.details;
 
+import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
@@ -66,9 +67,9 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     protected ImageView mImageUp;
     @BindView(R.id.v_step_down)
     protected ImageView mImageDown;
+
     @Inject
     protected DetailsPresenter mPresenter;
-
     private StepsFragment mStepsFragment;
     private List<Integer> stepsListIndex;
     private int mIndex;
@@ -185,7 +186,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             position = extras.getInt(Contract.EXTRA_POSITION);
             mTxtBake.setText(extras.getString(Contract.EXTRA_BAKE_NAME));
 
-             /*pass position to DetailsPresenter class
+            /*pass position to DetailsPresenter class
              to get the value as list objects from Ingredients class
              and Steps class
                ----- NOTE----------------------
@@ -336,6 +337,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     }
 
     //This method is known for rotating the screen and small screen
+    @SuppressLint("SwitchIntDef")
     public void GetFragmentByScreenSize(int index) {
 
         assert (this.getSystemService(Context.WINDOW_SERVICE)) != null;
@@ -385,7 +387,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
                 .commit();
 
         mIndex = index;
-        Log.d(TAG, "bundleList send from DetailsActivity = " + String.valueOf(mStepsArrayList.size()));
 
     }
 

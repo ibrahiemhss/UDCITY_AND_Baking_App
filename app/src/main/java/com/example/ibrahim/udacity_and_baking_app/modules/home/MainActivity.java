@@ -8,7 +8,9 @@ import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.view.Surface;
+import android.view.View;
 import android.view.WindowManager;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.ibrahim.udacity_and_baking_app.IdlingResource.EspressoIdlingResource;
@@ -42,6 +44,8 @@ public class MainActivity extends BaseActivity implements MainView {
     //bind RecyclerView
     @BindView(R.id.bake_list)
     protected RecyclerView mBake_list;
+    @BindView(R.id.v_no_connect)
+    protected TextView mTxtNoConnect;
     @SuppressWarnings("unused")
     /*MainActivity will get any bake information  from this MainPresenter */
     @Inject
@@ -74,7 +78,14 @@ public class MainActivity extends BaseActivity implements MainView {
         GetListByScreenSize();
         if (savedInstanceState != null && savedInstanceState.containsKey(STATE_BAKE)) {
             mBakeArrayList = savedInstanceState.getParcelableArrayList(STATE_BAKE);
-            mBakesAdapter.addBakes(mBakeArrayList);
+
+            if (NetworkUtils.isNetAvailable(MainActivity.this)) {
+                /*make sure if value ready */
+                mBakesAdapter.addBakes(mBakeArrayList);
+            } else {
+                mTxtNoConnect.setVisibility(View.VISIBLE);
+                mBake_list.setVisibility(View.GONE);
+            }
 
         } else {
             GetListByScreenSize();
@@ -84,7 +95,8 @@ public class MainActivity extends BaseActivity implements MainView {
                 /*get value from the object of MainPresenter class */
                 mPresenter.geBaking();
             } else {
-                mPresenter.getBakeFromDatabase();
+                mTxtNoConnect.setVisibility(View.VISIBLE);
+                mBake_list.setVisibility(View.GONE);
             }
             MainWidgetProvider.sendRefreshBroadcast(MainActivity.this);
             EspressoIdlingResource.decrement(); // Tells Espresso test to resume

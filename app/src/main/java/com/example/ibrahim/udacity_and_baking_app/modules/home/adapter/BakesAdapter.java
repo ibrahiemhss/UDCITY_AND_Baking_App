@@ -17,7 +17,6 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
-//TODO (74) create  BakesAdapter
 
 /**
  *Created by ibrahim on 25/05/18.
@@ -62,7 +61,7 @@ public class BakesAdapter extends RecyclerView.Adapter<BakesAdapter.Holder> {
         notifyDataSetChanged();
     }
 
-    //TODO part(2) (1) create interface to goo another activity
+    //create interface to goo another activity
     public void setBakeClickListener(OnBakeClickListener listener) {
         mBakeClickListener = listener;
     }

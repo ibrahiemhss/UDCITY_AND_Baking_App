@@ -22,14 +22,11 @@ import butterknife.ButterKnife;
  * Created by ibrahim on 01/06/18.
  */
 
-@SuppressWarnings("unused")
 public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
 
 
     private final LayoutInflater mLayoutInflater;
     private final List<Steps> mList = new ArrayList<>();
-    private String mVideoURL;
-    private String mDescription;
     private StepsAdapter.OnStepsClickListener mBakeClickListener;
 
     public StepsAdapter(LayoutInflater inflater) {
@@ -68,21 +65,7 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
         mBakeClickListener = listener;
     }
 
-    public String getVideoURL() {
-        return mVideoURL;
-    }
 
-    private void setVideoURL(String mVideoURL) {
-        this.mVideoURL = mVideoURL;
-    }
-
-    public String getDescription() {
-        return mDescription;
-    }
-
-    private void setDescription(String mDescription) {
-        this.mDescription = mDescription;
-    }
 
     public interface OnStepsClickListener {
 
@@ -109,8 +92,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
         public void bind(Steps steps, int position) {
             mId.setText(String.valueOf(steps.getId()));
             mShortDescription.setText(steps.getShortDescription());
-            setVideoURL(steps.getVideoURL());
-            setDescription(steps.getDescription());
 
         }
 

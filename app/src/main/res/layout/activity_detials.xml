@@ -23,13 +23,14 @@
             android:textSize="20sp"
             android:textStyle="bold" />
         <LinearLayout
+            android:id="@+id/linear_ingredients"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/border_parents"
+            android:background="@drawable/border_bink"
             android:orientation="vertical"
             android:padding="5dp">
 
@@ -80,14 +81,16 @@
             </RelativeLayout>
         </LinearLayout>
 
+
         <LinearLayout
+            android:id="@+id/linear_steps"
             android:layout_width="match_parent"
             android:layout_height="match_parent"
             android:layout_marginBottom="5dp"
             android:layout_marginLeft="5dp"
             android:layout_marginRight="5dp"
             android:layout_marginTop="5dp"
-            android:background="@drawable/border_parents"
+            android:background="@drawable/border_bink"
             android:orientation="horizontal"
             android:padding="5dp">
 

@@ -1,19 +1,15 @@
 package com.example.ibrahim.udacity_and_baking_app.modules.fragments;
 
-import android.app.NotificationManager;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.content.res.Configuration;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.Fragment;
 import android.support.v4.media.session.MediaButtonReceiver;
 import android.support.v4.media.session.MediaSessionCompat;
-import android.support.v4.media.session.PlaybackStateCompat;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,7 +22,6 @@ import android.widget.TextView;
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 import com.example.ibrahim.udacity_and_baking_app.data.SharedPrefManager;
-import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.StepsAdapter;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
@@ -46,18 +41,16 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
-import static android.view.ViewGroup.LayoutParams.MATCH_PARENT;
-
 /**
  *Created by ibrahim on 01/06/18.
  */
 
-@SuppressWarnings({"WeakerAccess", "unused"})
+@SuppressWarnings("WeakerAccess")
 public class StepsFragment extends Fragment implements View.OnClickListener {
 
     private static final String TAG = "StepsFragment";
+    @SuppressWarnings("unused")
     private static MediaSessionCompat mMediaSession;
-    private final Handler mHideHandler = new Handler();
     @BindView(R.id.tv_descriptoin)
     protected TextView mTxtDescription;
     @BindView(R.id.tv_txt_novid)
@@ -73,24 +66,15 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
     @BindView(R.id.rv_details)
     protected RelativeLayout mRelativeLayout;
 
-    private StepsAdapter.OnStepsClickListener mOnStepsClickListener;
     private boolean mRotation;
-    private Bundle savedState = null;
     private SimpleExoPlayer mExoPlayer;
     private int mIndex;
     private Boolean mIstablet;
     private Boolean mNoRotation;
-    private PlaybackStateCompat.Builder mStateBuilder;
-    private NotificationManager mNotificationManager;
-    private View mContentView;
     private ArrayList<Steps> mStepsArrayList = new ArrayList<>();
-    private String mVideoUrl;
-    private String mDescription;
     private Unbinder unbinder;
-    private ViewGroup container;
-    private LayoutInflater inflater;
 
-
+    //method get value saved in bundle which coming from DetailsActivity
     private void readBundle(Bundle bundle) {
         if (bundle != null && bundle.containsKey(Contract.EXTRA_STATE_STEPS) && bundle.containsKey(Contract.EXTRA_STEP_INDEX)) {
             mStepsArrayList = bundle.getParcelableArrayList(Contract.EXTRA_STATE_STEPS);
@@ -105,89 +89,64 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
             }
             Log.d(TAG, "mIndex savedInstanceStateFragment = " + mIndex);
             Log.d(TAG, "mRotation savedInstanceStateFragment = " + String.valueOf(mRotation));
-
         }
-
     }
 
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
-
-
         View view = inflater.inflate(R.layout.fragment_steps, container, false);
-
         unbinder = ButterKnife.bind(this, view);
-        Bundle extras = this.getArguments();
 
+        //get bundle that coming from activity that responsible of creating fragment
+        Bundle extras = this.getArguments();
+        //to make sure that bundle not null
         if (extras != null) {
+            //pass extras to read Bundle method get value of bundle
             readBundle(extras);
             Log.d(TAG, " mIndex after getArguments = " + mIndex);
             Log.d(TAG, "mRotation after getArguments = " + String.valueOf(mRotation));
 
+            //Boolean mRotation has value coming from bundle if  device rotate it is true
             if (mRotation) {
-                unbinder = ButterKnife.bind(this, view);
+                //make viewGroup that contains exoplayer match parent
                 LinearLayout.LayoutParams layoutParams = new LinearLayout.LayoutParams(
                         RelativeLayout.LayoutParams.MATCH_PARENT, RelativeLayout.LayoutParams.MATCH_PARENT);
+                //Also cancel padding make it 0 in all edges
                 mLinearLayout.setPadding(0, 0, 0, 0);
                 mLinearLayout.setLayoutParams(layoutParams);
-
-
                 mRelativeLayout.setVisibility(View.GONE);
-
-
-            } else {
-                mLinearLayout = new LinearLayout(getActivity());
-                mLinearLayout.setLayoutParams(new LinearLayout.LayoutParams(MATCH_PARENT, 250));
-                mRelativeLayout.setVisibility(View.VISIBLE);
 
             }
         }
 
+        //play player if step list not empty
         if (mStepsArrayList != null && mStepsArrayList.size() > 0) {
-            show();
+            showView();
         }
-        // mPresenter.getSteps(position);
 
-
-        if (mIndex == 0) {
-            mImgMoveright.setVisibility(View.INVISIBLE);
-        }
-        if (mIndex == mStepsArrayList.size()) {
-            mImgMoveLeft.setVisibility(View.INVISIBLE);
-        }
+        //running onclick for change video
         mImgMoveLeft.setOnClickListener(this);
         mImgMoveright.setOnClickListener(this);
 
         return view;
     }
 
-
     @Override
     public void onDestroyView() {
         super.onDestroyView();
         unbinder.unbind();
+        releasePlayer();
     }
 
-    public String getmVideoUrl() {
-        return mVideoUrl;
-    }
-
-    public void setmVideoUrl(String mVideoUrl) {
-        this.mVideoUrl = mVideoUrl;
-    }
-
-    public String getmDescription() {
-        return mDescription;
-    }
-
-    public void setmDescription(String mDescription) {
-        this.mDescription = mDescription;
-    }
-
+    /**
+     * method to play video pass
+     *
+     * @param mVideoUri by get mIndex from onClick inside fragment
+     *                  by it,s position will get value
+     */
 
     private void initializePlayer(Uri mVideoUri) {
-
 
         if (mExoPlayer == null) {
             mExoPlayer = ExoPlayerFactory.newSimpleInstance(
@@ -200,12 +159,14 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    //enabling functionality such  looping and playback of sequences of videos
     private MediaSource buildMediaSource(Uri uri) {
         return new ExtractorMediaSource(uri,
                 new DefaultHttpDataSourceFactory("Baking_app"),
                 new DefaultExtractorsFactory(), null, null);
     }
 
+    //make player empty
     private void releasePlayer() {
         if (mExoPlayer != null) {
             mExoPlayer.release();
@@ -232,90 +193,88 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
 
     @Override
     public void onClick(View view) {
+
+        /* in onclick change value of int mIndex and
+        *  get the values from Steps ArrayList depending on of the position that equal mIndex
+        *  in onclick changing value of mIndex*/
         int id = view.getId();
         if (id == R.id.move_left) {
-
-
+            //mImgMoveLeft will increase mIndex 1 every one click
             if (mStepsArrayList != null) {
                 if (mIndex == mStepsArrayList.size())
                     return;
                 mIndex++;
-
+                //Hide or show the image by accessing the last position in the lis
                 if (mIndex >= mStepsArrayList.size()) {
                     mIndex = mStepsArrayList.size() - 1;
                     mImgMoveLeft.setVisibility(View.INVISIBLE);
                     mImgMoveright.setVisibility(View.VISIBLE);
-
                 } else {
                     mImgMoveright.setVisibility(View.VISIBLE);
-
                 }
                 Log.d(TAG, "mIndex move_left = " + mIndex);
+                //save the value of mIndex in SharedPreferences to use it in activity
                 SharedPrefManager.getInstance(getActivity()).setPrefIndex(mIndex);
-
-                show();
+                showView();
             }
-        } else if (id == R.id.move_right) {
 
-
+        } else if
+                (id == R.id.move_right) {
+            //mImgMoveright will decrease mIndex 1 every one click
             if (mStepsArrayList != null) {
-
                 if (mIndex == 0)
                     return;
                 mIndex--;
-
+                //Hide or show the image by accessing the first position in the list
                 if (mIndex <= 0) {
                     mImgMoveright.setVisibility(View.INVISIBLE);
                     mImgMoveLeft.setVisibility(View.VISIBLE);
-
                 } else {
                     mImgMoveLeft.setVisibility(View.VISIBLE);
-
                 }
                 Log.d(TAG, "mIndex move_right = " + mIndex);
+                //save the value of mIndex in SharedPreferences to use it in activity
                 SharedPrefManager.getInstance(getActivity()).setPrefIndex(mIndex);
-
             }
-            show();
+            showView();
         }
-
-
     }
 
-    private void show() {
-
+    //Responsible for controlling the overview for fragment
+    private void showView() {
         releasePlayer();
-
+        //make sure mStepsArrayList not empty
         if (mStepsArrayList.size() > 0) {
-
+            //get value of videoUrl by pass last value of mIndex
             String videoUrl = getVideoUrl(mIndex);
+            /*if boolean mNoRotation or mIstablet true will show the Description below video
+            * no rotation because no space in screen to display will show Description just in Tablet*/
             if (mNoRotation || mIstablet) {
                 mTxtDescription.setText(mStepsArrayList.get(mIndex).getDescription());
 
             }
-
-
+            //play video if value of videoUrl not empty if empty just text will display message
             if (!videoUrl.isEmpty()) {
-
                 initializePlayer(Uri.parse(videoUrl));
-
                 mTextNoVideo.setVisibility(View.GONE);
-
                 mPlayerView.setVisibility(View.VISIBLE);
             } else {
                 mTextNoVideo.setVisibility(View.VISIBLE);
-
                 mPlayerView.setVisibility(View.GONE);
             }
-
             Log.d(TAG, "VideoURL:show" + videoUrl);
 
         }
 
     }
 
+    /**get value of Video Url by pass
+     * @param index  will be the position of VideoUrl that wanted
+     * @return videoStream
+     */
     private String getVideoUrl(int index) {
         String videoStream;
+        //one case there video coming inside ThumbnailURL
         if (mStepsArrayList.get(index).getVideoURL().isEmpty()) {
             videoStream = mStepsArrayList.get(index).getThumbnailURL();
         } else {
@@ -324,28 +283,12 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
         return videoStream;
     }
 
-    public View initializeUi() {
-        View view = null;
-
-        int orientation = getActivity().getResources().getConfiguration().orientation;
-
-        if (orientation == Configuration.ORIENTATION_LANDSCAPE) {
-            view = inflater.inflate(R.layout.fragment_steps, container, false);
-        }
-        if (orientation == Configuration.ORIENTATION_PORTRAIT) {
-            view = inflater.inflate(R.layout.fragment_steps, container, false);
-        }
-        return view;
-    }
-
     /**
      * Broadcast Receiver registered to receive the MEDIA_BUTTON intent coming from clients.
      */
     public static class MediaReceiver extends BroadcastReceiver {
-
         public MediaReceiver() {
         }
-
         @Override
         public void onReceive(Context context, Intent intent) {
             MediaButtonReceiver.handleIntent(mMediaSession, intent);

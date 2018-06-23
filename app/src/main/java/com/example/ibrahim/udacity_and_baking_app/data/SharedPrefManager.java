@@ -9,7 +9,6 @@ import android.content.SharedPreferences;
  *
  * @see <a href="https://github.com/ibrahiemhss/Mashaweer-master/blob/master/app/src/main/java/com/mashaweer/ibrahim/mashaweer/data/SharedPrefManager.java"">https://github.com</a>
  */
-@SuppressWarnings("unused")
 public class SharedPrefManager {
     private static final String PREF_INDEX = "pref_index";
     private static final String PREF_DETAILS_POSITION = "pref_position";
