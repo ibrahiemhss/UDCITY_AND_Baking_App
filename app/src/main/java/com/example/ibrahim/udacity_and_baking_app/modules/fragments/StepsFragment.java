@@ -300,7 +300,7 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
         //make sure mStepsArrayList not empty
         if (mStepsArrayList.size() > 0) {
             //get value of videoUrl by pass last value of mIndex
-            String videoUrl = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+            String videoUrl = mStepsArrayList.get(mIndex).getVideoURL();
             //get value of thumbnailURL by pass last value of mIndex
             String thumbnailURL = mStepsArrayList.get(mIndex).getThumbnailURL();
             /*if boolean mNoRotation or mIstablet true will show the Description below video
