@@ -24,7 +24,6 @@ import static android.support.test.espresso.matcher.ViewMatchers.withId;
 import static android.support.test.espresso.matcher.ViewMatchers.withText;
 
 /**
- *
  * Created by ibrahim on 13/06/18.
  */
 @RunWith(AndroidJUnit4.class)
@@ -41,7 +40,6 @@ public class DetailsActivityTest {
             result.putExtra(Contract.EXTRA_BAKE_NAME, getListValue(mPosition));
             //send position
             result.putExtra(Contract.EXTRA_POSITION, mPosition);
-
             return result;
         }
     };

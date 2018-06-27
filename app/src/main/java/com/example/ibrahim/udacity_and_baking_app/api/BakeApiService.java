@@ -8,7 +8,6 @@ import retrofit2.http.GET;
 import rx.Observable;
 
 /**
- *
  * Created by ibrahim on 22/05/18.
  */
 public interface BakeApiService {

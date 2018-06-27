@@ -28,7 +28,6 @@ public class Contract implements BaseColumns {
     public static final String EXTRA_STEP_FRAGMENT = "step_fragment";
 
 
-
     //content provider
     static final String PATH_INGREDIENTS = "ingredients";
     static final String PATH_BAKE = "bake";

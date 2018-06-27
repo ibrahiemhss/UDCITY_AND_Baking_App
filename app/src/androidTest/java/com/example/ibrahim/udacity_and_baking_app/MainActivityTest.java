@@ -18,13 +18,11 @@ import static android.support.test.espresso.Espresso.onView;
 import static android.support.test.espresso.matcher.ViewMatchers.withId;
 
 /**
- *
  * Created by ibrahim on 12/06/18.
  */
 @RunWith(AndroidJUnit4.class)
 public class MainActivityTest {
     /*test on click on item in RecyclerView  in MainActivity */
-
     @Rule
     public ActivityTestRule<MainActivity> mActivityTestRule = new ActivityTestRule<>(MainActivity.class);
 

@@ -29,7 +29,6 @@ class WidgetRemoteViewsFactorys implements RemoteViewsService.RemoteViewsFactory
         this.context = context;
         int appWidgetId = intent.getIntExtra(AppWidgetManager.EXTRA_APPWIDGET_ID,
                 AppWidgetManager.INVALID_APPWIDGET_ID);
-
         Log.d("AppWidgetId", String.valueOf(appWidgetId));
 
     }

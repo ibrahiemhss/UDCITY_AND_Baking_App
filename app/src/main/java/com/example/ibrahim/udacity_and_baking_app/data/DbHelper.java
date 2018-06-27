@@ -1,4 +1,3 @@
-
 package com.example.ibrahim.udacity_and_baking_app.data;
 
 import android.content.Context;
@@ -11,7 +10,6 @@ import javax.inject.Inject;
 
 
 /**
- *
  * Created by ibrahim on 22/05/18.
  */
 public class DbHelper extends SQLiteOpenHelper {

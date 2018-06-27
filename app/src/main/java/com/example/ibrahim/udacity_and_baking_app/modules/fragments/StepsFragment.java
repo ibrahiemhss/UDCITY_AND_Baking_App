@@ -45,7 +45,7 @@ import butterknife.ButterKnife;
 import butterknife.Unbinder;
 
 /**
- *Created by ibrahim on 01/06/18.
+ * Created by ibrahim on 01/06/18.
  */
 
 @SuppressWarnings("WeakerAccess")
@@ -116,7 +116,6 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
 
         }
     }
-
 
 
     @Nullable
@@ -352,6 +351,7 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
     public static class MediaReceiver extends BroadcastReceiver {
         public MediaReceiver() {
         }
+
         @Override
         public void onReceive(Context context, Intent intent) {
             MediaButtonReceiver.handleIntent(mMediaSession, intent);

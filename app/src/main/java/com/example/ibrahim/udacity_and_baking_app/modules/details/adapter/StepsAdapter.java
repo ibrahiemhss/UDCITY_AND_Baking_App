@@ -18,7 +18,6 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- *
  * Created by ibrahim on 01/06/18.
  */
 
@@ -64,7 +63,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
     public void setStepsClickListener(StepsAdapter.OnStepsClickListener listener) {
         mBakeClickListener = listener;
     }
-
 
 
     public interface OnStepsClickListener {

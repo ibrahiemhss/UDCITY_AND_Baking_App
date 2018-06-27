@@ -46,7 +46,7 @@ import butterknife.ButterKnife;
 
 
 /**
- *Created by ibrahim on 22/05/18.
+ * Created by ibrahim on 22/05/18.
  */
 
 @SuppressWarnings({"WeakerAccess", "unused"})
@@ -177,6 +177,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         return id == R.id.home || super.onContextItemSelected(item);
 
     }
+
     @Override
     protected void resolveDaggerDependency() {
 

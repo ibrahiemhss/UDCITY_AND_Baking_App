@@ -16,16 +16,17 @@
         android:layout_marginTop="5dp"
         android:background="@drawable/border_item"
         android:orientation="horizontal">
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:padding="5dp"
-        android:text="@string/quantity"
-        android:textColor="@color/colorText"
-        android:textSize="18sp"
-        android:textStyle="normal"
-        tools:ignore="HardcodedText" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:padding="5dp"
+            android:text="@string/quantity"
+            android:textColor="@color/colorText"
+            android:textSize="18sp"
+            android:textStyle="normal"
+            tools:ignore="HardcodedText" />
 
         <TextView
             android:id="@+id/textview_quantity"
@@ -90,17 +91,18 @@
             android:textSize="18sp"
             android:textStyle="normal"
             tools:ignore="HardcodedText" />
-    <TextView
-        android:id="@+id/textview_preview_ingredient"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
-        android:layout_weight="1"
-        android:paddingLeft="5dp"
-        android:textColor="@color/colorDarkBink"
-        android:textSize="18sp"
-        android:textStyle="italic"
-        tools:ignore="HardcodedText,RtlSymmetry" />
+
+        <TextView
+            android:id="@+id/textview_preview_ingredient"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center"
+            android:layout_weight="1"
+            android:paddingLeft="5dp"
+            android:textColor="@color/colorDarkBink"
+            android:textSize="18sp"
+            android:textStyle="italic"
+            tools:ignore="HardcodedText,RtlSymmetry" />
 
     </LinearLayout>
 

@@ -1,5 +1,3 @@
-
-
 package com.example.ibrahim.udacity_and_baking_app.utilities;
 
 import android.content.Context;

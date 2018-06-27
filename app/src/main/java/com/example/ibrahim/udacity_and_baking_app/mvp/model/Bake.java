@@ -5,7 +5,7 @@ import android.os.Parcel;
 import android.os.Parcelable;
 
 /**
- *Created by ibrahim on 24/05/18.
+ * Created by ibrahim on 24/05/18.
  */
 
 @SuppressWarnings("unused")

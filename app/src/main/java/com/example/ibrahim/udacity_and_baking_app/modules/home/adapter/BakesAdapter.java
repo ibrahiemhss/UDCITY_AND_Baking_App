@@ -19,7 +19,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 /**
- *Created by ibrahim on 25/05/18.
+ * Created by ibrahim on 25/05/18.
  */
 
 

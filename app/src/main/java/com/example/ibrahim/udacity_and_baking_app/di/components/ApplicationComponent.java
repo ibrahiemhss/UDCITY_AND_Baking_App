@@ -11,7 +11,6 @@ import retrofit2.Retrofit;
 
 /**
  * Created by ibrahim on 22/05/18.
- *
  */
 //used throughout the entire app
 
