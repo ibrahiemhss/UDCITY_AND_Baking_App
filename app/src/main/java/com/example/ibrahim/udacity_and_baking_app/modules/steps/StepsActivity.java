@@ -4,17 +4,20 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
+import android.widget.ImageView;
 
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.base.BaseActivity;
 import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 import com.example.ibrahim.udacity_and_baking_app.data.SharedPrefManager;
+import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivity;
 import com.example.ibrahim.udacity_and_baking_app.modules.fragments.StepsFragment;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
 
@@ -30,9 +33,11 @@ import butterknife.BindView;
 public class StepsActivity extends BaseActivity {
 
     private static final String TAG = "StepsActivity";
-
     @BindView(R.id.toolbar)
     protected Toolbar mToolbar;
+    @BindView(R.id.v_back)
+    protected ImageView mBack;
+    Fragment mStepsFragment;
     private int mIndex;
     private ArrayList<Steps> mArrayList;
 
@@ -49,6 +54,7 @@ public class StepsActivity extends BaseActivity {
 
         //get Bundle with intent come from DetailsActivity
         final Bundle extras = getIntent().getExtras();
+        mStepsFragment = new StepsFragment();
 
         //first entry after oncreate
         if (savedInstanceState == null) {
@@ -64,8 +70,18 @@ public class StepsActivity extends BaseActivity {
                 initializeView();
             }
         }
-        //set the custom toolbar
+
+
         setSupportActionBar(mToolbar);
+
+        getSupportActionBar().setTitle(null);
+        mBack.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(StepsActivity.this, DetailsActivity.class);
+                startActivity(intent);
+            }
+        });
 
         //get last value of all data showed that saved in savedInstanceState
         if (savedInstanceState != null
@@ -74,6 +90,7 @@ public class StepsActivity extends BaseActivity {
 
             mArrayList = extras.getParcelableArrayList(Contract.EXTRA_STATE_STEPS);
             mIndex = savedInstanceState.getInt(Contract.EXTRA_STATE_INDEX);
+            mStepsFragment = getSupportFragmentManager().getFragment(savedInstanceState, Contract.EXTRA_STEP_FRAGMENT);
             Log.d(TAG, "mIndex OnsaveInStepsActivity = " + mIndex);
             initializeView();
         }
@@ -85,6 +102,7 @@ public class StepsActivity extends BaseActivity {
             mToolbar.setVisibility(View.VISIBLE);
         }
     }
+
 
     //hide toolbar if isRotated() true
     @Override
@@ -100,8 +118,12 @@ public class StepsActivity extends BaseActivity {
     //pass wanted data to show after rotation
     @Override
     public void onSaveInstanceState(Bundle outState) {
+        //get index that saved in sharedPreferences and save it in bundle
         outState.putInt(Contract.EXTRA_STATE_INDEX, SharedPrefManager.getInstance(StepsActivity.this).getPrefIndex());
+        //save arraylist
         outState.putParcelableArrayList(Contract.EXTRA_STATE_STEPS, mArrayList);
+        //save mStepsFragment
+        getSupportFragmentManager().putFragment(outState, Contract.EXTRA_STEP_FRAGMENT, mStepsFragment);
         Log.d(TAG, "mIndex outStateInStepsActivity = " + SharedPrefManager.getInstance(StepsActivity.this).getPrefIndex());
         super.onSaveInstanceState(outState);
     }
@@ -109,7 +131,6 @@ public class StepsActivity extends BaseActivity {
     //method will show every things
     private void initializeView() {
 
-        StepsFragment mStepsFragment = new StepsFragment();
         Bundle bundle = new Bundle();
         //pass step ArrayList to StepsFragment
         bundle.putParcelableArrayList(Contract.EXTRA_STATE_STEPS, mArrayList);
@@ -129,6 +150,7 @@ public class StepsActivity extends BaseActivity {
                 .replace(R.id.step_container, mStepsFragment)
                 .commit();
     }
+
 
     @SuppressLint("SwitchIntDef")
     private boolean isRotated() {

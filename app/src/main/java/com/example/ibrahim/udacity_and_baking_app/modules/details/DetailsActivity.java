@@ -5,16 +5,19 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.res.Configuration;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.MenuItem;
 import android.view.Surface;
 import android.view.View;
 import android.view.WindowManager;
-import android.widget.ImageView;
+import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.ibrahim.udacity_and_baking_app.IdlingResource.EspressoIdlingResource;
 import com.example.ibrahim.udacity_and_baking_app.R;
@@ -23,6 +26,7 @@ import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 import com.example.ibrahim.udacity_and_baking_app.data.SharedPrefManager;
 import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerDetailsComponents;
 import com.example.ibrahim.udacity_and_baking_app.di.module.DetailsModule;
+import com.example.ibrahim.udacity_and_baking_app.modules.AppWidget.WidgetProvider;
 import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.IngredientsAdapter;
 import com.example.ibrahim.udacity_and_baking_app.modules.details.adapter.StepsAdapter;
 import com.example.ibrahim.udacity_and_baking_app.modules.fragments.StepsFragment;
@@ -53,28 +57,24 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     @BindView(R.id.linear_details)
     protected LinearLayout linear_details;
+    @BindView(R.id.linear_ingredients)
+    protected LinearLayout mLinearLayoutIngredients;
+    @BindView(R.id.linear_steps)
+    protected LinearLayout mLinearLayoutSteps;
     @BindView(R.id.ingredients_list)
     protected RecyclerView mIngredients_list;
     @BindView(R.id.step_list)
     protected RecyclerView mStep_list;
     @BindView(R.id.tv_baking_name)
     protected TextView mTxtBake;
-    @BindView(R.id.v_ingredient_next)
-    protected ImageView mImageNext;
-    @BindView(R.id.v_Ingredient_back)
-    protected ImageView mImageBack;
-    @BindView(R.id.v_step_up)
-    protected ImageView mImageUp;
-    @BindView(R.id.v_step_down)
-    protected ImageView mImageDown;
+    @BindView(R.id.btn_show_details)
+    protected Button mSeeDetails;
 
     @Inject
     protected DetailsPresenter mPresenter;
-    private StepsFragment mStepsFragment;
+    private Fragment mStepsFragment;
     private List<Integer> stepsListIndex;
     private int mIndex;
-    private LinearLayoutManager mIngredientLayoutManager;
-    private LinearLayoutManager mStepLayoutManager;
     private boolean mTwoPane;
     private boolean mRotation;
     private boolean mFirstOpen;
@@ -97,7 +97,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
         ButterKnife.bind(this);
         mStepsFragment = new StepsFragment();
-
+        updateWidget();
         EspressoIdlingResource.increment(); // stops Espresso tests from going forward
         getAllData();
         EspressoIdlingResource.decrement(); // Tells Espresso test to resume
@@ -124,14 +124,59 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             mStepsArrayList = savedInstanceState.getParcelableArrayList(Contract.EXTRA_STATE_STEPS);
             mIndex = savedInstanceState.getInt(Contract.EXTRA_STATE_INDEX);
             Log.d(TAG, "mIndex OnsaveInActivity = " + mIndex);
+            mStepsFragment = getSupportFragmentManager().getFragment(savedInstanceState, Contract.EXTRA_STEP_FRAGMENT);
 
             initialiseListIngredients();
             initialiseListSteps();
-            GetFragmentByScreenSize(mIndex);
+            GetFragmentByScreenSize(mIndex, true);
 
         }
+
+        seeDetails();
     }
 
+    public void seeDetails() {
+
+        mSeeDetails.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                if (mLinearLayoutSteps.getVisibility() == View.GONE) {
+                    mLinearLayoutSteps.setVisibility(View.VISIBLE);
+                    mLinearLayoutIngredients.setVisibility(View.GONE);
+                    mSeeDetails.setText(getResources().getString(R.string.show_ingredients));
+
+                } else {
+                    mLinearLayoutSteps.setVisibility(View.GONE);
+                    mLinearLayoutIngredients.setVisibility(View.VISIBLE);
+                    mSeeDetails.setText(getResources().getString(R.string.show_steps));
+
+                }
+
+            }
+        });
+    }
+
+    //update widget
+    private void updateWidget() {
+
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(DetailsActivity.this, "New list created", Toast.LENGTH_LONG).show();
+                // this will send the broadcast to update the appwidget
+                WidgetProvider.sendRefreshBroadcast(DetailsActivity.this);
+            }
+        });
+
+
+    }
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        int id = item.getItemId();
+        return id == R.id.home || super.onContextItemSelected(item);
+
+    }
     @Override
     protected void resolveDaggerDependency() {
 
@@ -153,6 +198,11 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         outState.putInt(Contract.EXTRA_STATE_INDEX, mIndex);
         Log.d(TAG, "mIndex outStateInActivity = " + mIndex);
 
+        if (isTablet()) {
+            getSupportFragmentManager().putFragment(outState, Contract.EXTRA_STEP_FRAGMENT, mStepsFragment);
+
+        }
+
         super.onSaveInstanceState(outState);
     }
 
@@ -166,7 +216,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         getAllData();
         initialiseListIngredients();
         initialiseListSteps();
-        GetFragmentByScreenSize(mIndex);
+        GetFragmentByScreenSize(mIndex, false);
         Log.d(TAG, "onRestartDetails IngredientsArrayList = " + String.valueOf(mIngredientsArrayList.size()));
         Log.d(TAG, "onRestartDetails StepsArrayList = " + String.valueOf(mStepsArrayList.size()));
 
@@ -208,62 +258,20 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
     private void initialiseListIngredients() {
 
         mIngredients_list.setHasFixedSize(true);
-        mIngredientLayoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.HORIZONTAL, false);
+        LinearLayoutManager mIngredientLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mIngredients_list.setLayoutManager(mIngredientLayoutManager);
         mIngredientsAdapter = new IngredientsAdapter(getLayoutInflater());
         mIngredients_list.setAdapter(mIngredientsAdapter);
 
-        mImageBack.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int totalItemCount = mIngredients_list.getAdapter().getItemCount();
-                if (totalItemCount <= 0) return;
-                int lastVisibleItemIndex = mIngredientLayoutManager.findLastVisibleItemPosition();
-                if (lastVisibleItemIndex >= totalItemCount) return;
-                mIngredientLayoutManager.smoothScrollToPosition(mIngredients_list, null, lastVisibleItemIndex + 1);
-            }
-        });
-
-        mImageNext.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int firstVisibleItemIndex = mIngredientLayoutManager.findFirstCompletelyVisibleItemPosition();
-                if (firstVisibleItemIndex > 0) {
-                    mIngredientLayoutManager.smoothScrollToPosition(mIngredients_list, null, firstVisibleItemIndex - 1);
-                }
-            }
-        });
     }
 
     //method get show of Steps list
     private void initialiseListSteps() {
 
         mStep_list.setHasFixedSize(true);
-        mStepLayoutManager
-                = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
+        LinearLayoutManager mStepLayoutManager = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         mStep_list.setLayoutManager(mStepLayoutManager);
         mStepsAdapter = new StepsAdapter(getLayoutInflater());
-        mImageDown.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int totalItemCount = mStep_list.getAdapter().getItemCount();
-                if (totalItemCount <= 0) return;
-                int lastVisibleItemIndex = mStepLayoutManager.findLastVisibleItemPosition();
-                if (lastVisibleItemIndex >= totalItemCount) return;
-                mStepLayoutManager.smoothScrollToPosition(mStep_list, null, lastVisibleItemIndex + 1);
-            }
-        });
-
-        mImageUp.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int firstVisibleItemIndex = mStepLayoutManager.findLastVisibleItemPosition();
-                if (firstVisibleItemIndex == 0) return;
-                mStepLayoutManager.smoothScrollToPosition(mStep_list, null, firstVisibleItemIndex - 1);
-
-            }
-        });
 
         mStep_list.setAdapter(mStepsAdapter);
         /*in onclick steps will change int mIndex to clicked position
@@ -322,9 +330,10 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
          and open fragment if that the first time opened and
          sure called after implemented onStepsLoaded not in onCreate */
         if (!mFirstOpen) {
-            GetFragmentByScreenSize(mIndex);
+            GetFragmentByScreenSize(mIndex, false);
             //after correct call make mFirstOpen true to call fragment after rotation
             mFirstOpen = true;
+            updateWidget();
             Log.d(TAG, "bundleList onStepsLoaded = " + String.valueOf(mStepsArrayList.size()));
         }
     }
@@ -338,7 +347,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
 
     //This method is known for rotating the screen and small screen
     @SuppressLint("SwitchIntDef")
-    public void GetFragmentByScreenSize(int index) {
+    public void GetFragmentByScreenSize(int index, boolean saved) {
 
         assert (this.getSystemService(Context.WINDOW_SERVICE)) != null;
         assert this.getSystemService(Context.WINDOW_SERVICE) != null;
@@ -348,20 +357,26 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
             case Surface.ROTATION_0:
                 //but sure if it is tablet will make mTwoPane true and initializeFragment
                 if (isTablet()) {
-                    initializeFragment(index);
+                    if (!saved) {
+                        initializeFragment(index);
+                    }
                     mTwoPane = true;
                 }
                 break;
 
             //this if rotated 90 make mTwoPane true and initializeFragment
             case Surface.ROTATION_90:
-                initializeFragment(index);
+                if (!saved) {
+                    initializeFragment(index);
+                }
                 mTwoPane = true;
                 break;
 
             //this if rotated 180 make mTwoPane true and initializeFragment
             case Surface.ROTATION_180:
-                initializeFragment(index);
+                if (!saved) {
+                    initializeFragment(index);
+                }
                 mTwoPane = true;
                 break;
         }
@@ -383,7 +398,7 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         FragmentManager fragmentManager = getSupportFragmentManager();
         //create new show of fragment
         fragmentManager.beginTransaction()
-                .replace(R.id.step_container, mStepsFragment)
+                .add(R.id.step_container, mStepsFragment)
                 .commit();
 
         mIndex = index;

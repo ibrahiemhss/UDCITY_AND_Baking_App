@@ -1,5 +1,7 @@
 package com.example.ibrahim.udacity_and_baking_app.mvp.presenter;
 
+import android.content.Context;
+
 import com.example.ibrahim.udacity_and_baking_app.api.BakeApiService;
 import com.example.ibrahim.udacity_and_baking_app.base.BasePresenter;
 import com.example.ibrahim.udacity_and_baking_app.mapper.BakeMapper;
@@ -23,6 +25,8 @@ import rx.Observer;
 
 @SuppressWarnings({"WeakerAccess", "unused"})
 public class DetailsPresenter extends BasePresenter<DetailsView> implements Observer<List<BakingResponse>> {
+
+    private final Context mContext;
     @Inject
     protected BakeApiService mApiService;
     /*inject BakeMapper */
@@ -31,7 +35,8 @@ public class DetailsPresenter extends BasePresenter<DetailsView> implements Obse
     private int position;
 
     @Inject
-    public DetailsPresenter() {
+    public DetailsPresenter(Context context) {
+        mContext = context;
     }
 
     /*get value position from intent */
@@ -73,7 +78,7 @@ public class DetailsPresenter extends BasePresenter<DetailsView> implements Obse
     public void onNext(List<BakingResponse> responseList) {
 
         /*get list of Ingredients for bakingResponse by its position that come from intent*/
-        ArrayList<Ingredients> ingredientsList = mBakeMapper.getIngredientsList(responseList, getPosition());
+        ArrayList<Ingredients> ingredientsList = mBakeMapper.getIngredientsList(mContext, responseList, getPosition());
         /*pass the value of ingredients List into
         DetailsActivity by implements onIngredientsLoaded from DetailsView interface*/
         getView().onIngredientsLoaded(ingredientsList);

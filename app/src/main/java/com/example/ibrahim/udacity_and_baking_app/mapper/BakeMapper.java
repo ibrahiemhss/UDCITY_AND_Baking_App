@@ -32,7 +32,7 @@ public class BakeMapper {
 
     /*get all values from json that come inside BakingResponse
     * and add inside object of Bake*/
-    public ArrayList<Bake> mapBake(Context mContext, List<BakingResponse> responses) {
+    public ArrayList<Bake> mapBake(List<BakingResponse> responses) {
         //create object bakeList ArrayList from class Bake
         ArrayList<Bake> bakeList = new ArrayList<>();
         //get value from list responses
@@ -46,20 +46,7 @@ public class BakeMapper {
                 myBake.setIngredientsArrayList(bakingResponse.getIngredients());
                 //add all value from myBake to bakeList
                 bakeList.add(myBake);
-                ContentValues values = new ContentValues();
-                values.put(Contract.BakeEntry.COL_NAMES, bakingResponse.getName());
 
-                if (getBakeUtils.getBake(mContext).size() > 3) {
-                    Log.d("insert_content", "recall_added");
-
-                } else {
-                    final Uri uri = mContext.getContentResolver().insert(Contract.BakeEntry.PATH_BAKE_URI, values);
-
-                    if (uri != null) {
-                        Log.d("insert_content", "first_added");
-                    }
-
-                }
             }
 
 
@@ -74,12 +61,12 @@ public class BakeMapper {
        * this method get every getIngredients array by its position inside  BakingResponse
        */
 
-    public ArrayList<Ingredients> getIngredientsList(List<BakingResponse> responses, int position) {
+    public ArrayList<Ingredients> getIngredientsList(Context mContext, List<BakingResponse> responses, int position) {
         ArrayList<Ingredients> ingredientsList = new ArrayList<>();
         if (responses != null) {
             for (BakingResponse bakingResponse : responses) {
                 //call ingredientsList method to get ingredients by its position
-                ingredientsList = ingredientsList(responses.get(position).getIngredients());
+                ingredientsList = ingredientsList(mContext, responses.get(position).getIngredients());
             }
         }
         return ingredientsList;
@@ -102,17 +89,36 @@ public class BakeMapper {
     }
 
 
-    private ArrayList<Ingredients> ingredientsList(BakingResponseIngredients[] bakingResponseIngredients) {
+    private ArrayList<Ingredients> ingredientsList(Context mContext, BakingResponseIngredients[] bakingResponseIngredients) {
         ArrayList<Ingredients> bakeIngredientsList = new ArrayList<>();
         if (bakingResponseIngredients != null) {
 
+            if (getBakeUtils.geIngredients(mContext).size() > 0) {
+
+                Uri uri = Contract.BakeEntry.PATH_INGREDIENTS_URI;
+                uri = uri.buildUpon().appendPath(null).build();
+                mContext.getContentResolver().delete(uri, null, null);
+                if (uri != null) {
+                    Log.d("contentResolver delete", "delete success");
+                }
+            }
             for (BakingResponseIngredients bakingResponseIngredients1 : bakingResponseIngredients) {
                 Ingredients myBakeIngredients = new Ingredients();
                 myBakeIngredients.setIngredient(bakingResponseIngredients1.getIngredient());
                 myBakeIngredients.setQuantity(bakingResponseIngredients1.getQuantity());
                 myBakeIngredients.setMeasure(bakingResponseIngredients1.getMeasure());
                 bakeIngredientsList.add(myBakeIngredients);
+                ContentValues values = new ContentValues();
+                values.put(Contract.BakeEntry.COL_QUANTITY, bakingResponseIngredients1.getQuantity());
+                values.put(Contract.BakeEntry.COL_MEASURE, bakingResponseIngredients1.getMeasure());
+                values.put(Contract.BakeEntry.COL_INGREDIENT, bakingResponseIngredients1.getIngredient());
 
+
+                final Uri uriInsert = mContext.getContentResolver().insert(Contract.BakeEntry.PATH_INGREDIENTS_URI, values);
+                if (uriInsert != null) {
+                    Log.d("contentResolver insert", "first added success");
+
+                }
 
             }
         }
@@ -131,7 +137,6 @@ public class BakeMapper {
                 mySteps.setThumbnailURL(bakingResponseStep.getThumbnailURL());
                 mySteps.setVideoURL(bakingResponseStep.getVideoURL());
                 stepsList1.add(mySteps);
-
             }
         }
         return stepsList1;

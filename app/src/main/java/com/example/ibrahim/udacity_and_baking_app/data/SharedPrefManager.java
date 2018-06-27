@@ -11,7 +11,8 @@ import android.content.SharedPreferences;
  */
 public class SharedPrefManager {
     private static final String PREF_INDEX = "pref_index";
-    private static final String PREF_DETAILS_POSITION = "pref_position";
+    private static final String PREF_BAKE_POSITION = "pref_bake_position";
+    private static final String PREF_DETAILS_POSITION = "pref_details_position";
     private static final String PREF_BAKE_NAME = "pref_bake_name";
 
     private static final String SHARED_PREF_NAME = "save_contents";
@@ -28,6 +29,19 @@ public class SharedPrefManager {
 
         }
         return mInstance;
+    }
+
+    public int getPrefBakePosition() {
+        return pref.getInt(PREF_BAKE_POSITION, 0);
+
+    }
+
+    public void setPrefBakePosition(int position) {
+        SharedPreferences.Editor editor = pref.edit();
+        editor.putInt(PREF_BAKE_POSITION, position);
+        editor.apply();
+        editor.commit();
+
     }
 
     public int getPrefDetailsPosition() {

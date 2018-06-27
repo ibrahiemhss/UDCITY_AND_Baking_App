@@ -19,10 +19,13 @@ import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.request.RequestOptions;
 import com.example.ibrahim.udacity_and_baking_app.R;
 import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 import com.example.ibrahim.udacity_and_baking_app.data.SharedPrefManager;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Steps;
+import com.google.android.exoplayer2.C;
 import com.google.android.exoplayer2.DefaultLoadControl;
 import com.google.android.exoplayer2.DefaultRenderersFactory;
 import com.google.android.exoplayer2.ExoPlayerFactory;
@@ -65,9 +68,13 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
     protected LinearLayout mLinearLayout;
     @BindView(R.id.rv_details)
     protected RelativeLayout mRelativeLayout;
+    @BindView(R.id.image_alternative)
+    protected ImageView mImageAlternative;
 
     private boolean mRotation;
     private SimpleExoPlayer mExoPlayer;
+    private long mPlayerPosition;
+    private boolean isPlayWhenReady;
     private int mIndex;
     private Boolean mIstablet;
     private Boolean mNoRotation;
@@ -92,6 +99,26 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
         }
     }
 
+    @Override
+    public void onActivityCreated(Bundle savedInstanceState) {
+        super.onActivityCreated(savedInstanceState);
+        //create this to continue play video after saveState(after rotate device)
+        if (savedInstanceState != null) {
+            mPlayerPosition = savedInstanceState.getLong(Contract.EXTRA_PLAYER_POSITION);
+            isPlayWhenReady = savedInstanceState.getBoolean(Contract.EXTRA_PLAYER_READY);
+            if (mPlayerPosition != C.TIME_UNSET && isPlayWhenReady) {
+                Log.d(TAG, "mPlayerPosition onRestore = " + String.valueOf(mPlayerPosition));
+                mExoPlayer.seekTo(mPlayerPosition);
+
+            }
+            Log.d(TAG, "mPlayerPosition after savedInstanceState = " + String.valueOf(mPlayerPosition));
+            Log.d(TAG, "isPlayWhenReady after savedInstanceState = " + String.valueOf(isPlayWhenReady));
+
+        }
+    }
+
+
+
     @Nullable
     @Override
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, @Nullable Bundle savedInstanceState) {
@@ -106,6 +133,9 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
             readBundle(extras);
             Log.d(TAG, " mIndex after getArguments = " + mIndex);
             Log.d(TAG, "mRotation after getArguments = " + String.valueOf(mRotation));
+            Log.d(TAG, "isPlayWhenReady before savedInstanceState = " + String.valueOf(isPlayWhenReady));
+            Log.d(TAG, "mPlayerPosition before savedInstanceState = " + String.valueOf(mPlayerPosition));
+
 
             //Boolean mRotation has value coming from bundle if  device rotate it is true
             if (mRotation) {
@@ -119,6 +149,7 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
 
             }
         }
+
 
         //play player if step list not empty
         if (mStepsArrayList != null && mStepsArrayList.size() > 0) {
@@ -155,8 +186,23 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
             mPlayerView.setPlayer(mExoPlayer);
             mExoPlayer.setPlayWhenReady(true);
             MediaSource mediaSource = buildMediaSource(mVideoUri);
-            mExoPlayer.prepare(mediaSource, true, false);
+            mExoPlayer.prepare(mediaSource, false, false);
+
         }
+    }
+
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        //last position of playing video
+        outState.putLong(Contract.EXTRA_PLAYER_POSITION, mPlayerPosition);
+        //last state of player if ready(true) or not ready(false)
+        outState.putBoolean(Contract.EXTRA_PLAYER_READY, isPlayWhenReady);
+
+        Log.d(TAG, "mPlayerPosition before savedInstanceState = " + String.valueOf(mPlayerPosition));
+        Log.d(TAG, "isPlayWhenReady before savedInstanceState = " + String.valueOf(isPlayWhenReady));
+
     }
 
     //enabling functionality such  looping and playback of sequences of videos
@@ -171,6 +217,7 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
         if (mExoPlayer != null) {
             mExoPlayer.release();
             mExoPlayer = null;
+
         }
     }
 
@@ -178,6 +225,13 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
     @Override
     public void onPause() {
         super.onPause();
+        //get current position for video playing  before onPause
+        mPlayerPosition = mExoPlayer.getCurrentPosition();
+        //get current ready state of video player before onPause
+        isPlayWhenReady = mExoPlayer.getPlayWhenReady();
+
+        Log.d(TAG, "mPlayerPosition onPause = " + String.valueOf(mPlayerPosition));
+
         if (Util.SDK_INT <= 23) {
             releasePlayer();
         }
@@ -243,10 +297,13 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
     //Responsible for controlling the overview for fragment
     private void showView() {
         releasePlayer();
+        mImageAlternative.setVisibility(View.GONE);
         //make sure mStepsArrayList not empty
         if (mStepsArrayList.size() > 0) {
             //get value of videoUrl by pass last value of mIndex
-            String videoUrl = getVideoUrl(mIndex);
+            String videoUrl = "http://clips.vorwaerts-gmbh.de/big_buck_bunny.mp4";
+            //get value of thumbnailURL by pass last value of mIndex
+            String thumbnailURL = mStepsArrayList.get(mIndex).getThumbnailURL();
             /*if boolean mNoRotation or mIstablet true will show the Description below video
             * no rotation because no space in screen to display will show Description just in Tablet*/
             if (mNoRotation || mIstablet) {
@@ -254,33 +311,39 @@ public class StepsFragment extends Fragment implements View.OnClickListener {
 
             }
             //play video if value of videoUrl not empty if empty just text will display message
-            if (!videoUrl.isEmpty()) {
+            if (videoUrl.isEmpty() && thumbnailURL.isEmpty()) {
+
+                mTextNoVideo.setVisibility(View.VISIBLE);
+                mPlayerView.setVisibility(View.GONE);
+                mImageAlternative.setVisibility(View.GONE);
+                Log.d(TAG, "TestShow \n Description = " + mStepsArrayList.get(mIndex).getDescription());
+
+
+            } else if (!videoUrl.isEmpty()) {
                 initializePlayer(Uri.parse(videoUrl));
                 mTextNoVideo.setVisibility(View.GONE);
                 mPlayerView.setVisibility(View.VISIBLE);
-            } else {
-                mTextNoVideo.setVisibility(View.VISIBLE);
+                Log.d(TAG, "TestShow  \n videoUrl =" + videoUrl);
+
+            } else if
+                    (!thumbnailURL.isEmpty()) {
+                mTextNoVideo.setVisibility(View.GONE);
                 mPlayerView.setVisibility(View.GONE);
+                mImageAlternative.setVisibility(View.VISIBLE);
+
+                Glide.with(getActivity())
+                        .load(thumbnailURL)
+                        .apply(new RequestOptions()
+                                .placeholder(R.drawable.brownies))
+                        .into(mImageAlternative);
+
+                Log.d(TAG, "TestShow \n thumbnailURL =" + thumbnailURL);
+
             }
-            Log.d(TAG, "VideoURL:show" + videoUrl);
+
 
         }
 
-    }
-
-    /**get value of Video Url by pass
-     * @param index  will be the position of VideoUrl that wanted
-     * @return videoStream
-     */
-    private String getVideoUrl(int index) {
-        String videoStream;
-        //one case there video coming inside ThumbnailURL
-        if (mStepsArrayList.get(index).getVideoURL().isEmpty()) {
-            videoStream = mStepsArrayList.get(index).getThumbnailURL();
-        } else {
-            videoStream = mStepsArrayList.get(index).getVideoURL();
-        }
-        return videoStream;
     }
 
     /**

@@ -20,7 +20,6 @@ import com.example.ibrahim.udacity_and_baking_app.data.Contract;
 import com.example.ibrahim.udacity_and_baking_app.data.SharedPrefManager;
 import com.example.ibrahim.udacity_and_baking_app.di.components.DaggerMainComponents;
 import com.example.ibrahim.udacity_and_baking_app.di.module.MainModule;
-import com.example.ibrahim.udacity_and_baking_app.modules.AppWidget.MainWidgetProvider;
 import com.example.ibrahim.udacity_and_baking_app.modules.details.DetailsActivity;
 import com.example.ibrahim.udacity_and_baking_app.modules.home.adapter.BakesAdapter;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
@@ -98,7 +97,7 @@ public class MainActivity extends BaseActivity implements MainView {
                 mTxtNoConnect.setVisibility(View.VISIBLE);
                 mBake_list.setVisibility(View.GONE);
             }
-            MainWidgetProvider.sendRefreshBroadcast(MainActivity.this);
+            // MainWidgetProvider.sendRefreshBroadcast(MainActivity.this);
             EspressoIdlingResource.decrement(); // Tells Espresso test to resume
 
 
@@ -132,7 +131,10 @@ public class MainActivity extends BaseActivity implements MainView {
     @Override
     public void onBakeLoaded(ArrayList<Bake> bakeList) {
         mBakeArrayList = bakeList;
-        mBakesAdapter.addBakes(mBakeArrayList);
+        if (mBakeArrayList != null) {
+            mBakesAdapter.addBakes(mBakeArrayList);
+
+        }
 
     }
 
@@ -158,6 +160,7 @@ public class MainActivity extends BaseActivity implements MainView {
         Intent intent = new Intent(this, DetailsActivity.class);
         Bundle extras = new Bundle();
         extras.putInt(Contract.EXTRA_POSITION, position);
+        SharedPrefManager.getInstance(this).setPrefBakePosition(position);
         String name = mBakeArrayList.get(position).getName();
         extras.putString(Contract.EXTRA_BAKE_NAME, name);
         SharedPrefManager.getInstance(this).setPrefDetailsPosition(position);

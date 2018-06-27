@@ -12,7 +12,6 @@ import com.example.ibrahim.udacity_and_baking_app.mapper.BakeMapper;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 import com.example.ibrahim.udacity_and_baking_app.mvp.model.BakingResponse;
 import com.example.ibrahim.udacity_and_baking_app.mvp.view.MainView;
-import com.example.ibrahim.udacity_and_baking_app.utilities.getBakeUtils;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -90,7 +89,7 @@ public class MainPresenter extends BasePresenter<MainView> implements Observer<L
     public void onNext(List<BakingResponse> bakingResponses) {
 
     /*get list of BakeMap with  bakingResponse that will get list of bake*/
-        mBakeList = mBakeMapper.mapBake(mContext, bakingResponses);
+        mBakeList = mBakeMapper.mapBake(bakingResponses);
    /*pass bakeList into getView that come from basepresenter
     in MainPresenter that have specified
      as mainview so view will get MainView  */
@@ -108,12 +107,5 @@ public class MainPresenter extends BasePresenter<MainView> implements Observer<L
                 R.drawable.cheesecake
         };
     }
-
-    /*other choice this method to get data of bake from local storage that inserted*/
-    public void getBakeFromDatabase() {
-        ArrayList<Bake> bakes = getBakeUtils.getBake(mContext);
-        getView().onBakeLoaded(bakes);
-    }
-
 
 }

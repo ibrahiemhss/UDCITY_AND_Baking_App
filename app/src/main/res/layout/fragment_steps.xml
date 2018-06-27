@@ -13,6 +13,15 @@
         android:orientation="horizontal"
         android:padding="5dp">
 
+        <ImageView
+            android:id="@+id/image_alternative"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:contentDescription="TODO"
+            android:src="@drawable/brownies"
+            android:visibility="gone"
+            tools:ignore="ContentDescription,HardcodedText" />
+
         <com.google.android.exoplayer2.ui.SimpleExoPlayerView
             android:id="@+id/playerView"
             android:layout_width="match_parent"

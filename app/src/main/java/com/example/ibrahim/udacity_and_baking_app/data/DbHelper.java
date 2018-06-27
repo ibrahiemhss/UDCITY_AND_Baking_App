@@ -26,7 +26,9 @@ public class DbHelper extends SQLiteOpenHelper {
     @Override
     public void onCreate(SQLiteDatabase db) {
         try {
+            db.execSQL(Contract.BakeEntry.CREATE_TABLE_INGREDIENTS);
             db.execSQL(Contract.BakeEntry.CREATE_TABLE_BAKE);
+
 
         } catch (SQLException e) {
             Log.d(TAG, e.getMessage());
@@ -35,7 +37,9 @@ public class DbHelper extends SQLiteOpenHelper {
 
     @Override
     public void onUpgrade(SQLiteDatabase db, int oldVersion, int newVersion) {
+        db.execSQL(Contract.BakeEntry.DROP_TABLE_INGREDIENTS);
         db.execSQL(Contract.BakeEntry.DROP_TABLE_BAKE);
+
 
         onCreate(db);
     }

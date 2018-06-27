@@ -6,7 +6,13 @@
     <string name="txt_please_wait" tools:keep="@string/txt_please_wait">please wait.....</string>
     <string name="ingredients">Ingredients</string>
     <string name="steps">Steps</string>
-    <string name="see_video">click on step to see video description</string>
+    <string name="see_video">click on item to see video description</string>
     <string name="no_video_description">no video description</string>
     <string name="no_connection">there no internet connection to get data</string>
+    <string name="quantity">quantity   :</string>
+    <string name="measure">measure    :</string>
+    <string name="ingredient">ingredient :</string>
+    <string name="show_steps">click to see steps</string>
+    <string name="show_ingredients">click to see ingredients</string>
+
 </resources>

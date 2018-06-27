@@ -75,8 +75,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
     @SuppressWarnings({"WeakerAccess", "unused"})
     public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
         private final Context mContext;
-        @BindView(R.id.textview_id)
-        protected TextView mId;
         @BindView(R.id.textview_shortDescription)
         protected TextView mShortDescription;
 
@@ -90,7 +88,6 @@ public class StepsAdapter extends RecyclerView.Adapter<StepsAdapter.Holder> {
         }
 
         public void bind(Steps steps, int position) {
-            mId.setText(String.valueOf(steps.getId()));
             mShortDescription.setText(steps.getShortDescription());
 
         }

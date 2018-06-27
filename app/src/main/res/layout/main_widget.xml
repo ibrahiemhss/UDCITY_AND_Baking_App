@@ -11,7 +11,7 @@
     <FrameLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@drawable/border_white">
+        android:background="@drawable/border_ivory">
 
         <TextView
             android:id="@+id/widgetTitle"
@@ -34,8 +34,8 @@
             android:id="@+id/widgetListView"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:divider="#eeeeee"
             android:dividerHeight="1dp"
+            android:stackFromBottom="true"
             tools:listitem="@layout/list_item_widget" />
     </LinearLayout>
 

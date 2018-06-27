@@ -33,18 +33,21 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".modules.details.DetailsActivity" />
+            android:name=".modules.details.DetailsActivity"
+            android:parentActivityName=".modules.home.MainActivity"
+            tools:targetApi="jelly_bean" />
         <activity
             android:name=".modules.steps.StepsActivity"
-            android:theme="@style/AppTheme_No_Action" />
+            android:parentActivityName=".modules.details.DetailsActivity"
+            android:theme="@style/AppTheme_No_Action"
+            tools:targetApi="jelly_bean" />
 
         <receiver
-            android:name=".modules.AppWidget.MainWidgetProvider"
+            android:name=".modules.AppWidget.WidgetProvider"
             tools:ignore="InnerclassSeparator">
             <intent-filter>
                 <action android:name="android.appwidget.action.APPWIDGET_UPDATE" />
-
-
+                <action android:name="com.example.ibrahim.udacity_and_baking_app.app.ACTION_DATA_UPDATED" />
             </intent-filter>
 
             <meta-data
@@ -52,15 +55,15 @@
                 android:resource="@xml/main_widget_info" />
         </receiver>
         <service
-            android:name=".modules.AppWidget.WidgetRemoteViewsService"
-            android:exported="false"
+            android:name=".modules.AppWidget.WidgetService"
             android:permission="android.permission.BIND_REMOTEVIEWS"
             tools:ignore="InnerclassSeparator" />
 
         <provider
             android:name="com.example.ibrahim.udacity_and_baking_app.data.MyContentProvider"
             android:authorities="com.example.ibrahim.udacity_and_baking_app"
-            android:exported="false"/>
+            android:exported="true"
+            tools:ignore="ExportedContentProvider" />
 
 
     </application>
