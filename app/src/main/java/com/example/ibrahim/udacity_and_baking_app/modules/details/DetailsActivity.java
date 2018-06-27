@@ -17,7 +17,6 @@ import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.LinearLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.ibrahim.udacity_and_baking_app.IdlingResource.EspressoIdlingResource;
 import com.example.ibrahim.udacity_and_baking_app.R;
@@ -162,7 +161,6 @@ public class DetailsActivity extends BaseActivity implements DetailsView {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
-                Toast.makeText(DetailsActivity.this, "New list created", Toast.LENGTH_LONG).show();
                 // this will send the broadcast to update the appwidget
                 WidgetProvider.sendRefreshBroadcast(DetailsActivity.this);
             }
