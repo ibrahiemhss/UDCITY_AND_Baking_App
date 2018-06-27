@@ -9,7 +9,7 @@ import android.util.Log;
 import javax.inject.Inject;
 
 
-/**
+/*
  * Created by ibrahim on 22/05/18.
  */
 public class DbHelper extends SQLiteOpenHelper {

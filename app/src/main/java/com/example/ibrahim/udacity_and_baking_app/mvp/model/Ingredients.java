@@ -3,7 +3,7 @@ package com.example.ibrahim.udacity_and_baking_app.mvp.model;
 import android.os.Parcel;
 import android.os.Parcelable;
 
-/**
+/*
  * Created by ibrahim on 29/05/18.
  */
 

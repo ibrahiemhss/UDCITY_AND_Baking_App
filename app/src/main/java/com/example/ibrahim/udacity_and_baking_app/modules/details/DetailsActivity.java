@@ -45,7 +45,7 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
-/**
+/*
  * Created by ibrahim on 22/05/18.
  */
 

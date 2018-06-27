@@ -5,7 +5,7 @@ import com.example.ibrahim.udacity_and_baking_app.mvp.model.Bake;
 import java.util.ArrayList;
 
 
-/**
+/*
  * Created by ibrahim on 22/05/18.
  */
 // extends BaseView
